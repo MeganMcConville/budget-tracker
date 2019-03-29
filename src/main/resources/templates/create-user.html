@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "http://www.thymeleaf.org/dtd/xhtml1-strict-thymelefa-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Finance Friend Login</title>
+    <link rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div>
+    <img th:src="@{/images}" th:alt-title="Finance Friend Logo">
+</div>
+<div>
+    <form th:action="@{/users}">
+        <label for="email_field">Email:</label>
+        <input type="text" id="email_field">
+        <label for="password_field">Password:</label>
+        <input type="text" id="password_field">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="text" id="confirm_password">
+        <input type="submit">
+    </form>
+</div>
+
+</body>
+</html>
