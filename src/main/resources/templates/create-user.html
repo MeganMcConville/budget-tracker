@@ -2,25 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
     <title>Create Account</title>
 </head>
 
 <body>
 
-<div>
+<div class="image-div">
     <img th:src="@{/images/fflogo.png}" th:alt-title="${'Finance Friend Logo'}">
 </div>
-<div>
+<div class="create-new-form-div">
     <div th:if="${param.exists}">There is already an account associated with the email address you entered.</div>
     <div th:if="${param.invalid}">Please enter a valid email address.</div>
-    <form th:action="@{/users}" method="post" th:object="${user}">
+    <form class="new-user-form" th:action="@{/users}" method="post" th:object="${user}">
         <label for="email_field">Email:</label>
         <input type="text" id="email_field" th:field="*{username}">
         <label for="password_field">Password:</label>
-        <input type="text" id="password_field" th:field="*{password}">
-        <label for="confirm_password">Confirm Password</label>
-        <input type="text" id="confirm_password">
-        <input type="submit">
+        <input type="password" id="password_field" th:field="*{password}">
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" id="confirm_password">
+        <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
     </form>
 </div>
 
