@@ -1,0 +1,40 @@
+@import "styles/variables";
+
+.image-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img{
+        width: 35%;
+        height: auto;
+    }
+}
+
+.create-new-form-div{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 45%;
+    margin: auto;
+
+    .new-user-form{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+    }
+
+    .btn, .btn-success, .btn-lg, .btn-block{
+        margin-top: 1em !important;
+        margin-bottom: 1em !important;
+    }
+
+    input{
+        border-radius: .3em;
+        box-shadow: none;
+        border: 1px solid $grey;
+    }
+
+}
+

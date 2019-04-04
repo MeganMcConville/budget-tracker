@@ -1,9 +1,13 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven{
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath("gradle.plugin.org.kravemir.gradle.sass:GradleSassPlugin:1.2.2")
     }
 }
 
@@ -12,6 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.kravemir.gradle.sass'
 
 bootJar {
     baseName = 'gs-spring-boot'
@@ -21,6 +26,23 @@ bootJar {
 repositories {
     mavenCentral()
 }
+
+sass{
+    main{
+        srcDir = file("$projectDir/src/main/resources/static/sass")
+        outDir = file("$projectDir/src/main/resources/static/css")
+        exclude = "styles/*.scss"
+        minify = true
+    }
+}
+
+task deleteCss(type: Delete){
+    delete "src/main/resources/static/css"
+}
+
+mainSass.dependsOn deleteCss
+build.dependsOn mainSass
+bootRun.dependsOn mainSass
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
