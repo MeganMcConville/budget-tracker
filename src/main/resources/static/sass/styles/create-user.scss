@@ -18,6 +18,10 @@
     width: 45%;
     margin: auto;
 
+    div.error{
+        color: red;
+    }
+
     .new-user-form{
         display: flex;
         flex-direction: column;
@@ -34,6 +38,10 @@
         border-radius: .3em;
         box-shadow: none;
         border: 1px solid $grey;
+    }
+
+    label.error{
+        color: red;
     }
 
 }
