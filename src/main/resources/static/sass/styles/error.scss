@@ -1,0 +1,14 @@
+@import "styles/variables";
+
+#error-div{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 45%;
+    margin: auto;
+    margin-bottom: 2em;
+    color: $grey;
+    font-size: 18px;
+    font-weight: 300;
+}
