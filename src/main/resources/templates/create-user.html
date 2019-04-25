@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/login-create'">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.js"></script>
     <script th:src="@{/js/create-user.js}"></script>
     <title>Create Account</title>
 </head>
 
 <body>
+<div layout:fragment="content">
 
 <div class="image-div">
     <img th:src="@{/images/fflogo.png}" th:alt-title="${'Finance Friend Logo'}">
@@ -29,5 +29,6 @@
     </form>
 </div>
 
+</div>
 </body>
 </html>
