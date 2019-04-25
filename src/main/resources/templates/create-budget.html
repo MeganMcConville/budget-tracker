@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/default'">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Budget</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div>
+        <form th:action="@{/budgets}" method="post" th:object="${budget}">
+            <label for="budgetName">Name:</label>
+            <input id="budgetName" type="text" th:field="*{name}">
+            <button type="submit" class="btn btn-success">Create</button>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>
