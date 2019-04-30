@@ -24,6 +24,7 @@ public class BudgetItem {
     @Column(name = "name")
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private BudgetItemType budgetItemType;
 

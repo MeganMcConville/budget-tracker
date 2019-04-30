@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/default'">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/create-budget-item.js}"></script>
+    <title>Create Budget Item</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div id="error-message" class="hidden alert alert-danger">Something went wrong. Please try again.</div>
+    <div id="success-message" class="hidden alert alert-success">Budget item successfully saved.</div>
+    <div id="column-names" class="hidden">
+        <p>Name</p>
+        <p>Amount</p>
+        <p>Item Type</p>
+    </div>
+    <div id="finished-budget-items">
+    </div>
+    <div>
+            <label for="budget-item-name">Name:</label>
+            <input id="budget-item-name" type="text">
+            <label for="budget-item-amount">Amount:</label>
+            <input id="budget-item-amount" type="number">
+            <label for="budget-item-type">Item Type:</label>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" aria-label="Budget item type" id="budget-item-type">
+                <label class="btn btn-secondary">
+                    <input type="radio" name="budget-item-type" id="monthly" value="MONTHLY" autocomplete="off"> Monthly
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="budget-item-type" id="annual" value="ANNUAL" autocomplete="off"> Annual
+                </label>
+            </div>
+            <input type="hidden" th:value="${budgetId}" id="budget-id">
+            <button type="button" class="btn btn-success create-budget-item-button">Add</button>
+    </div>
+
+
+</div>
+</body>
+</html>
