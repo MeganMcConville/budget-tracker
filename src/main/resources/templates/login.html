@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/login-create'">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/main.css}">
     <title>Login</title>
 </head>
 
 <body>
-
+<div layout:fragment="content">
 
 <div class="image-div">
     <img th:src="@{/images/fflogo.png}" th:alt-title="${'Finance Friend Logo'}">
@@ -17,12 +17,13 @@
 <div id="login-form-div">
     <form th:action="@{/login}" method="post" id="login-form">
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email">
+        <input type="text" id="email" name="username">
         <label for="password">Password:</label>
         <input type="password" id="password" name="password">
         <button type="submit" class="btn btn-success btn-lg btn-block">Log in</button>
     </form>
 </div>
 
+</div>
 </body>
 </html>
