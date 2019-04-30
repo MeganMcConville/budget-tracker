@@ -1,0 +1,30 @@
+.hidden{
+    display: none;
+}
+
+.button.disabled{
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+#column-names.displaying{
+    width: 40%;
+    margin: 2px;
+    display: grid;
+    grid-template-columns: 40% 40% 20%;
+    p{
+        text-decoration: underline;
+        font-weight: bold;
+    }
+}
+
+#finished-budget-items{
+    height: 100%;
+    width:40%;
+    margin-left: 5px;
+
+    div{
+        display: grid;
+        grid-template-columns: 40% 40% 20%;
+    }
+}

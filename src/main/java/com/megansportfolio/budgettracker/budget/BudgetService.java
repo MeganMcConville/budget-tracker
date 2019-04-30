@@ -14,11 +14,11 @@ public class BudgetService {
     @Autowired
     private UserDao userDao;
 
-    public void createBudget(Budget budget, String loggedInUserEmailAddress){
+    public long createBudget(Budget budget, String loggedInUserEmailAddress){
 
         User user = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
         budget.setUser(user);
-        budgetDao.save(budget);
+        return budgetDao.save(budget).getId();
 
     }
 }

@@ -26,7 +26,7 @@ public class BudgetController {
     public String createBudget(@ModelAttribute Budget budget){
         UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
-        budgetService.createBudget(budget, loggedInUserEmailAddress);
-        return "create-budget";
+        long budgetId = budgetService.createBudget(budget, loggedInUserEmailAddress);
+        return "redirect:/budget-items/create?budgetId=" + budgetId;
     }
 }
