@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/budgets")
 public class BudgetController {
@@ -28,5 +30,17 @@ public class BudgetController {
         String loggedInUserEmailAddress = loggedInUser.getUsername();
         long budgetId = budgetService.createBudget(budget, loggedInUserEmailAddress);
         return "redirect:/budget-items/create?budgetId=" + budgetId;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String viewBudgets(Model model){
+        UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        List<Budget> userBudgets = budgetService.findBudgets(loggedInUserEmailAddress);
+        if (userBudgets == null || userBudgets.size() == 0){
+            return "redirect:/budgets/create";
+        }
+        model.addAttribute("budgets", userBudgets);
+        return "view-budgets";
     }
 }

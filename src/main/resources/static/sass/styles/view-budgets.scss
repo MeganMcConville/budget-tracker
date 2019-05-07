@@ -1,0 +1,29 @@
+@import "styles/variables";
+
+h2{
+    color: $green;
+}
+ul{
+    list-style-type: none;
+    margin: 0 0 0 1em;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 40%;
+    li{
+        li:hover{
+            cursor: pointer;
+        }
+        a{
+            text-decoration: none;
+            font-size: 1.15em;
+            color: black;
+            a:hover{
+                text-decoration: none;
+                color: $green;
+            }
+        }
+    }
+
+}

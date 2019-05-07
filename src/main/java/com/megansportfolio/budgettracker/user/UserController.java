@@ -35,8 +35,7 @@ public class UserController {
         catch (InvalidEmailException e){
             return "redirect:/users?invalid";
         }
-        //todo when login page is made, redirect to it instead
-        return "create-user";
+        return "redirect:/login";
     }
 
 }
