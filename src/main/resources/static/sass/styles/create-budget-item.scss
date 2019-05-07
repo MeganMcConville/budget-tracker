@@ -2,6 +2,10 @@
     display: none;
 }
 
+h2{
+    color: $green;
+}
+
 .button.disabled{
     opacity: 0.65;
     cursor: not-allowed;

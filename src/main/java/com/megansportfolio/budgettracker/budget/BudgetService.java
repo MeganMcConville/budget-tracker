@@ -5,6 +5,8 @@ import com.megansportfolio.budgettracker.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BudgetService {
 
@@ -20,5 +22,11 @@ public class BudgetService {
         budget.setUser(user);
         return budgetDao.save(budget).getId();
 
+    }
+
+    public List<Budget> findBudgets(String emailAddress){
+        User currentUser = userDao.findOneByUsernameIgnoreCase(emailAddress);
+        List<Budget> userBudgets = budgetDao.findByUser(currentUser);
+        return userBudgets;
     }
 }
