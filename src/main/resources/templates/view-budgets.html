@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/default'">
+<head>
+    <meta charset="UTF-8">
+    <!--make the title display the logged in user's name, if we put in a name ability?-->
+    <title>Budgets</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2 id="my-budgets-title">My Budgets</h2>
+    <div>
+        <ul>
+            <li th:each="budget: ${budgets}">
+                <a th:href="@{/budgets/{budgetId}(budgetId=${budget.getId()})}" th:text="${budget.getName()}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

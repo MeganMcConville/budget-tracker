@@ -2,7 +2,11 @@
     display: none;
 }
 
-.button.disabled{
+#add-budget-item-title{
+    color: $green;
+}
+
+.disabled#create-item-button{
     opacity: 0.65;
     cursor: not-allowed;
 }
