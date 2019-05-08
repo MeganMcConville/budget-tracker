@@ -2,11 +2,11 @@
     display: none;
 }
 
-h2{
+#add-budget-item-title{
     color: $green;
 }
 
-.button.disabled{
+.disabled#create-item-button{
     opacity: 0.65;
     cursor: not-allowed;
 }

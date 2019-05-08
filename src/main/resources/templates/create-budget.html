@@ -10,7 +10,7 @@
 <body>
 <div layout:fragment="content">
 
-    <h2>Create A Budget</h2>
+    <h2 id="create-budget-title">Create A Budget</h2>
     <div>
         <form th:action="@{/budgets}" method="post" th:object="${budget}">
             <label for="budgetName">Name:</label>
