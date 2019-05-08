@@ -12,14 +12,14 @@ ul{
     flex-direction: column;
     width: 40%;
     li{
-        li:hover{
+        &:hover{
             cursor: pointer;
         }
         a{
             text-decoration: none;
             font-size: 1.15em;
             color: black;
-            a:hover{
+            &:hover{
                 text-decoration: none;
                 color: $green;
             }
