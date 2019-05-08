@@ -1,0 +1,64 @@
+@import "styles/variables";
+
+body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+    #sidebar, #content{
+        height: 100%;
+        overflow: auto;
+
+    }
+
+    #sidebar{
+        background: $grey;
+        width: 20%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        box-shadow: 2px 0 4px rgba(0,0,0,0.5);
+        transition: width .35s;
+
+        ul{
+            display: flex;
+            flex-direction: column;
+            list-style-type: none;
+
+            a{
+                text-decoration: none;
+            }
+            a:hover{
+                color: $green;
+                text-decoration: none;
+            }
+        }
+    }
+
+    #sidebar.collapsed{
+        width: 0;
+    }
+
+    #closer{
+        float: right;
+        cursor: pointer;
+        margin: 2px 2px 0px 0px;
+        font-size: 1.25em;
+    }
+
+    #sidebar.collapsed + #content{
+        width: 100%;
+    }
+
+    #content{
+        width: 80%;
+        #toggle{
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 1.25em;
+        }
+    }
+
+
+}
