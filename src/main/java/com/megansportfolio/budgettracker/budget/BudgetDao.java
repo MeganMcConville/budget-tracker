@@ -11,4 +11,6 @@ public interface BudgetDao extends JpaRepository<Budget, Long> {
 
     List<Budget> findByUser(User user);
 
+    Budget findOneById(long Id);
+
 }
