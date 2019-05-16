@@ -10,12 +10,20 @@
 <body>
 <div layout:fragment="content">
 
-    <h1 th:text="${budget.getName()}"></h1>
-    <ul>
-        <li th:each="budgetItem: ${budget.getBudgetItems()}">
-            <p th:text="${budgetItem.getName()}"></p>
-        </li>
-    </ul>
+    <h1 id="budget-title" th:text="${budget.getName()}"></h1>
+
+    <table id="budget-items-table">
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Type</th>
+        </tr>
+        <tr th:each="budgetItem: ${budget.getBudgetItems()}">
+            <td th:text="${budgetItem.getName()}"></td>
+            <td class="amount" th:text="${'$' + budgetItem.getAmount()}"></td>
+            <td th:text="${budgetItem.getBudgetItemType()}"></td>
+        </tr>
+    </table>
 
 
 </div>
