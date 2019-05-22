@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -42,5 +43,14 @@ public class BudgetController {
         }
         model.addAttribute("budgets", userBudgets);
         return "view-budgets";
+    }
+
+    @RequestMapping(value = "/{budgetId}", method = RequestMethod.GET)
+    public String viewIndividualBudget(@PathVariable long budgetId, Model model){
+        UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId);
+        model.addAttribute("budget", individualBudget);
+        return "budget";
     }
 }
