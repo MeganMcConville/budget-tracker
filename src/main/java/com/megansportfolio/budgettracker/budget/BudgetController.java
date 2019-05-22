@@ -51,6 +51,6 @@ public class BudgetController {
         String loggedInUserEmailAddress = loggedInUser.getUsername();
         Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId);
         model.addAttribute("budget", individualBudget);
-        return "individual-budget";
+        return "budget";
     }
 }

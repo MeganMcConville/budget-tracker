@@ -32,7 +32,7 @@ public class BudgetService {
 
     public Budget getBudget(String loggedInUserEmailAddress, long budgetId){
         User currentUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
-        Budget budget = budgetDao.findOneById(budgetId);
+        Budget budget = budgetDao.getOne(budgetId);
         if(currentUser.getId() == budget.getUser().getId()){
             return budget;
         }
