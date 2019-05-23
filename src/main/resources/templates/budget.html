@@ -5,13 +5,16 @@
       layout:decorate="'layouts/default'">
 <head>
     <meta charset="UTF-8">
+    <script th:src="@{/js/budget.js}"></script>
     <title>Budget</title>
 </head>
 <body>
 <div layout:fragment="content">
 
     <h1 id="budget-title" th:text="${budget.getName()}"></h1>
-
+    <button id="edit-budget-button" class="btn btn-success">Edit</button>
+    <button id="cancel-edits-button" class="btn btn-secondary hidden">Cancel</button>
+    <button id="save-edits-button" class="btn btn-success hidden" type="submit">Save</button>
     <table id="budget-items-table">
         <tr>
             <th>Name</th>
@@ -19,12 +22,26 @@
             <th>Type</th>
         </tr>
         <tr th:each="budgetItem: ${budget.getBudgetItems()}">
-            <td th:text="${budgetItem.getName()}"></td>
-            <td class="amount" th:text="${'$' + budgetItem.getAmount()}"></td>
-            <td th:text="${budgetItem.getBudgetItemType()}"></td>
+            <td>
+                <p class="" th:text="${budgetItem.getName()}"></p>
+                <input class="hidden edit-input" type="text" th:value="${budgetItem.getName()}" th:attr="data-original-value=${budgetItem.getName()}">
+            </td>
+            <td>
+                <p class="amount" th:text="${'$' + budgetItem.getAmount()}"></p>
+                <input class="hidden edit-input" type="number" th:value="${budgetItem.getAmount()}" th:attr="data-original-value=${budgetItem.getAmount()}">
+            </td>
+            <td>
+                <p th:text="${budgetItem.getBudgetItemType()}"></p>
+                <select class="hidden edit-input" id="budget-item-type-dropdown" name="budget-item-type-dropdown" th:attr="data-original-value=${budgetItem.getBudgetItemType()}">
+                    <option th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}"
+                            th:value="${budgetItemType}"
+                            th:text="${budgetItemType}"
+                            th:selected="${budgetItemType == budgetItem.getBudgetItemType()}">
+                    </option>
+                </select>
+            </td>
         </tr>
     </table>
-
 
 </div>
 </body>
