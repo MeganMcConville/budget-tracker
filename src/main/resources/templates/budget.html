@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/default'">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 id="budget-title" th:text="${budget.getName()}"></h1>
+
+    <table id="budget-items-table">
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Type</th>
+        </tr>
+        <tr th:each="budgetItem: ${budget.getBudgetItems()}">
+            <td th:text="${budgetItem.getName()}"></td>
+            <td class="amount" th:text="${'$' + budgetItem.getAmount()}"></td>
+            <td th:text="${budgetItem.getBudgetItemType()}"></td>
+        </tr>
+    </table>
+
+
+</div>
+</body>
+</html>

@@ -29,4 +29,14 @@ public class BudgetService {
         List<Budget> userBudgets = budgetDao.findByUser(currentUser);
         return userBudgets;
     }
+
+    public Budget getBudget(String loggedInUserEmailAddress, long budgetId){
+        User currentUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
+        Budget budget = budgetDao.getOne(budgetId);
+        if(currentUser.getId() == budget.getUser().getId()){
+            return budget;
+        }
+        throw new RuntimeException();
+    }
+
 }
