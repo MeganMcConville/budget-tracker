@@ -40,5 +40,14 @@
         color: red;
     }
 
+    #login-link{
+        color: black;
+        text-align: center;
+    }
+    #login-link:hover{
+        color: $green;
+        text-align: center;
+    }
+
 }
 
