@@ -32,4 +32,9 @@ public class UserService {
 
 
     }
+
+    public User getUser(String loggedInUserUsername){
+        User currentUser = userDao.findOneByUsernameIgnoreCase(loggedInUserUsername);
+        return currentUser;
+    }
 }

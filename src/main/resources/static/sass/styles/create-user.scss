@@ -43,11 +43,9 @@
     #login-link{
         color: black;
         text-align: center;
+        &:hover{
+            color: $green;
+        }
     }
-    #login-link:hover{
-        color: $green;
-        text-align: center;
-    }
-
 }
 

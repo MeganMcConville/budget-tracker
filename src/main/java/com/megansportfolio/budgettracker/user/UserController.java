@@ -1,6 +1,7 @@
 package com.megansportfolio.budgettracker.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -36,6 +37,15 @@ public class UserController {
             return "redirect:/users?invalid";
         }
         return "redirect:/login";
+    }
+
+    @RequestMapping(value = "/account", method = RequestMethod.GET)
+    public String viewAccount(Model model){
+        UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserUsername = loggedInUser.getUsername();
+        User currentUser = userService.getUser(loggedInUserUsername);
+        model.addAttribute("currentUser", currentUser);
+        return "account";
     }
 
 }

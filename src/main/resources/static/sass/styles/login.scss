@@ -38,9 +38,8 @@
       #create-account-link{
           color: black;
           text-align: center;
-      }
-      #create-account-link:hover{
-          color: $green;
-          text-align: center;
+          &:hover{
+               color: $green;
+          }
       }
 }

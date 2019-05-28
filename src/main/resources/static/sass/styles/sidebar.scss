@@ -49,15 +49,16 @@ body{
                     margin-left: 1rem;
                     color: white;
                 }
-            }
+                &:hover{
+                     background-color: white;
+                     a{
+                          text-decoration: none;
+                          margin-left: 1rem;
+                          color: $green;
+                      }
+                }
 
-            li:hover{
-                background-color: white;
-                a{
-                     text-decoration: none;
-                     margin-left: 1rem;
-                     color: $green;
-                 }
+
             }
         }
     }
