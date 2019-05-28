@@ -14,24 +14,33 @@
 #login-form-div{
       display: flex;
       justify-content: center;
-       flex-direction: column;
-       width: 45%;
-       margin: auto;
+      flex-direction: column;
+      width: 45%;
+      margin: auto;
 
       #login-form{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
       }
 
       .btn, .btn-success, .btn-lg, .btn-block{
-              margin-top: 1em !important;
-              margin-bottom: 1em !important;
+          margin-top: 1em !important;
+          margin-bottom: 1em !important;
        }
 
       input{
-               border-radius: .3em;
-               box-shadow: none;
-               border: 1px solid $dark-grey;
-       }
+          border-radius: .3em;
+          box-shadow: none;
+          border: 1px solid grey;
+      }
+
+      #create-account-link{
+          color: black;
+          text-align: center;
+      }
+      #create-account-link:hover{
+          color: $green;
+          text-align: center;
+      }
 }
