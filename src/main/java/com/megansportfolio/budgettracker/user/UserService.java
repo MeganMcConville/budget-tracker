@@ -24,6 +24,11 @@ public class UserService {
         EmailValidator validator = EmailValidator.getInstance();
         if (validator.isValid(user.getUsername())){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setFirstName(user.getFirstName().trim());
+            user.setLastName(user.getLastName().trim());
+            if(user.getFirstName().length() < 1 || user.getLastName().length() < 1){
+                throw new RuntimeException();
+            }
             userDao.save(user);
         }
         else{

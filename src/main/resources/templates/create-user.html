@@ -21,11 +21,15 @@
     <form class="new-user-form" th:action="@{/users}" method="post" th:object="${user}" id="create-user-form">
         <label for="email">Email:</label>
         <input type="text" id="email" th:field="*{username}">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" th:field="*{firstName}">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" th:field="*{lastName}">
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" th:field="*{password}">
         <label for="confirm_password">Confirm Password:</label>
         <input type="password" name="confirm_password" id="confirm_password">
-        <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
+        <button id="create-user-submit-button" type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
     </form>
     <a id="login-link" th:href="@{/login}">Already have an account? Sign In.</a>
 </div>
