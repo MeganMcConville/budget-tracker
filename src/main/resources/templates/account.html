@@ -4,15 +4,35 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="'layouts/default'">
 <head>
+    <script th:src="@{/js/account.js}"></script>
     <meta charset="UTF-8">
     <title>Account</title>
 </head>
 <body>
 <div layout:fragment="content">
 
-    <div>
-        <p th:text="${currentUser.getFirstName()}"></p>
-        <p th:text="${currentUser.getLastName()}"></p>
+    <div id="input-error-message" class="hidden alert alert-danger">That field must contain a name.</div>
+    <div id="update-success-message" class="hidden alert alert-success">Account successfully updated.</div>
+    <h2 id="account-title">Account Settings</h2>
+    <div id="account-settings-container">
+        <div>
+            <p class="label">Email:</p>
+            <p id="username-display" th:text="${currentUser.getUsername()}"></p>
+        </div>
+        <div>
+            <p class="label">First Name:</p>
+            <p id="first-name-display" th:text="${currentUser.getFirstName()}"></p>
+            <input id="first-name-edit-input" type="text" class="hidden" th:value="${currentUser.getFirstName()}">
+            <i class="fas fa-pencil-alt" title="Edit first name" id="edit-first-name-button"></i>
+            <button type="button" class="hidden btn btn-success" id="save-first-name-edit-button">Save</button>
+        </div>
+        <div>
+            <p class="label">Last Name:</p>
+            <p id="last-name-display" th:text="${currentUser.getLastName()}"></p>
+            <input id="last-name-edit-input" type="text" class="hidden" th:value="${currentUser.getLastName()}">
+            <i class="fas fa-pencil-alt" title="Edit last name" id="edit-last-name-button"></i>
+            <button type="button" class="hidden btn btn-success" id="save-last-name-edit-button">Save</button>
+        </div>
     </div>
 
 </div>

@@ -35,11 +35,29 @@ public class UserService {
             throw new InvalidEmailException();
         }
 
-
     }
 
     public User getUser(String loggedInUserUsername){
         User currentUser = userDao.findOneByUsernameIgnoreCase(loggedInUserUsername);
         return currentUser;
+    }
+
+    public void updateUser(User user, String loggedInUserEmailAddress){
+        User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
+        if(user.getFirstName() != null){
+            String firstName = user.getFirstName().trim();
+            if (firstName.length() < 1){
+                throw new RuntimeException();
+            }
+            loggedInUser.setFirstName(firstName);
+        }
+        if (user.getLastName() != null){
+            String lastName = user.getLastName().trim();
+            if (lastName.length() < 1){
+                throw new RuntimeException();
+            }
+            loggedInUser.setLastName(lastName);
+        }
+        userDao.save(loggedInUser);
     }
 }

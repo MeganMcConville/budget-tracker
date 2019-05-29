@@ -1,15 +1,13 @@
 package com.megansportfolio.budgettracker.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.support.BindingAwareModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/users")
@@ -37,6 +35,14 @@ public class UserController {
             return "redirect:/users?invalid";
         }
         return "redirect:/login";
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void updateUser(@RequestBody User user){
+        UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        userService.updateUser(user, loggedInUserEmailAddress);
     }
 
     @RequestMapping(value = "/account", method = RequestMethod.GET)
