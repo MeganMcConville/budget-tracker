@@ -4,6 +4,7 @@
 
 #add-budget-item-title{
     color: $green;
+    margin-left: 5px;
 }
 
 .disabled#create-item-button{
@@ -30,5 +31,16 @@
     div{
         display: grid;
         grid-template-columns: 40% 40% 20%;
+    }
+}
+
+#create-budget-item-form{
+    margin-left: 5px;
+}
+
+#return-budget-link{
+    margin: 5px 0 0 5px;
+    i{
+        margin-right: 5px;
     }
 }
