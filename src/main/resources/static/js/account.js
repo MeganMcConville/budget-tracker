@@ -37,18 +37,23 @@ $(document).ready(function(){
             $("#update-success-message").show();
             button.siblings("input").addClass("hidden");
             button.addClass("hidden");
-            button.removeClass("disabled")
             button.prevAll("p").show();
             button.prev("i").show();
             displayElement.text(displayValue);
         //done curlies
+        })
+        .fail(function(){
+            $("#server-error-message").show();
+        })
+        .always(function(){
+            button.removeClass("disabled");
         });
     //patchUser curly
-    //todo, need semi-colon?
     }
 
     $("#save-first-name-edit-button").click(function(){
         var saveFirstNameButton = $(this);
+        $("#server-error-message").hide();
         $("#input-error-message").hide();
         if(!saveFirstNameButton.hasClass("disabled")){
             var firstNameInput = $("#first-name-edit-input");
@@ -71,6 +76,7 @@ $(document).ready(function(){
 
     $("#save-last-name-edit-button").click(function(){
         var saveLastNameButton = $(this);
+        $("#server-error-message").hide();
         $("#input-error-message").hide();
         if(!saveLastNameButton.hasClass("disabled")){
             var lastNameInput = $("#last-name-edit-input");
