@@ -12,26 +12,54 @@ body{
     }
 
     #sidebar{
-        background: $light-grey;
-        width: 20%;
+        width: 15%;
         position: absolute;
         left: 0;
         top: 0;
         z-index: 1;
         box-shadow: 2px 0 4px rgba(0,0,0,0.5);
         transition: width .35s;
+        overflow-x: hidden;
+        height: 100vh;
+        background-color: $green;
+        opacity: 0.97;
+
+        img{
+            height: 37.6px;
+            width: 63.638px;
+            margin: 2px 0 0 2px;
+            border-radius: 2px;
+        }
 
         ul{
             display: flex;
             flex-direction: column;
             list-style-type: none;
+            width: 100%;
+            margin-left: 0;
+            margin-top: 5px;
 
-            a{
-                text-decoration: none;
-            }
-            a:hover{
-                color: $green;
-                text-decoration: none;
+            li{
+                width: 100%;
+                height: 3em;
+                cursor: auto;
+
+                a{
+                    text-decoration: none;
+                    line-height: 2.5em;
+                    margin-left: 1rem;
+                    color: white;
+                }
+                &:hover{
+                     background-color: white;
+                     a{
+                          text-decoration: none;
+                          margin-left: 1rem;
+                          color: $green;
+                      }
+                }
+
+
             }
         }
     }
@@ -52,11 +80,12 @@ body{
     }
 
     #content{
-        width: 80%;
+        width: 85%;
         #toggle{
             cursor: pointer;
             margin-left: 5px;
             font-size: 1.25em;
+            color: white;
         }
     }
 

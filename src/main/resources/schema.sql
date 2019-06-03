@@ -1,7 +1,9 @@
 CREATE TABLE users(
 username VARCHAR(200) UNIQUE,
 password VARCHAR(200),
-id BIGSERIAL PRIMARY KEY
+id BIGSERIAL PRIMARY KEY,
+first_name TEXT NOT NULL,
+last_name TEXT NOT NULL
 );
 
 CREATE TABLE budget(

@@ -17,6 +17,7 @@
     flex-direction: column;
     width: 45%;
     margin: auto;
+    margin-bottom: 5px;
 
     .new-user-form{
         display: flex;
@@ -40,5 +41,12 @@
         color: red;
     }
 
+    #login-link{
+        color: black;
+        text-align: center;
+        &:hover{
+            color: $green;
+        }
+    }
 }
 

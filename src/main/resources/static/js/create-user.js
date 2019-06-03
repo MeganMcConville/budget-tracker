@@ -2,6 +2,10 @@ $(document).ready(function(){
     $("#create-user-form").validate({
         rules: {
 
+            firstName: "required",
+
+            lastName: "required",
+
             password: {
                 required: true,
                 minlength: 8
@@ -21,5 +25,11 @@ $(document).ready(function(){
                 equalTo: "Passwords do not match"
             }
         }
-    })
-})
+    });
+
+    $("#create-user-submit-button").click(function(){
+        $("input").each(function(){
+            $(this).val($(this).val().trim());
+        });
+    });
+});
