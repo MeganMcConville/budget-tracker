@@ -28,11 +28,8 @@
             <input id="budget-item-amount" type="number">
             <label for="budget-item-type">Item Type:</label>
             <div class="btn-group btn-group-toggle" data-toggle="buttons" aria-label="Budget item type" id="budget-item-type">
-                <label class="btn btn-secondary">
-                    <input type="radio" name="budget-item-type" id="monthly" value="MONTHLY" autocomplete="off"> Monthly
-                </label>
-                <label class="btn btn-secondary">
-                    <input type="radio" name="budget-item-type" id="annual" value="ANNUAL" autocomplete="off"> Annual
+                <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
+                    <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
                 </label>
             </div>
             <input type="hidden" th:value="${budgetId}" id="budget-id">

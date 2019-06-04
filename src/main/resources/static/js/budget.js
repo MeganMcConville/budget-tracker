@@ -13,6 +13,7 @@ $(document).ready(function (){
         $("#save-edits-button").removeClass("hidden");
         $("p").hide();
         $(".edit-input").removeClass("hidden");
+
     });
 
     //on click of cancel button, revert to original, put values back
@@ -46,7 +47,7 @@ $(document).ready(function (){
             if(amountInput.val() !== amountInput.attr("data-original-value")){
                 budgetItem.amount = amountInput.val();
             }
-            var selectedOption = row.find(".type-input :selected");
+            var selectedOption = row.find(".type-input .active input");
             var typeInput = row.find(".type-input");
             if(selectedOption.val() !== typeInput.attr("data-original-value")){
                 budgetItem.budgetItemType = selectedOption.val();
@@ -78,7 +79,7 @@ $(document).ready(function (){
                 amountDisplay.text(amountInput.val());
                 amountInput.attr("data-original-value", amountInput.val());
                 var typeDisplay = row.find(".item-type");
-                var typeInput = row.find(".type-input :selected");
+                var typeInput = row.find(".type-input .active input");
                 typeDisplay.text(typeInput.val());
                 typeInput.attr("data-original-value", typeInput.val());
             });
