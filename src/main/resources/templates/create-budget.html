@@ -11,7 +11,7 @@
 <div layout:fragment="content">
 
     <h2 id="create-budget-title">Create A Budget</h2>
-    <div>
+    <div id="create-budget-form">
         <form th:action="@{/budgets}" method="post" th:object="${budget}">
             <label for="budgetName">Name:</label>
             <input id="budgetName" type="text" th:field="*{name}">
