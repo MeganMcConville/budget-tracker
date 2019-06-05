@@ -28,6 +28,7 @@ body{
             height: 37.6px;
             width: 63.638px;
             margin: 2px 0 0 2px;
+            border-radius: 2px;
         }
 
         ul{
@@ -49,15 +50,16 @@ body{
                     margin-left: 1rem;
                     color: white;
                 }
-            }
+                &:hover{
+                     background-color: white;
+                     a{
+                          text-decoration: none;
+                          margin-left: 1rem;
+                          color: $green;
+                      }
+                }
 
-            li:hover{
-                background-color: white;
-                a{
-                     text-decoration: none;
-                     margin-left: 1rem;
-                     color: $green;
-                 }
+
             }
         }
     }
