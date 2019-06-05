@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <script th:src="@{/js/create-budget-item.js}"></script>
-    <title>Create Budget Item</title>
+    <title>Create Budget Items</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -21,7 +21,7 @@
     </div>
     <div id="finished-budget-items">
     </div>
-    <div>
+    <div id="create-budget-item-form">
             <label for="budget-item-name">Name:</label>
             <input id="budget-item-name" type="text">
             <label for="budget-item-amount">Amount:</label>
@@ -38,7 +38,7 @@
             <input type="hidden" th:value="${budgetId}" id="budget-id">
             <button type="button" class="btn btn-success create-budget-item-button" id="create-item-button">Add</button>
     </div>
-
+    <a id="return-budget-link" class="btn btn-secondary" th:href="@{/budgets}"><i class="fas fa-reply"></i>Return to Budgets</a>
 
 </div>
 </body>
