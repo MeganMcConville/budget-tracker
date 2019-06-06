@@ -9,9 +9,10 @@ $(document).ready(function (){
         var editButton = $(this);
         editButton.hide();
         $("#edit-budget-success-message").hide();
+        $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
-        $("p").hide();
+        $("#budget-items-table p").hide();
         $(".edit-input").removeClass("hidden");
 
     });
@@ -22,16 +23,18 @@ $(document).ready(function (){
         $("#cancel-edits-button").addClass("hidden");
         $("#save-edits-button").addClass("hidden");
         $("#edit-budget-button").show();
+        $("#create-new-item-button").show();
         $(".edit-input").addClass("hidden");
         //change input values back to original
         $(".edit-input").each(function(){
             $(this).val($(this).attr("data-original-value"));
         });
-        $("p").show();
+        $("#budget-items-table p").show();
     });
     //on click of save button, save changes and get out of edit mode
     $("#save-edits-button").click(function(){
         $("#save-edits-button").addClass("disabled");
+        $("#edit-budget-error-message").hide();
         var payload = [];
         $(".budget-table-data").each(function(){
             var row = $(this);
@@ -65,8 +68,9 @@ $(document).ready(function (){
             $("#cancel-edits-button").addClass("hidden");
             $("#save-edits-button").addClass("hidden");
             $("#edit-budget-button").show();
+            $("#create-new-item-button").show();
             $(".edit-input").addClass("hidden");
-            $("p").show();
+            $("#budget-items-table p").show();
             //put new values to inputs & p's
             $(".budget-table-data").each(function(){
                 var row = $(this);
@@ -91,6 +95,15 @@ $(document).ready(function (){
             $("#save-edits-button").removeClass("disabled");
         });
     });
-
+    $("#create-new-item-button").click(function(){
+        $("#create-new-item-button").hide();
+        $("#create-new-item-button").addClass("disabled")
+        $("#edit-budget-button").hide();
+        $("#edit-budget-error-message").hide();
+        $("#edit-budget-success-message").hide();
+        $(".new-item-input").removeClass("hidden");
+        $(".save-buttons").removeClass("hidden");
+    //show create new curlies
+    });
 //whole page closing curlies
 });

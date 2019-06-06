@@ -11,7 +11,7 @@
 
     .grid-container{
         display: grid;
-        grid-template-columns: 40% 30% 30%;
+        grid-template-columns: 40% 20% 30% 10%;
     }
     .column-heading{
         text-align: center;
@@ -38,16 +38,20 @@
         .amount, .amount-input{
             text-align: right;
             margin-right: 1em;
+            width: 75%;
         }
-        .item-type{
-            text-align: center;
+        .btn-group-container{
+        margin: auto;
+            .item-type{
+                text-align: center;
+            }
         }
         input{
             box-shadow: none;
             border: 1px solid $dark-grey;
             border-radius: 5px;
         }
-        select:not(.hidden), input:not(.hidden){
+        input:not(.hidden){
             display: block;
             margin: 0 auto;
         }
@@ -64,7 +68,7 @@
         border-color: $light-secondary;
         margin-left: 0;
     }
-    .type-button:hover, type-button:not(.disabled).active{
+    .type-button:hover, .type-button:not(.disabled).active{
         background-color: $secondary;
         margin-left: 0;
     }

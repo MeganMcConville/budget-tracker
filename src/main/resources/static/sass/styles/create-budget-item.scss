@@ -42,14 +42,14 @@
         border-color: $light-secondary;
         margin-left: 0;
     }
-    .type-button:hover, type-button:not(.disabled).active{
+    .type-button:hover, .type-button:not(.disabled).active{
         background-color: $secondary;
         margin-left: 0;
     }
-    #button-group-left{
+    :nth-child(1){
         border-right: 1px solid white;
     }
-    #button-group-right{
+    :nth-child(2){
         border-left: 1px solid white;
     }
 }
