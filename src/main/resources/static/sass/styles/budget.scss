@@ -34,6 +34,7 @@
         }
         .name-input{
             width: 90%;
+            margin-left: 0;
         }
         .amount, .amount-input{
             text-align: right;
@@ -51,12 +52,20 @@
             border: 1px solid $dark-grey;
             border-radius: 5px;
         }
-        input:not(.hidden){
-            display: block;
-            margin: 0 auto;
+        .save-buttons{
+            margin: auto;
+            cursor: pointer;
+            #cancel-new-item-x{
+                margin-right: 5px;
+                color: $secondary;
+            }
+            #save-new-item-check{
+                color: $green;
+            }
         }
     }
-    .row-data:nth-child(even){
+
+    .row-data:nth-child(even):not(.hidden){
         background-color: $light-grey;
     }
 }

@@ -4,17 +4,18 @@ $(document).ready(function (){
     $(document).ajaxSend(function(e, xhr, options){
         xhr.setRequestHeader(header, token);
     });
+
     //on click, hide edit button and enter edit mode
     $("#edit-budget-button").click(function(){
         var editButton = $(this);
         editButton.hide();
         $("#edit-budget-success-message").hide();
+        $("#create-new-item-success-message").hide();
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
         $("#budget-items-table p").hide();
         $(".edit-input").removeClass("hidden");
-
     });
 
     //on click of cancel button, revert to original, put values back
@@ -31,6 +32,7 @@ $(document).ready(function (){
         });
         $("#budget-items-table p").show();
     });
+
     //on click of save button, save changes and get out of edit mode
     $("#save-edits-button").click(function(){
         $("#save-edits-button").addClass("disabled");
@@ -57,6 +59,7 @@ $(document).ready(function (){
             }
             payload.push(budgetItem);
         });
+
         $.ajax({
             url: "/budget-items",
             type: "PATCH",
@@ -95,15 +98,111 @@ $(document).ready(function (){
             $("#save-edits-button").removeClass("disabled");
         });
     });
+
     $("#create-new-item-button").click(function(){
         $("#create-new-item-button").hide();
         $("#create-new-item-button").addClass("disabled")
         $("#edit-budget-button").hide();
         $("#edit-budget-error-message").hide();
         $("#edit-budget-success-message").hide();
+        $("#create-new-item-success-message").hide();
+        $(".new-item-container").removeClass("hidden");
         $(".new-item-input").removeClass("hidden");
         $(".save-buttons").removeClass("hidden");
     //show create new curlies
     });
+
+    $("#cancel-new-item-x").click(function(){
+        $(".new-item-container").addClass("hidden");
+        $(".save-buttons").addClass("hidden");
+        $(".new-item-input").addClass("hidden");
+        $("#edit-budget-button").show();
+        $("#create-new-item-button").removeClass("disabled");
+        $("#create-new-item-button").show();
+        //clear inputs
+        $("#new-item-name-input, #new-item-amount-input").val("");
+        $("#new-item-type-input .active").removeClass("active");
+    //cancel item button curlies
+    });
+
+    $("#save-new-item-check").click(function(){
+        if(!$("#save-new-item-check").hasClass("disabled")){
+            $("#save-new-item-check").addClass("disabled");
+            $("edit-budget-error-message").hide();
+            var nameInput = $("#new-item-name-input");
+            var name = nameInput.val();
+            var amountInput = $("#new-item-amount-input");
+            var amount = amountInput.val();
+            var typeInput = $("#new-item-type-input .active input");
+            var budgetItemType = typeInput.val();
+            var budgetId = $("#new-item-name-input").closest(".row-data").attr("data-budget-id");
+            var payload = {
+                amount: amount,
+                name: name,
+                budgetItemType: budgetItemType,
+                budget:{
+                    id: budgetId
+                }
+            //payload curly
+            };
+            $.ajax({
+                url:"/budget-items",
+                type: "POST",
+                data: JSON.stringify(payload),
+                contentType: "application/json"
+            //ajax curlies
+            })
+            .done(function(){
+                $("#create-new-item-success-message").show();
+                $("#new-item-name-input, #new-item-amount-input").val("");
+                $("#new-item-type-input .active").removeClass("active");
+                $(".new-item-container").addClass("hidden");
+                $(".save-buttons").addClass("hidden");
+                $(".new-item-input").addClass("hidden");
+                $("#edit-budget-button").show();
+                $("#create-new-item-button").removeClass("disabled");
+                $("#create-new-item-button").show();
+                //add new item to budget
+                var newRow = $(".budget-table-data").first().clone();
+                var newItemName = newRow.find(".name");
+                newItemName.text(name);
+                newItemName.attr("data-original-value", name);
+                var newItemAmount = newRow.find(".amount");
+                newItemAmount.text("$" + amount);
+                newItemAmount.attr("data-original-value", amount);
+                var newItemType = newRow.find(".item-type-text");
+                newItemType.text(budgetItemType);
+                newItemType.attr("data-original-value", budgetItemType);
+                var newItemNameInput = newRow.find(".name-input");
+                newItemNameInput.val(name);
+                newItemNameInput.attr("data-original-value", name);
+                var newItemAmountInput = newRow.find(".amount-input");
+                newItemAmountInput.val(amount);
+                newItemAmountInput.attr("data-original-value", amount);
+                var newItemTypeInput = newRow.find(".type-input");
+                newItemTypeInput.attr("data-original-value", budgetItemType);
+                var typeButtons = newRow.find("input[type=radio]");
+                typeButtons.each(function(){
+                    if($(this).val().includes(budgetItemType)){
+                        $(this).parent().addClass("active");
+                    }
+                    else{
+                        $(this).parent().removeClass("active");
+                    }
+                //each curlies
+                });
+                newRow.insertBefore(".new-item-container");
+            })
+            .fail(function(){
+                $("#edit-budget-error-message").show();
+            })
+            .always(function(){
+                $("#save-new-item-check").removeClass("disabled");
+            });
+        //if curly
+        }
+    //save new item closing curlies
+    });
+
 //whole page closing curlies
 });
