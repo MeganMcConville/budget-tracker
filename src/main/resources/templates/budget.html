@@ -15,8 +15,16 @@
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
     <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
 
-    <h1 id="budget-title" th:text="${budget.getName()}"></h1>
+    <div id="budget-heading">
+        <h1 id="budget-title" th:text="${budget.getName()}" th:attr="budget-id=${budget.getId()}"></h1>
+        <i class="fas fa-pencil-alt" title="Rename budget" id="rename-budget-button"></i>
+        <input id="rename-budget-input" class="hidden" type="text" th:value="${budget.getName()}">
+        <div class="rename-buttons hidden">
+            <i class="far fa-times-circle" id="rename-budget-x"></i>
+            <i class="fas fa-check" id="rename-budget-check"></i>
+        </div>
 
+    </div>
     <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
     <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
     <button id="cancel-edits-button" class="btn btn-secondary hidden mb-2 ml-2">Cancel</button>

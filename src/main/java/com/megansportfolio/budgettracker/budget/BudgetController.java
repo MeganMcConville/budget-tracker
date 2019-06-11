@@ -2,13 +2,11 @@ package com.megansportfolio.budgettracker.budget;
 
 import com.megansportfolio.budgettracker.user.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,5 +50,13 @@ public class BudgetController {
         Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId);
         model.addAttribute("budget", individualBudget);
         return "budget";
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void renameBudget(@RequestBody Budget budget){
+        UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        budgetService.renameBudget(budget, loggedInUserEmailAddress);
     }
 }
