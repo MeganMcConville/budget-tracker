@@ -18,11 +18,11 @@
 
     <div id="budget-heading">
         <h1 id="budget-title" th:text="${budget.getName()}" th:attr="data-budget-id=${budget.getId()}, data-original-value=${budget.getName()}"></h1>
-        <i class="fas fa-pencil-alt" title="Rename budget" id="rename-budget-button"></i>
+        <i class="fas fa-pencil-alt ml-3" title="Rename budget" id="rename-budget-button"></i>
         <input id="rename-budget-input" class="hidden" type="text" th:value="${budget.getName()}">
-        <div class="rename-buttons hidden">
-            <i class="far fa-times-circle" id="rename-budget-x"></i>
-            <i class="fas fa-check" id="rename-budget-check"></i>
+        <div class="rename-buttons ml-3 hidden">
+            <i class="far fa-times-circle" id="rename-budget-x" title="Cancel"></i>
+            <i class="fas fa-check" id="rename-budget-check" title="Save"></i>
         </div>
 
     </div>
