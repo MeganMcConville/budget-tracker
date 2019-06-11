@@ -204,5 +204,71 @@ $(document).ready(function (){
     //save new item closing curlies
     });
 
+    $("#rename-budget-button").click(function(){
+        $("#rename-budget-button").hide();
+        $("#budget-title").hide();
+        $("#edit-budget-success-message").hide();
+        $("#create-new-item-success-message").hide();
+        $("#rename-budget-input").removeClass("hidden");
+        $(".rename-buttons").removeClass("hidden");
+    //rename button curlies
+    });
+
+    $("#rename-budget-x").click(function(){
+        $("#edit-budget-error-message").hide();
+        $("#budget-title").show();
+        $("#rename-budget-error-message").hide();
+        $(".rename-buttons").addClass("hidden");
+        $("#rename-budget-input").addClass("hidden");
+        $("#rename-budget-input").val($("#budget-title").attr("data-original-value"));
+        $("#rename-budget-button").show();
+    //cancel rename curlies
+    });
+
+    $("#rename-budget-check").click(function(){
+        $("#rename-budget-error-message").hide();
+        $("#edit-budget-error-message").hide();
+        var budgetId = $("#budget-title").attr("data-budget-id");
+        if(!$("#rename-budget-check").hasClass("disabled")){
+            var renameBudgetInput = $("#rename-budget-input");
+            var updateBudgetName = renameBudgetInput.val().trim();
+            if(updateBudgetName.length < 1){
+                $("#rename-budget-error-message").show();
+            }
+            else{
+                $("rename-budget-check").addClass("disabled");
+                var payload = {
+                    name: updateBudgetName,
+                    id: budgetId
+                };
+                $.ajax({
+                    url:"/budgets",
+                    type: "PATCH",
+                    data: JSON.stringify(payload),
+                    contentType: "application/json"
+                })
+                .done(function(){
+                    $("#update-budget-success-message").show();
+                    $("#rename-budget-error-message").hide();
+                    $(".rename-buttons").addClass("hidden");
+                    $("#rename-budget-input").addClass("hidden");
+                    $("#rename-budget-button").show();
+                    $("#budget-title").show();
+                    $("#budget-title").text(updateBudgetName);
+                    $("#budget-title").attr("data-original-value", updateBudgetName);
+                    $("#rename-budget-input").val(updateBudgetName);
+                })
+                .fail(function(){
+                    $("edit-budget-error-message").show();
+                })
+                .always(function(){
+                    $("#rename-budget-check").removeClass("disabled");
+                });
+            //else curly
+            }
+        //if curly
+        }
+    //rename budget curlies
+    });
 //whole page closing curlies
 });

@@ -42,7 +42,7 @@ public class BudgetService {
     public void renameBudget(Budget budget, String loggedInUserEmailaddress){
         User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailaddress);
         Budget existingBudget = budgetDao.getOne(budget.getId());
-        if(loggedInUser.getId() != budget.getUser().getId()){
+        if(loggedInUser.getId() != existingBudget.getUser().getId()){
             throw new RuntimeException();
         }
         if(budget.getName() != null){

@@ -12,11 +12,12 @@
 <div layout:fragment="content">
 
     <div id="edit-budget-error-message" class="hidden alert alert-danger">Something went wrong. Please refresh the page and try again.</div>
+    <div id="rename-budget-error-message" class="hidden alert alert-danger">Please enter a name</div>
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
     <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
 
     <div id="budget-heading">
-        <h1 id="budget-title" th:text="${budget.getName()}" th:attr="budget-id=${budget.getId()}"></h1>
+        <h1 id="budget-title" th:text="${budget.getName()}" th:attr="data-budget-id=${budget.getId()}, data-original-value=${budget.getName()}"></h1>
         <i class="fas fa-pencil-alt" title="Rename budget" id="rename-budget-button"></i>
         <input id="rename-budget-input" class="hidden" type="text" th:value="${budget.getName()}">
         <div class="rename-buttons hidden">
