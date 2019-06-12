@@ -2,14 +2,18 @@
 
 #budget-title{
     margin-left: 10px;
+    color: $green;
 }
 
 #budget-items-table{
-
-    border-collapse: collapse;
     width: 60%;
     margin-left: 10px;
-    th{
+
+    .grid-container{
+        display: grid;
+        grid-template-columns: 40% 30% 30%;
+    }
+    .column-heading{
         text-align: center;
         vertical-align: middle;
         border: 1px solid $light-grey;
@@ -20,19 +24,54 @@
         color: white;
         font-weight: bold;
     }
-    td{
-        border: 1px solid $dark-grey;
-        border-collapse: collapse;
+    .row-data{
+
         text-align: left;
         vertical-align: middle;
-        border-bottom: 1px solid $light-grey;
         padding: 6px;
-
-        &.amount{
+        p{
+            margin-bottom: 0;
+        }
+        .name-input{
+            width: 90%;
+        }
+        .amount, .amount-input{
             text-align: right;
+            margin-right: 1em;
+        }
+        .item-type{
+            text-align: center;
+        }
+        input{
+            box-shadow: none;
+            border: 1px solid $dark-grey;
+            border-radius: 5px;
+        }
+        select:not(.hidden), input:not(.hidden){
+            display: block;
+            margin: 0 auto;
         }
     }
-    tr:nth-child(even){
+    .row-data:nth-child(even){
         background-color: $light-grey;
+    }
+}
+
+
+.btn-group{
+    .type-button{
+        background-color: $light-secondary;
+        border-color: $light-secondary;
+        margin-left: 0;
+    }
+    .type-button:hover, type-button:not(.disabled).active{
+        background-color: $secondary;
+        margin-left: 0;
+    }
+    :nth-child(1){
+        border-right: 1px solid white;
+    }
+    :nth-child(2){
+        border-left: 1px solid white;
     }
 }

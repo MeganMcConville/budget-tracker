@@ -1,3 +1,5 @@
+@import "styles/variables";
+
 .hidden{
     display: none;
 }
@@ -31,6 +33,24 @@
     div{
         display: grid;
         grid-template-columns: 40% 40% 20%;
+    }
+}
+
+.btn-group{
+    .type-button{
+        background-color: $light-secondary;
+        border-color: $light-secondary;
+        margin-left: 0;
+    }
+    .type-button:hover, type-button:not(.disabled).active{
+        background-color: $secondary;
+        margin-left: 0;
+    }
+    #button-group-left{
+        border-right: 1px solid white;
+    }
+    #button-group-right{
+        border-left: 1px solid white;
     }
 }
 
