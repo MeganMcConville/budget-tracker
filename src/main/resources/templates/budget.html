@@ -11,17 +11,23 @@
 <body>
 <div layout:fragment="content">
 
-    <div id="edit-budget-error-message" class="hidden alert alert-danger">Something went wrong. Please try again.</div>
+    <div id="edit-budget-error-message" class="hidden alert alert-danger">Something went wrong. Please refresh the page and try again.</div>
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
+    <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
+
     <h1 id="budget-title" th:text="${budget.getName()}"></h1>
+
     <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
+    <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
     <button id="cancel-edits-button" class="btn btn-secondary hidden mb-2 ml-2">Cancel</button>
     <button id="save-edits-button" class="btn btn-success hidden mb-2" type="submit">Save</button>
+
     <div id="budget-items-table">
             <div class="grid-container">
                 <div class="column-heading">Name</div>
                 <div class="column-heading">Amount</div>
                 <div class="column-heading">Type</div>
+                <div class="column-heading"></div>
             </div>
             <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
                  th:attr="data-budget-item-id=${budgetItem.getId()}">
@@ -35,8 +41,8 @@
                     <input class="hidden edit-input amount-input" type="number" th:value="${budgetItem.getAmount()}"
                            th:attr="data-original-value=${budgetItem.getAmount()}">
                 </div>
-                <div>
-                    <p class="item-type" th:text="${budgetItem.getBudgetItemType()}"></p>
+                <div class="btn-group-container">
+                    <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
                     <div class="btn-group btn-group-toggle hidden edit-input type-input" data-toggle="buttons"
                          aria-label="Budget item type" id="budget-item-type-radio" th:attr="data-original-value=${budgetItem.getBudgetItemType()}">
                         <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}"
@@ -44,9 +50,26 @@
                             <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
                         </label>
                     </div>
-
                 </div>
+            </div>
 
+            <div class="grid-container row-data new-item-container hidden" th:attr="data-budget-id=${budget.getId()}">
+                <div>
+                    <input class="hidden new-item-input name-input" id="new-item-name-input" type="text">
+                </div>
+                <div>
+                    <input class="hidden new-item-input amount-input" id="new-item-amount-input" type="number">
+                </div>
+                <div class="btn-group-container hidden btn-group btn-group-toggle new-item-input type-input" id="new-item-type-input" data-toggle="buttons"
+                     aria-label="Budget item type">
+                    <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
+                        <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
+                    </label>
+                </div>
+                <div class="save-buttons hidden">
+                    <i class="far fa-times-circle" id="cancel-new-item-x"></i>
+                    <i class="fas fa-check" id="save-new-item-check"></i>
+                </div>
             </div>
     </div>
 
