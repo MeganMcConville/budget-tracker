@@ -12,11 +12,20 @@
 <div layout:fragment="content">
 
     <div id="edit-budget-error-message" class="hidden alert alert-danger">Something went wrong. Please refresh the page and try again.</div>
+    <div id="rename-budget-error-message" class="hidden alert alert-danger">Please enter a name</div>
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
     <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
 
-    <h1 id="budget-title" th:text="${budget.getName()}"></h1>
+    <div id="budget-heading">
+        <h1 id="budget-title" th:text="${budget.getName()}" th:attr="data-budget-id=${budget.getId()}, data-original-value=${budget.getName()}"></h1>
+        <i class="fas fa-pencil-alt ml-3" title="Rename budget" id="rename-budget-button"></i>
+        <input id="rename-budget-input" class="hidden" type="text" th:value="${budget.getName()}">
+        <div class="rename-buttons ml-3 hidden">
+            <i class="far fa-times-circle" id="rename-budget-x" title="Cancel"></i>
+            <i class="fas fa-check" id="rename-budget-check" title="Save"></i>
+        </div>
 
+    </div>
     <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
     <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
     <button id="cancel-edits-button" class="btn btn-secondary hidden mb-2 ml-2">Cancel</button>

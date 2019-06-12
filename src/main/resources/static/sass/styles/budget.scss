@@ -1,8 +1,35 @@
 @import "styles/variables";
 
-#budget-title{
-    margin-left: 10px;
-    color: $green;
+#budget-heading{
+    display: flex;
+    align-items: center;
+    #budget-title{
+        margin-left: 10px;
+        color: $green;
+    }
+    #rename-budget-button, #rename-budget-check{
+        color: $green;
+        cursor: pointer;
+        &.disabled{
+            opacity: .5;
+        }
+    }
+    #rename-budget-x{
+        cursor: pointer;
+        color: $secondary;
+    }
+
+    #rename-budget-input{
+        margin-left: 10px;
+        margin-bottom: 1em;
+        margin-top: 1em;
+        padding-left: 5px;
+        border-radius: 5px;
+    }
+    .rename-buttons{
+        margin-bottom: 1em;
+        margin-top: 1em;
+    }
 }
 
 #budget-items-table{
@@ -46,11 +73,6 @@
             .item-type{
                 text-align: center;
             }
-        }
-        input{
-            box-shadow: none;
-            border: 1px solid $dark-grey;
-            border-radius: 5px;
         }
         .save-buttons{
             margin: auto;
