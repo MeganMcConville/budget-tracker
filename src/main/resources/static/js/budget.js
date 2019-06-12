@@ -128,7 +128,7 @@ $(document).ready(function (){
     $("#save-new-item-check").click(function(){
         if(!$("#save-new-item-check").hasClass("disabled")){
             $("#save-new-item-check").addClass("disabled");
-            $("edit-budget-error-message").hide();
+            $("#edit-budget-error-message").hide();
             var nameInput = $("#new-item-name-input");
             var name = nameInput.val();
             var amountInput = $("#new-item-amount-input");
@@ -236,7 +236,7 @@ $(document).ready(function (){
                 $("#rename-budget-error-message").show();
             }
             else{
-                $("rename-budget-check").addClass("disabled");
+                $("#rename-budget-check").addClass("disabled");
                 var payload = {
                     name: updateBudgetName,
                     id: budgetId
@@ -259,7 +259,7 @@ $(document).ready(function (){
                     $("#rename-budget-input").val(updateBudgetName);
                 })
                 .fail(function(){
-                    $("edit-budget-error-message").show();
+                    $("#edit-budget-error-message").show();
                 })
                 .always(function(){
                     $("#rename-budget-check").removeClass("disabled");
