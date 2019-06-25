@@ -1,9 +1,11 @@
 package com.megansportfolio.budgettracker.budgetItem;
 
 import com.megansportfolio.budgettracker.budget.Budget;
+import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "budget_item")
@@ -28,6 +30,8 @@ public class BudgetItem {
     @Column(name = "type")
     private BudgetItemType budgetItemType;
 
+    @OneToMany(mappedBy = "budgetItemId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BudgetEntry> budgetEntries;
 
     public long getId(){
         return this.id;
