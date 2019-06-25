@@ -270,5 +270,35 @@ $(document).ready(function (){
         }
     //rename budget curlies
     });
+    $(".delete-item-button").click(function(){
+        var deleteIcon = $(this);
+        $(".delete-confirmation").attr("data-budget-item-id", deleteIcon.parent().parent().attr("data-budget-item-id"))
+    //trashcan curlies
+    });
+
+    $(".delete-confirmation").click(function(){
+        if(!$(".delete-confirmation").hasClass("disabled")){
+            $(".delete-confirmation").addClass("disabled");
+            $("#edit-budget-error-message").hide();
+            var budgetItemId = $(".delete-confirmation").attr("data-budget-item-id");
+            $.ajax({
+                url: "/budget-items/" + budgetItemId,
+                type: "DELETE"
+            })
+            .done(function(){
+                $(".grid-container[data-budget-item-id="+budgetItemId+"]").remove();
+                $("#delete-item-modal").modal("toggle");
+            })
+            .fail(function(){
+                $("#edit-budget-error-message").show();
+            })
+            .always(function(){
+                $(".delete-confirmation").removeClass("disabled");
+            });
+        //if curlies
+        }
+    //delete confirmation function curlies
+    });
+
 //whole page closing curlies
 });
