@@ -39,6 +39,7 @@ public class BudgetItemService {
         List<BudgetItem> originalBudgetItems = budgetItemDao.findAllById(ids);
         for(BudgetItem budgetItem : budgetItems){
             BudgetItem originalBudgetItem = originalBudgetItems.stream().filter(x -> x.getId() == budgetItem.getId()).findFirst().get();
+
             if(!originalBudgetItem.getBudget().getUser().getUsername().equals(loggedInUserEmailAddress)){
                 throw new RuntimeException();
             }
@@ -47,9 +48,6 @@ public class BudgetItemService {
             }
             if(budgetItem.getName() != null){
                 originalBudgetItem.setName(budgetItem.getName());
-            }
-            if(budgetItem.getBudgetItemType() != null){
-                originalBudgetItem.setBudgetItemType(budgetItem.getBudgetItemType());
             }
         }
     }

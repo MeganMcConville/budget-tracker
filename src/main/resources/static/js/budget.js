@@ -14,7 +14,7 @@ $(document).ready(function (){
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
-        $("#budget-items-table p").hide();
+        $("#budget-items-table p:not(.item-type-text)").hide();
         $(".edit-input").removeClass("hidden");
     });
 
@@ -52,11 +52,6 @@ $(document).ready(function (){
             if(amountInput.val() !== amountInput.attr("data-original-value")){
                 budgetItem.amount = amountInput.val();
             }
-            var selectedOption = row.find(".type-input .active input");
-            var typeInput = row.find(".type-input");
-            if(selectedOption.val() !== typeInput.attr("data-original-value")){
-                budgetItem.budgetItemType = selectedOption.val();
-            }
             payload.push(budgetItem);
         });
 
@@ -85,10 +80,6 @@ $(document).ready(function (){
                 var amountInput = row.find(".amount-input");
                 amountDisplay.text(amountInput.val());
                 amountInput.attr("data-original-value", amountInput.val());
-                var typeDisplay = row.find(".item-type");
-                var typeInput = row.find(".type-input .active input");
-                typeDisplay.text(typeInput.val());
-                typeInput.attr("data-original-value", typeInput.val());
             });
         })
         .fail(function(){
@@ -109,6 +100,7 @@ $(document).ready(function (){
         $(".new-item-container").removeClass("hidden");
         $(".new-item-input").removeClass("hidden");
         $(".save-buttons").removeClass("hidden");
+        $("html, body").animate({scrollTop: $("#new-item-div").offset().top}, 1000);
     //show create new curlies
     });
 
@@ -179,18 +171,6 @@ $(document).ready(function (){
                 var newItemAmountInput = newRow.find(".amount-input");
                 newItemAmountInput.val(amount);
                 newItemAmountInput.attr("data-original-value", amount);
-                var newItemTypeInput = newRow.find(".type-input");
-                newItemTypeInput.attr("data-original-value", budgetItemType);
-                var typeButtons = newRow.find("input[type=radio]");
-                typeButtons.each(function(){
-                    if($(this).val().includes(budgetItemType)){
-                        $(this).parent().addClass("active");
-                    }
-                    else{
-                        $(this).parent().removeClass("active");
-                    }
-                //each curlies
-                });
                 newRow.insertBefore(".new-item-container");
             })
             .fail(function(){
