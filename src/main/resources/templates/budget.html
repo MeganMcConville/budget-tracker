@@ -50,15 +50,8 @@
                     <input class="hidden edit-input amount-input" type="number" th:value="${budgetItem.getAmount()}"
                            th:attr="data-original-value=${budgetItem.getAmount()}">
                 </div>
-                <div class="btn-group-container">
+                <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
-                    <div class="btn-group btn-group-toggle hidden edit-input type-input" data-toggle="buttons"
-                         aria-label="Budget item type" id="budget-item-type-radio" th:attr="data-original-value=${budgetItem.getBudgetItemType()}">
-                        <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}"
-                               th:classappend="${budgetItemType == budgetItem.getBudgetItemType() ? ' active' : ''}">
-                            <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
-                        </label>
-                    </div>
                 </div>
             </div>
 
