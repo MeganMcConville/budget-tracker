@@ -38,4 +38,12 @@ public class BudgetItemController {
         String loggedInUserEmailAddress = loggedInUser.getUsername();
         budgetItemService.updateBudgetItems(budgetItems, loggedInUserEmailAddress);
     }
+
+    @RequestMapping(value = "/{budgetItemId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteBudgetItem(@PathVariable long budgetItemId){
+        UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        budgetItemService.deleteBudgetItem(budgetItemId, loggedInUserEmailAddress);
+    }
 }
