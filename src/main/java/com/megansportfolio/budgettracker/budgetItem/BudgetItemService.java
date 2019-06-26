@@ -52,4 +52,13 @@ public class BudgetItemService {
         }
     }
 
+    public void deleteBudgetItem(long budgetItemId, String loggedInUserEmailAddress){
+        User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
+        BudgetItem itemToDelete = budgetItemDao.getOne(budgetItemId);
+        if(loggedInUser.getId() != itemToDelete.getBudget().getUser().getId()){
+            throw new RuntimeException();
+        }
+        budgetItemDao.deleteById(itemToDelete.getId());
+    }
+
 }

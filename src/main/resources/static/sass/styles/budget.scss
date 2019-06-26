@@ -74,6 +74,12 @@
                 text-align: center;
             }
         }
+
+        .delete-item-button{
+            color: $secondary;
+            margin-left: 45%;
+            cursor: pointer;
+        }
         .save-buttons{
             margin: auto;
             cursor: pointer;
