@@ -100,6 +100,7 @@ $(document).ready(function (){
         $(".new-item-container").removeClass("hidden");
         $(".new-item-input").removeClass("hidden");
         $(".save-buttons").removeClass("hidden");
+        $("html, body").animate({scrollTop: $("#new-item-div").offset().top}, 1000);
     //show create new curlies
     });
 
