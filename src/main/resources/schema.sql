@@ -19,3 +19,11 @@ amount NUMERIC NOT NULL,
 name VARCHAR(200) NOT NULL,
 type VARCHAR(200) NOT NULL
 );
+
+CREATE TABLE budget_item_history(
+id BIGSERIAL PRIMARY KEY,
+budget_item_id BIGSERIAL NOT NULL REFERENCES budget_item(id),
+amount NUMERIC NOT NULL,
+name VARCHAR(200) NOT NULL,
+edit_date DATE NOT NULL
+);
