@@ -47,7 +47,6 @@ public class BudgetService {
         }
         if(budget.getName() != null){
             String updatedName = budget.getName().trim();
-            //check if if empty string
             if(updatedName.length() < 1){
                 throw new RuntimeException();
             }
