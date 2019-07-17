@@ -1,5 +1,23 @@
 @import "styles/variables";
 
+#date-modal-header, #delete-item-header{
+    background-color: $green;
+    color: white;
+    font-weight: bold;
+    span{
+        color: white;
+    }
+}
+
+#date-modal-body{
+    display: flex;
+    justify-content: space-evenly;
+    #month-select{
+        padding: 2px 5px 2px 5px;
+        border-radius: 5px;
+    }
+}
+
 #budget-heading{
     display: flex;
     align-items: center;
@@ -31,6 +49,25 @@
         margin-top: 1em;
     }
 }
+
+#button-container{
+    display: flex;
+    justify-content: flex-start;
+    width: 60%;
+
+    #cancel-edits-button{
+        margin-right: .5em;
+    }
+
+    #calendar-icon{
+        color: $green;
+        font-size: 2em;
+        margin-left: auto;
+        margin-right: .7em;
+        cursor: pointer;
+    }
+}
+
 
 #budget-items-table{
     width: 60%;

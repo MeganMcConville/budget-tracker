@@ -20,15 +20,15 @@
     <div class="error" th:if="${param.invalid}">Please enter a valid email address.</div>
     <form class="new-user-form" th:action="@{/users}" method="post" th:object="${user}" id="create-user-form">
         <label for="email">Email:</label>
-        <input type="text" id="email" th:field="*{username}">
+        <input type="text" id="email" th:field="*{username}" tabindex="1">
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" th:field="*{firstName}">
+        <input type="text" id="firstName" th:field="*{firstName}" tabindex="2">
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" th:field="*{lastName}">
+        <input type="text" id="lastName" th:field="*{lastName}" tabindex="3">
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" th:field="*{password}">
+        <input type="password" id="password" name="password" th:field="*{password}" tabindex="4">
         <label for="confirm_password">Confirm Password:</label>
-        <input type="password" name="confirm_password" id="confirm_password">
+        <input type="password" name="confirm_password" id="confirm_password" tabindex="5">
         <button id="create-user-submit-button" type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
     </form>
     <a id="login-link" th:href="@{/login}">Already have an account? Sign In.</a>
