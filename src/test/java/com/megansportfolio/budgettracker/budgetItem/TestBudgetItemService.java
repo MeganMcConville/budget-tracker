@@ -145,28 +145,33 @@ public class TestBudgetItemService {
         user.setUsername(loggedInUserEmailAddress);
         Budget budget = new Budget();
         budget.setUser(user);
+        
+        String name = "Name";
+        String newName = "New Name";
+        BigDecimal one = BigDecimal.ONE;
+        BigDecimal ten = BigDecimal.TEN;
 
         originalBudgetItems.forEach(x -> x.setBudget(budget));
 
         // first: nothing overridden
-        budgetItem1.setName("Name");
-        budgetItem1.setAmount(BigDecimal.ONE);
+        budgetItem1.setName(name);
+        budgetItem1.setAmount(one);
 
         // second: name overridden
-        budgetItem2.setName("Name");
-        budgetItem2.setAmount(BigDecimal.ONE);
-        newBudgetItem2.setName("New Name");
+        budgetItem2.setName(name);
+        budgetItem2.setAmount(one);
+        newBudgetItem2.setName(newName);
 
         // third: amount overridden
-        budgetItem3.setName("Name");
-        budgetItem3.setAmount(BigDecimal.ONE);
-        newBudgetItem3.setAmount(BigDecimal.TEN);
+        budgetItem3.setName(name);
+        budgetItem3.setAmount(one);
+        newBudgetItem3.setAmount(ten);
 
         // fourth: both overridden
-        budgetItem4.setName("Name");
-        budgetItem4.setAmount(BigDecimal.ONE);
-        newBudgetItem4.setName("New Name");
-        newBudgetItem4.setAmount(BigDecimal.TEN);
+        budgetItem4.setName(name);
+        budgetItem4.setAmount(one);
+        newBudgetItem4.setName(newName);
+        newBudgetItem4.setAmount(ten);
 
         serviceUnderTest.updateBudgetItems(parameterBudgetItems, loggedInUserEmailAddress);
 
@@ -174,13 +179,13 @@ public class TestBudgetItemService {
         Mockito.verify(budgetItemHistoryDao).saveAll(captor.capture());
         List<BudgetItemHistory> savedBudgetItemHistories = captor.getValue();
         Assert.assertEquals(3, savedBudgetItemHistories.size());
-        Assert.assertEquals("Name", savedBudgetItemHistories.get(0).getName());
-        Assert.assertEquals(BigDecimal.ONE, savedBudgetItemHistories.get(1).getAmount());
-        Assert.assertEquals("Name", savedBudgetItemHistories.get(2).getName());
-        Assert.assertEquals(BigDecimal.ONE, savedBudgetItemHistories.get(2).getAmount());
+        Assert.assertEquals(name, savedBudgetItemHistories.get(0).getName());
+        Assert.assertEquals(one, savedBudgetItemHistories.get(1).getAmount());
+        Assert.assertEquals(name, savedBudgetItemHistories.get(2).getName());
+        Assert.assertEquals(one, savedBudgetItemHistories.get(2).getAmount());
 
-        Assert.assertEquals("Name", budgetItem1.getName());
-        Assert.assertEquals(BigDecimal.ONE, budgetItem1.getAmount());
+        Assert.assertEquals(name, budgetItem1.getName());
+        Assert.assertEquals(one, budgetItem1.getAmount());
         Assert.assertEquals(newBudgetItem2.getName(), budgetItem2.getName());
         Assert.assertEquals(newBudgetItem3.getAmount(), budgetItem3.getAmount());
         Assert.assertEquals(newBudgetItem4.getName(), budgetItem4.getName());

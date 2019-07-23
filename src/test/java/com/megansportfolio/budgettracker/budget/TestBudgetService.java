@@ -146,7 +146,7 @@ public class TestBudgetService {
         serviceUnderTest.renameBudget(parameterBudget, loggedInUserEmailAddress);
 
         Mockito.verify(budgetDao).save(budget);
-        Assert.assertEquals(parameterBudget.getName(), budget.getName());
+        Assert.assertEquals(updatedName, budget.getName());
     }
 
     @Test
