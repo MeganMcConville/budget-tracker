@@ -43,4 +43,8 @@ public enum Month {
         this.nameLabel = nameLabel;
         this.monthNumber = monthNumber;
     }
+
+    public int getMonthNumber(){
+        return this.monthNumber;
+    }
 }
