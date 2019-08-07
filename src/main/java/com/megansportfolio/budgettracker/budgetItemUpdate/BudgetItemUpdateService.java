@@ -33,6 +33,14 @@ public class BudgetItemUpdateService {
             }
 
             else{
+                budgetItemUpdate.setBudgetItem(correspondingBudgetItem);
+                long budgetItemId = budgetItemUpdate.getBudgetItem().getId();
+                int updateMonth = budgetItemUpdate.getMonth();
+                int updateYear = budgetItemUpdate.getYear();
+                BudgetItemUpdate existingUpdate = budgetItemUpdateDao.findOneByBudgetItemIdAndMonthAndYear(budgetItemId, updateMonth, updateYear);
+                if(existingUpdate != null){
+                    budgetItemUpdateDao.delete(existingUpdate);
+                }
                 updatesToSave.add(budgetItemUpdate);
             }
 
