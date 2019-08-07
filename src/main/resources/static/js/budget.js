@@ -5,9 +5,7 @@ $(document).ready(function (){
         xhr.setRequestHeader(header, token);
     });
 
-    $(function(){
       $('[data-toggle="tooltip"]').tooltip()
-    });
 
     //on click, hide edit button and enter edit mode
     $("#edit-budget-button").click(function(){
@@ -80,7 +78,7 @@ $(document).ready(function (){
             if($(row.find(".month-specific-checkbox")).is(":checked")){
                 budgetItemUpdate.monthSpecific = true;
             }
-            if(amountHasChanged == true || nameHasChanged == true){
+            if(amountHasChanged || nameHasChanged){
                 payload.push(budgetItemUpdate);
             }
         });
