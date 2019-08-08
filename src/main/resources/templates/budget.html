@@ -57,6 +57,12 @@
                 <div class="column-heading">Name</div>
                 <div class="column-heading">Amount</div>
                 <div class="column-heading">Type</div>
+                <div class="column-heading">
+                    <p id="month-specific-heading" class="hidden">Month Specific
+                        <i class="far fa-question-circle" data-toggle="tooltip" data-placement="top"
+                           title="Check if you want this item's edit to only apply to the selected month and year."></i>
+                    </p>
+                </div>
                 <div class="column-heading"></div>
             </div>
             <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
@@ -73,6 +79,9 @@
                 </div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
+                </div>
+                <div class="checkbox-container">
+                    <input class="hidden edit-input month-specific-checkbox" type="checkbox">
                 </div>
                 <div>
                     <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>

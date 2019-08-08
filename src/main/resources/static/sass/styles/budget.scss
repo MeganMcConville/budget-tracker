@@ -33,12 +33,12 @@
 }
 
 #budget-items-table{
-    width: 60%;
+    width: 75%;
     margin-left: 10px;
 
     .grid-container{
         display: grid;
-        grid-template-columns: 40% 20% 30% 10%;
+        grid-template-columns: 40% 15% 25% 15% 5%;
     }
     .column-heading{
         text-align: center;
@@ -50,6 +50,9 @@
         background-color: $green;
         color: white;
         font-weight: bold;
+        i{
+            cursor: pointer;
+        }
     }
     .row-data{
 
@@ -68,8 +71,8 @@
             margin-right: 1em;
             width: 75%;
         }
-        .type-container{
-        margin: auto;
+        .type-container, .checkbox-container{
+            margin: auto;
             .item-type{
                 text-align: center;
             }

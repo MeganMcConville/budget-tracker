@@ -2,8 +2,6 @@ package com.megansportfolio.budgettracker.budgetItem;
 
 import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budget.BudgetDao;
-import com.megansportfolio.budgettracker.budgetItemHistory.BudgetItemHistory;
-import com.megansportfolio.budgettracker.budgetItemHistory.BudgetItemHistoryDao;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.junit.Assert;
@@ -33,9 +31,6 @@ public class TestBudgetItemService {
 
     @Mock
     UserDao userDao;
-
-    @Mock
-    BudgetItemHistoryDao budgetItemHistoryDao;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -95,159 +90,6 @@ public class TestBudgetItemService {
         expectedException.expect(RuntimeException.class);
 
         serviceUnderTest.createBudgetItem(budgetItem, loggedInUserEmailAddress);
-    }
-
-    @Test
-    public void testUpdateBudgetItems(){
-
-        long id1 = 1;
-        long id2 = 2;
-        long id3 = 3;
-        long id4 = 4;
-        List<Long> ids = new ArrayList<>();
-        ids.add(id1);
-        ids.add(id2);
-        ids.add(id3);
-        ids.add(id4);
-
-        BudgetItem budgetItem1 = new BudgetItem();
-        BudgetItem budgetItem2 = new BudgetItem();
-        BudgetItem budgetItem3 = new BudgetItem();
-        BudgetItem budgetItem4 = new BudgetItem();
-        List<BudgetItem> originalBudgetItems = new ArrayList<>();
-        originalBudgetItems.add(budgetItem1);
-        originalBudgetItems.add(budgetItem2);
-        originalBudgetItems.add(budgetItem3);
-        originalBudgetItems.add(budgetItem4);
-        Mockito.when(budgetItemDao.findAllById(ids)).thenReturn(originalBudgetItems);
-
-        BudgetItem newBudgetItem1 = new BudgetItem();
-        BudgetItem newBudgetItem2 = new BudgetItem();
-        BudgetItem newBudgetItem3 = new BudgetItem();
-        BudgetItem newBudgetItem4 = new BudgetItem();
-        List<BudgetItem> parameterBudgetItems = new ArrayList<>();
-        parameterBudgetItems.add(newBudgetItem1);
-        parameterBudgetItems.add(newBudgetItem2);
-        parameterBudgetItems.add(newBudgetItem3);
-        parameterBudgetItems.add(newBudgetItem4);
-
-        budgetItem1.setId(id1);
-        newBudgetItem1.setId(id1);
-        budgetItem2.setId(id2);
-        newBudgetItem2.setId(id2);
-        budgetItem3.setId(id3);
-        newBudgetItem3.setId(id3);
-        budgetItem4.setId(id4);
-        newBudgetItem4.setId(id4);
-
-        String loggedInUserEmailAddress = "test@test.com";
-        User user = new User();
-        user.setUsername(loggedInUserEmailAddress);
-        Budget budget = new Budget();
-        budget.setUser(user);
-        
-        String name = "Name";
-        String newName = "New Name";
-        BigDecimal one = BigDecimal.ONE;
-        BigDecimal ten = BigDecimal.TEN;
-
-        originalBudgetItems.forEach(x -> x.setBudget(budget));
-
-        // first: nothing overridden
-        budgetItem1.setName(name);
-        budgetItem1.setAmount(one);
-
-        // second: name overridden
-        budgetItem2.setName(name);
-        budgetItem2.setAmount(one);
-        newBudgetItem2.setName(newName);
-
-        // third: amount overridden
-        budgetItem3.setName(name);
-        budgetItem3.setAmount(one);
-        newBudgetItem3.setAmount(ten);
-
-        // fourth: both overridden
-        budgetItem4.setName(name);
-        budgetItem4.setAmount(one);
-        newBudgetItem4.setName(newName);
-        newBudgetItem4.setAmount(ten);
-
-        serviceUnderTest.updateBudgetItems(parameterBudgetItems, loggedInUserEmailAddress);
-
-        ArgumentCaptor<List<BudgetItemHistory>> captor = ArgumentCaptor.forClass(List.class);
-        Mockito.verify(budgetItemHistoryDao).saveAll(captor.capture());
-        List<BudgetItemHistory> savedBudgetItemHistories = captor.getValue();
-        Assert.assertEquals(3, savedBudgetItemHistories.size());
-        Assert.assertEquals(name, savedBudgetItemHistories.get(0).getName());
-        Assert.assertEquals(one, savedBudgetItemHistories.get(1).getAmount());
-        Assert.assertEquals(name, savedBudgetItemHistories.get(2).getName());
-        Assert.assertEquals(one, savedBudgetItemHistories.get(2).getAmount());
-
-        Assert.assertEquals(name, budgetItem1.getName());
-        Assert.assertEquals(one, budgetItem1.getAmount());
-        Assert.assertEquals(newBudgetItem2.getName(), budgetItem2.getName());
-        Assert.assertEquals(newBudgetItem3.getAmount(), budgetItem3.getAmount());
-        Assert.assertEquals(newBudgetItem4.getName(), budgetItem4.getName());
-        Assert.assertEquals(newBudgetItem4.getAmount(), budgetItem4.getAmount());
-
-    }
-
-    @Test
-    public void testUpdateBudgetItemsWithWrongUser(){
-
-        long id1 = 1;
-        long id2 = 2;
-        long id3 = 3;
-        long id4 = 4;
-        List<Long> ids = new ArrayList<>();
-        ids.add(id1);
-        ids.add(id2);
-        ids.add(id3);
-        ids.add(id4);
-
-        BudgetItem budgetItem1 = new BudgetItem();
-        BudgetItem budgetItem2 = new BudgetItem();
-        BudgetItem budgetItem3 = new BudgetItem();
-        BudgetItem budgetItem4 = new BudgetItem();
-        List<BudgetItem> originalBudgetItems = new ArrayList<>();
-        originalBudgetItems.add(budgetItem1);
-        originalBudgetItems.add(budgetItem2);
-        originalBudgetItems.add(budgetItem3);
-        originalBudgetItems.add(budgetItem4);
-        Mockito.when(budgetItemDao.findAllById(ids)).thenReturn(originalBudgetItems);
-
-        BudgetItem newBudgetItem1 = new BudgetItem();
-        BudgetItem newBudgetItem2 = new BudgetItem();
-        BudgetItem newBudgetItem3 = new BudgetItem();
-        BudgetItem newBudgetItem4 = new BudgetItem();
-        List<BudgetItem> parameterBudgetItems = new ArrayList<>();
-        parameterBudgetItems.add(newBudgetItem1);
-        parameterBudgetItems.add(newBudgetItem2);
-        parameterBudgetItems.add(newBudgetItem3);
-        parameterBudgetItems.add(newBudgetItem4);
-
-        budgetItem1.setId(id1);
-        newBudgetItem1.setId(id1);
-        budgetItem2.setId(id2);
-        newBudgetItem2.setId(id2);
-        budgetItem3.setId(id3);
-        newBudgetItem3.setId(id3);
-        budgetItem4.setId(id4);
-        newBudgetItem4.setId(id4);
-
-        String loggedInUserEmailAddress = "test@test.com";
-        User wrongUser = new User();
-        wrongUser.setUsername("wrong@wrong.com");
-        Budget budget = new Budget();
-        budget.setUser(wrongUser);
-
-        originalBudgetItems.forEach(x -> x.setBudget(budget));
-
-        expectedException.expect(RuntimeException.class);
-
-        serviceUnderTest.updateBudgetItems(parameterBudgetItems, loggedInUserEmailAddress);
-
     }
 
     @Test
