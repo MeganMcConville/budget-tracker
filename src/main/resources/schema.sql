@@ -20,10 +20,12 @@ name VARCHAR(200) NOT NULL,
 type VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE budget_item_history(
+CREATE TABLE budget_item_update(
 id BIGSERIAL PRIMARY KEY,
 budget_item_id BIGSERIAL NOT NULL REFERENCES budget_item(id),
+month SMALLINT NOT NULL,
+year SMALLINT NOT NULL,
+name TEXT NOT NULL,
 amount NUMERIC NOT NULL,
-name VARCHAR(200) NOT NULL,
-edit_date DATE NOT NULL
+month_specific BOOLEAN NOT NULL
 );

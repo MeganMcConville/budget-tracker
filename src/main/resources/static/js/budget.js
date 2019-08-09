@@ -5,6 +5,8 @@ $(document).ready(function (){
         xhr.setRequestHeader(header, token);
     });
 
+      $('[data-toggle="tooltip"]').tooltip()
+
     //on click, hide edit button and enter edit mode
     $("#edit-budget-button").click(function(){
         var editButton = $(this);
@@ -14,8 +16,9 @@ $(document).ready(function (){
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
-        $("#budget-items-table p:not(.item-type-text)").hide();
+        $("#budget-items-table p:not(.item-type-text, #month-specific-heading)").hide();
         $(".edit-input").removeClass("hidden");
+        $("#month-specific-heading").removeClass("hidden");
     });
 
     //on click of cancel button, revert to original, put values back
@@ -26,17 +29,19 @@ $(document).ready(function (){
         $("#edit-budget-button").show();
         $("#create-new-item-button").show();
         $(".edit-input").addClass("hidden");
+        $("#month-specific-heading").addClass("hidden");
         //change input values back to original
         $(".edit-input").each(function(){
             $(this).val($(this).attr("data-original-value"));
         });
-        $("#budget-items-table p").show();
+        $("#budget-items-table p:not(#month-specific-heading)").show();
     });
 
     //on click of save button, save changes and get out of edit mode
     $("#save-edits-button").click(function(){
         $("#save-edits-button").addClass("disabled");
         $("#edit-budget-error-message").hide();
+
         var payload = [];
         $(".budget-table-data").each(function(){
             var row = $(this);
@@ -44,20 +49,43 @@ $(document).ready(function (){
             var budgetItem = {
                 id: id
             };
+            var budgetItemUpdate = {
+                budgetItem: budgetItem,
+                //todo currently dummy data, change with new functionality
+                month: 1,
+                year: 2019
+            };
+            var nameHasChanged = false;
+            var amountHasChanged = false;
+
             var nameInput = row.find(".name-input");
             if(nameInput.val() !== nameInput.attr("data-original-value")){
-                budgetItem.name = nameInput.val();
+                budgetItemUpdate.name = nameInput.val();
+                nameHasChanged = true;
             }
+            else{
+                budgetItemUpdate.name = nameInput.attr("data-original-value");
+            }
+
             var amountInput = row.find(".amount-input");
             if(amountInput.val() !== amountInput.attr("data-original-value")){
-                budgetItem.amount = amountInput.val();
+                budgetItemUpdate.amount = amountInput.val();
+                amountHasChanged = true;
             }
-            payload.push(budgetItem);
+            else{
+                budgetItemUpdate.amount = amountInput.attr("data-original-value");
+            }
+            if($(row.find(".month-specific-checkbox")).is(":checked")){
+                budgetItemUpdate.monthSpecific = true;
+            }
+            if(amountHasChanged || nameHasChanged){
+                payload.push(budgetItemUpdate);
+            }
         });
 
         $.ajax({
-            url: "/budget-items",
-            type: "PATCH",
+            url: "/budget-item-updates",
+            type: "POST",
             data: JSON.stringify(payload),
             contentType: "application/json"
         })
@@ -68,7 +96,8 @@ $(document).ready(function (){
             $("#edit-budget-button").show();
             $("#create-new-item-button").show();
             $(".edit-input").addClass("hidden");
-            $("#budget-items-table p").show();
+            $("#month-specific-heading").addClass("hidden");
+            $("#budget-items-table p:not(#month-specific-heading)").show();
             //put new values to inputs & p's
             $(".budget-table-data").each(function(){
                 var row = $(this);
@@ -278,6 +307,12 @@ $(document).ready(function (){
         //if curlies
         }
     //delete confirmation function curlies
+    });
+
+    $("#date-select-button").click(function(){
+        //need budgetId, month, year
+
+    //submit data function curlies
     });
 
 //whole page closing curlies

@@ -56,4 +56,5 @@ dependencies {
     compile('commons-validator:commons-validator:1.6')
     compile("org.postgresql:postgresql:42.1.4")
     testCompile("junit:junit")
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.2.3'
 }

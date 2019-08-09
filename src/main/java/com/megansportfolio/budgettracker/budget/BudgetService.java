@@ -1,11 +1,20 @@
 package com.megansportfolio.budgettracker.budget;
 
+import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
+import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
+import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BudgetService {
@@ -15,6 +24,32 @@ public class BudgetService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private BudgetItemUpdateDao budgetItemUpdateDao;
+
+    public int getDisplayYear(Integer year){
+        int displayYear;
+        if(year == null){
+            Calendar cal = Calendar.getInstance();
+            displayYear = (cal.get(Calendar.YEAR));
+        }
+        else{
+            displayYear = year;
+        }
+        return displayYear;
+    };
+
+    public String getDisplayMonth(Integer month){
+        Month displayMonth;
+        if(month == null){
+            Calendar cal = Calendar.getInstance();
+            month = (cal.get(Calendar.MONTH)) + 1;
+        }
+        displayMonth = Month.valueOfMonthNumber(month);
+
+        return displayMonth.getNameLabel();
+    };
 
     public long createBudget(Budget budget, String loggedInUserEmailAddress){
 
@@ -30,10 +65,37 @@ public class BudgetService {
         return userBudgets;
     }
 
-    public Budget getBudget(String loggedInUserEmailAddress, long budgetId){
+    @Transactional(readOnly = true)
+    public Budget getBudget(String loggedInUserEmailAddress, long budgetId, Integer month, Integer year){
         User currentUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
         Budget budget = budgetDao.getOne(budgetId);
         if(currentUser.getId() == budget.getUser().getId()){
+            if(month == null || year == null){
+                Calendar cal = Calendar.getInstance();
+                month = (cal.get(Calendar.MONTH)) + 1;
+                year = (cal.get(Calendar.YEAR));
+            }
+
+            LocalDate cutOff = LocalDate.of(year, month, 1);
+
+            List<BudgetItem> budgetItems = budget.getBudgetItems();
+            final int finalMonth = month;
+            final int finalYear = year;
+            for(BudgetItem budgetItem : budgetItems){
+                List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
+                List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
+                        .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))
+                        .sorted(Comparator.comparing(BudgetItemUpdate::getDate)).collect(Collectors.toList());
+                Optional<BudgetItemUpdate> correspondingUpdate = budgetItemUpdatesBeforeCutoff.stream()
+                        .filter(x -> !x.isMonthSpecific() || (x.getMonth() == finalMonth && x.getYear() == finalYear))
+                        .findFirst();
+                if(correspondingUpdate.isPresent()){
+                    BudgetItemUpdate budgetItemUpdate = correspondingUpdate.get();
+                    budgetItem.setName(budgetItemUpdate.getName());
+                    budgetItem.setAmount(budgetItemUpdate.getAmount());
+                }
+            }
+
             return budget;
         }
         throw new RuntimeException();
@@ -47,7 +109,6 @@ public class BudgetService {
         }
         if(budget.getName() != null){
             String updatedName = budget.getName().trim();
-            //check if if empty string
             if(updatedName.length() < 1){
                 throw new RuntimeException();
             }

@@ -31,14 +31,6 @@ public class BudgetItemController {
         budgetItemService.createBudgetItem(budgetItem, loggedInUserEmailAddress);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public void updateBudgetItems(@RequestBody List<BudgetItem> budgetItems){
-        UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String loggedInUserEmailAddress = loggedInUser.getUsername();
-        budgetItemService.updateBudgetItems(budgetItems, loggedInUserEmailAddress);
-    }
-
     @RequestMapping(value = "/{budgetItemId}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteBudgetItem(@PathVariable long budgetItemId){

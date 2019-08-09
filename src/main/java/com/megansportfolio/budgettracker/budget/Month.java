@@ -39,7 +39,7 @@ public enum Month {
         return this.nameLabel;
     }
 
-    private Month(String nameLabel, int monthNumber){
+    Month(String nameLabel, int monthNumber){
         this.nameLabel = nameLabel;
         this.monthNumber = monthNumber;
     }

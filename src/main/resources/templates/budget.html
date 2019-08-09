@@ -40,18 +40,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="date-modal-body">
-                    <select id="month-select">
-                        <option th:each="month : ${T(com.megansportfolio.budgettracker.budget.Month).values()}"
-                                th:value="${month}"
-                                th:text="${month.getNameLabel()}"></option>
-                    </select>
-                    <input type="number" min="1000" max="9999" placeholder="Year">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success">Select</button>
-                </div>
+                <form th:action="@{/budgets/{budgetId}(budgetId=${budget.getId()})}" method="get">
+                    <div class="modal-body" id="date-modal-body">
+                        <input type="hidden" name="budgetId" th:value="${budget.getId()}">
+                        <select id="month-select" name="month">
+                            <option th:each="month : ${T(com.megansportfolio.budgettracker.budget.Month).values()}"
+                                    th:value="${month.getMonthNumber()}"
+                                    th:text="${month.getNameLabel()}"></option>
+                        </select>
+                        <input type="number" min="1000" max="9999" placeholder="Year" name="year">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="date-select-button">Select</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -70,19 +73,28 @@
             <i class="far fa-times-circle" id="rename-budget-x" title="Cancel"></i>
             <i class="fas fa-check" id="rename-budget-check" title="Save"></i>
         </div>
+        <div>
+            <h2 th:text="${displayMonth} + ' ' + ${displayYear}"></h2>
+            <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
+        </div>
     </div>
     <div id="button-container">
         <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
         <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
         <button id="cancel-edits-button" class="btn btn-secondary hidden mb-2 ml-2">Cancel</button>
         <button id="save-edits-button" class="btn btn-success hidden mb-2" type="submit">Save</button>
-        <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
     </div>
     <div id="budget-items-table">
             <div class="grid-container">
                 <div class="column-heading">Name</div>
                 <div class="column-heading">Amount</div>
                 <div class="column-heading">Type</div>
+                <div class="column-heading">
+                    <p id="month-specific-heading" class="hidden">Month Specific
+                        <i class="far fa-question-circle" data-toggle="tooltip" data-placement="top"
+                           title="Check if you want this item's edit to only apply to the selected month and year."></i>
+                    </p>
+                </div>
                 <div class="column-heading"></div>
             </div>
             <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
@@ -99,6 +111,9 @@
                 </div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
+                </div>
+                <div class="checkbox-container">
+                    <input class="hidden edit-input month-specific-checkbox" type="checkbox">
                 </div>
                 <div>
                     <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>

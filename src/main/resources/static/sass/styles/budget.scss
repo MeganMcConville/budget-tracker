@@ -16,6 +16,10 @@
         padding: 2px 5px 2px 5px;
         border-radius: 5px;
     }
+    input{
+        padding-right: 2px;
+        text-align: right;
+    }
 }
 
 #budget-heading{
@@ -23,7 +27,6 @@
     align-items: center;
     #budget-title{
         margin-left: 10px;
-        color: $green;
     }
     #rename-budget-button, #rename-budget-check{
         color: $green;
@@ -48,34 +51,32 @@
         margin-bottom: 1em;
         margin-top: 1em;
     }
+    #calendar-icon{
+        color: $green;
+        font-size: 2em;
+        cursor: pointer;
+        margin-left: 1rem;
+    }
 }
 
 #button-container{
     display: flex;
     justify-content: flex-start;
-    width: 60%;
+    width: 75%;
 
     #cancel-edits-button{
         margin-right: .5em;
-    }
-
-    #calendar-icon{
-        color: $green;
-        font-size: 2em;
-        margin-left: auto;
-        margin-right: .7em;
-        cursor: pointer;
     }
 }
 
 
 #budget-items-table{
-    width: 60%;
+    width: 75%;
     margin-left: 10px;
 
     .grid-container{
         display: grid;
-        grid-template-columns: 40% 20% 30% 10%;
+        grid-template-columns: 40% 15% 25% 15% 5%;
     }
     .column-heading{
         text-align: center;
@@ -87,6 +88,9 @@
         background-color: $green;
         color: white;
         font-weight: bold;
+        i{
+            cursor: pointer;
+        }
     }
     .row-data{
 
@@ -108,8 +112,8 @@
         .amount-input{
             padding-right: 5px;
         }
-        .type-container{
-        margin: auto;
+        .type-container, .checkbox-container{
+            margin: auto;
             .item-type{
                 text-align: center;
             }
