@@ -51,6 +51,12 @@
         margin-bottom: 1em;
         margin-top: 1em;
     }
+}
+
+.date-display-container{
+    display: flex;
+    justify-content: flex-start;
+    margin: 1em 0 1em 10px;
     #calendar-icon{
         color: $green;
         font-size: 2em;
@@ -76,7 +82,7 @@
 
     .grid-container{
         display: grid;
-        grid-template-columns: 40% 15% 25% 15% 5%;
+        grid-template-columns: 40% 15% 20% 20% 5%;
     }
     .column-heading{
         text-align: center;
@@ -88,6 +94,9 @@
         background-color: $green;
         color: white;
         font-weight: bold;
+        p{
+            margin-bottom: 0;
+        }
         i{
             cursor: pointer;
         }

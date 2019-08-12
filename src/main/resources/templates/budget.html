@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <script th:src="@{/js/budget.js}"></script>
-    <title>Budget</title>
+    <title th:text="${budget.getName()}"></title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -73,10 +73,10 @@
             <i class="far fa-times-circle" id="rename-budget-x" title="Cancel"></i>
             <i class="fas fa-check" id="rename-budget-check" title="Save"></i>
         </div>
-        <div>
-            <h2 th:text="${displayMonth} + ' ' + ${displayYear}"></h2>
-            <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
-        </div>
+    </div>
+    <div class="date-display-container">
+        <h3 id="date-display" th:text="${displayMonth.getNameLabel()} + ' ' + ${displayYear}" th:attr="data-display-month=${displayMonth.getMonthNumber()}, data-display-year=${displayYear}"></h3>
+        <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
     </div>
     <div id="button-container">
         <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>

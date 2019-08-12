@@ -49,11 +49,12 @@ $(document).ready(function (){
             var budgetItem = {
                 id: id
             };
+            var updateMonth = $("#date-display").attr("data-display-month");
+            var updateYear = $("#date-display").attr("data-display-year");
             var budgetItemUpdate = {
                 budgetItem: budgetItem,
-                //todo currently dummy data, change with new functionality
-                month: 1,
-                year: 2019
+                month: updateMonth,
+                year: updateYear
             };
             var nameHasChanged = false;
             var amountHasChanged = false;

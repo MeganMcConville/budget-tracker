@@ -48,7 +48,7 @@ public class BudgetController {
         UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
         Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId, month, year);
-        String displayMonth = budgetService.getDisplayMonth(month);
+        Month displayMonth = budgetService.getDisplayMonth(month);
         int displayYear = budgetService.getDisplayYear(year);
         model.addAttribute("budget", individualBudget);
         model.addAttribute("displayYear", displayYear);

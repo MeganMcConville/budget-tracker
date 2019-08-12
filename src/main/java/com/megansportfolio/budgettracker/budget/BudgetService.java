@@ -40,7 +40,7 @@ public class BudgetService {
         return displayYear;
     };
 
-    public String getDisplayMonth(Integer month){
+    public Month getDisplayMonth(Integer month){
         Month displayMonth;
         if(month == null){
             Calendar cal = Calendar.getInstance();
@@ -48,7 +48,7 @@ public class BudgetService {
         }
         displayMonth = Month.valueOfMonthNumber(month);
 
-        return displayMonth.getNameLabel();
+        return displayMonth;
     };
 
     public long createBudget(Budget budget, String loggedInUserEmailAddress){
