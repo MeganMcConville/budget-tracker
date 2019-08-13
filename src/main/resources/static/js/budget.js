@@ -310,11 +310,6 @@ $(document).ready(function (){
     //delete confirmation function curlies
     });
 
-    $("#date-select-button").click(function(){
-        //need budgetId, month, year
-
-    //submit data function curlies
-    });
 
 //whole page closing curlies
 });
