@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <script th:src="@{/js/budget.js}"></script>
-    <title>Budget</title>
+    <title th:text="${budget.getName()}"></title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -14,7 +14,7 @@
     <div class="modal" id="delete-item-modal" tabindex="-1" role="alertdialog" aria-hidden="true" aria-labelledby="delete-item-modal-label">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" id="delete-item-header">
                     <h5 class="modal-title">Delete budget item?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -27,6 +27,34 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger delete-confirmation">Delete</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="select-date-modal" tabindex="-1" role="alertdialog" aria-hidden="true" aria-labelledby="select-date-modal-label">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header" id="date-modal-header">
+                    <h5 class="modal-title">Select month and year</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{/budgets/{budgetId}(budgetId=${budget.getId()})}" method="get">
+                    <div class="modal-body" id="date-modal-body">
+                        <input type="hidden" name="budgetId" th:value="${budget.getId()}">
+                        <select id="month-select" name="month">
+                            <option th:each="month : ${T(com.megansportfolio.budgettracker.budget.Month).values()}"
+                                    th:value="${month.getMonthNumber()}"
+                                    th:text="${month.getNameLabel()}"></option>
+                        </select>
+                        <input type="number" min="1000" max="9999" placeholder="Year" name="year">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="date-select-button">Select</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -45,13 +73,17 @@
             <i class="far fa-times-circle" id="rename-budget-x" title="Cancel"></i>
             <i class="fas fa-check" id="rename-budget-check" title="Save"></i>
         </div>
-
     </div>
-    <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
-    <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
-    <button id="cancel-edits-button" class="btn btn-secondary hidden mb-2 ml-2">Cancel</button>
-    <button id="save-edits-button" class="btn btn-success hidden mb-2" type="submit">Save</button>
-
+    <div class="date-display-container">
+        <h3 id="date-display" th:text="${displayMonth.getNameLabel()} + ' ' + ${displayYear}" th:attr="data-display-month=${displayMonth.getMonthNumber()}, data-display-year=${displayYear}"></h3>
+        <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
+    </div>
+    <div id="button-container">
+        <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
+        <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
+        <button id="cancel-edits-button" class="btn btn-secondary hidden mb-2 ml-2">Cancel</button>
+        <button id="save-edits-button" class="btn btn-success hidden mb-2" type="submit">Save</button>
+    </div>
     <div id="budget-items-table">
             <div class="grid-container">
                 <div class="column-heading">Name</div>

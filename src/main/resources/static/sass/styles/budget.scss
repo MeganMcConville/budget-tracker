@@ -1,11 +1,32 @@
 @import "styles/variables";
 
+#date-modal-header, #delete-item-header{
+    background-color: $green;
+    color: white;
+    font-weight: bold;
+    span{
+        color: white;
+    }
+}
+
+#date-modal-body{
+    display: flex;
+    justify-content: space-evenly;
+    #month-select{
+        padding: 2px 5px 2px 5px;
+        border-radius: 5px;
+    }
+    input{
+        padding-right: 2px;
+        text-align: right;
+    }
+}
+
 #budget-heading{
     display: flex;
     align-items: center;
     #budget-title{
         margin-left: 10px;
-        color: $green;
     }
     #rename-budget-button, #rename-budget-check{
         color: $green;
@@ -32,13 +53,36 @@
     }
 }
 
+.date-display-container{
+    display: flex;
+    justify-content: flex-start;
+    margin: 1em 0 1em 10px;
+    #calendar-icon{
+        color: $green;
+        font-size: 2em;
+        cursor: pointer;
+        margin-left: 1rem;
+    }
+}
+
+#button-container{
+    display: flex;
+    justify-content: flex-start;
+    width: 75%;
+
+    #cancel-edits-button{
+        margin-right: .5em;
+    }
+}
+
+
 #budget-items-table{
     width: 75%;
     margin-left: 10px;
 
     .grid-container{
         display: grid;
-        grid-template-columns: 40% 15% 25% 15% 5%;
+        grid-template-columns: 40% 15% 20% 20% 5%;
     }
     .column-heading{
         text-align: center;
@@ -50,6 +94,9 @@
         background-color: $green;
         color: white;
         font-weight: bold;
+        p{
+            margin-bottom: 0;
+        }
         i{
             cursor: pointer;
         }
@@ -70,6 +117,9 @@
             text-align: right;
             margin-right: 1em;
             width: 75%;
+        }
+        .amount-input{
+            padding-right: 5px;
         }
         .type-container, .checkbox-container{
             margin: auto;

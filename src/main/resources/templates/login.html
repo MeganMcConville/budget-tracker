@@ -17,9 +17,9 @@
 <div id="login-form-div">
     <form th:action="@{/login}" method="post" id="login-form">
         <label for="email">Email:</label>
-        <input type="text" id="email" name="username">
+        <input type="text" id="email" name="username" tabindex="1">
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password">
+        <input type="password" id="password" name="password" tabindex="2">
         <button type="submit" class="btn btn-success btn-lg btn-block">Log in</button>
     </form>
     <a id="create-account-link" th:href="@{/users}">New to Finance Friend? Create an Account!</a>

@@ -5,3 +5,15 @@ input{
     border: 1px solid $dark-grey;
     border-radius: 5px;
 }
+
+/*Webkit browsers*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/*Firefox*/
+input[type='number']{
+  -moz-appearance:textfield;
+}

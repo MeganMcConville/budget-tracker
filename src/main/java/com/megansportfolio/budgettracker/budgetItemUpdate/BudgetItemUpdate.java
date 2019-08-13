@@ -4,6 +4,7 @@ import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "budget_item_update")
@@ -87,5 +88,9 @@ public class BudgetItemUpdate {
 
     public void setMonthSpecific(boolean monthSpecific) {
         this.monthSpecific = monthSpecific;
+    }
+
+    public LocalDate getDate(){
+        return LocalDate.of(year, month, 1);
     }
 }
