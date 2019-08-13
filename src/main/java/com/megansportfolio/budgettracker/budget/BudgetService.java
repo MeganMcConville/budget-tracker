@@ -38,7 +38,7 @@ public class BudgetService {
             displayYear = year;
         }
         return displayYear;
-    };
+    }
 
     public Month getDisplayMonth(Integer month){
         Month displayMonth;
@@ -49,7 +49,7 @@ public class BudgetService {
         displayMonth = Month.valueOfMonthNumber(month);
 
         return displayMonth;
-    };
+    }
 
     public long createBudget(Budget budget, String loggedInUserEmailAddress){
 
@@ -85,7 +85,8 @@ public class BudgetService {
                 List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
                 List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
                         .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))
-                        .sorted(Comparator.comparing(BudgetItemUpdate::getDate)).collect(Collectors.toList());
+                        .sorted(Comparator.comparing(BudgetItemUpdate::getDate))
+                        .collect(Collectors.toList());
                 Optional<BudgetItemUpdate> correspondingUpdate = budgetItemUpdatesBeforeCutoff.stream()
                         .filter(x -> !x.isMonthSpecific() || (x.getMonth() == finalMonth && x.getYear() == finalYear))
                         .findFirst();
