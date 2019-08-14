@@ -2,12 +2,18 @@ package com.megansportfolio.budgettracker.budgetItem;
 
 import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budget.BudgetDao;
+import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
+import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +29,9 @@ public class BudgetItemService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private BudgetItemUpdateDao budgetItemUpdateDao;
+
     public void createBudgetItem(BudgetItem budgetItem, String loggedInUserEmailAddress){
         Budget budget = budgetDao.findById(budgetItem.getBudget().getId()).get();
         User user = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
@@ -33,25 +42,13 @@ public class BudgetItemService {
         budgetItemDao.save(budgetItem);
     }
 
-    @Transactional
-    public void updateBudgetItems(List<BudgetItem> budgetItems, String loggedInUserEmailAddress){
-        List<Long> ids = budgetItems.stream().map(BudgetItem::getId).collect(Collectors.toList());
-        List<BudgetItem> originalBudgetItems = budgetItemDao.findAllById(ids);
-        for(BudgetItem budgetItem : budgetItems){
-            BudgetItem originalBudgetItem = originalBudgetItems.stream().filter(x -> x.getId() == budgetItem.getId()).findFirst().get();
-            if(!originalBudgetItem.getBudget().getUser().getUsername().equals(loggedInUserEmailAddress)){
-                throw new RuntimeException();
-            }
-            if(budgetItem.getAmount() != null){
-                originalBudgetItem.setAmount(budgetItem.getAmount());
-            }
-            if(budgetItem.getName() != null){
-                originalBudgetItem.setName(budgetItem.getName());
-            }
-            if(budgetItem.getBudgetItemType() != null){
-                originalBudgetItem.setBudgetItemType(budgetItem.getBudgetItemType());
-            }
+    public void deleteBudgetItem(long budgetItemId, String loggedInUserEmailAddress){
+        User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
+        BudgetItem itemToDelete = budgetItemDao.getOne(budgetItemId);
+        if(loggedInUser.getId() != itemToDelete.getBudget().getUser().getId()){
+            throw new RuntimeException();
         }
+        budgetItemDao.deleteById(itemToDelete.getId());
     }
 
 }

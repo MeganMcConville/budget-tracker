@@ -5,6 +5,8 @@ $(document).ready(function (){
         xhr.setRequestHeader(header, token);
     });
 
+      $('[data-toggle="tooltip"]').tooltip()
+
     //on click, hide edit button and enter edit mode
     $("#edit-budget-button").click(function(){
         var editButton = $(this);
@@ -14,8 +16,9 @@ $(document).ready(function (){
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
-        $("#budget-items-table p").hide();
+        $("#budget-items-table p:not(.item-type-text, #month-specific-heading)").hide();
         $(".edit-input").removeClass("hidden");
+        $("#month-specific-heading").removeClass("hidden");
     });
 
     //on click of cancel button, revert to original, put values back
@@ -26,17 +29,19 @@ $(document).ready(function (){
         $("#edit-budget-button").show();
         $("#create-new-item-button").show();
         $(".edit-input").addClass("hidden");
+        $("#month-specific-heading").addClass("hidden");
         //change input values back to original
         $(".edit-input").each(function(){
             $(this).val($(this).attr("data-original-value"));
         });
-        $("#budget-items-table p").show();
+        $("#budget-items-table p:not(#month-specific-heading)").show();
     });
 
     //on click of save button, save changes and get out of edit mode
     $("#save-edits-button").click(function(){
         $("#save-edits-button").addClass("disabled");
         $("#edit-budget-error-message").hide();
+
         var payload = [];
         $(".budget-table-data").each(function(){
             var row = $(this);
@@ -44,25 +49,44 @@ $(document).ready(function (){
             var budgetItem = {
                 id: id
             };
+            var updateMonth = $("#date-display").attr("data-display-month");
+            var updateYear = $("#date-display").attr("data-display-year");
+            var budgetItemUpdate = {
+                budgetItem: budgetItem,
+                month: updateMonth,
+                year: updateYear
+            };
+            var nameHasChanged = false;
+            var amountHasChanged = false;
+
             var nameInput = row.find(".name-input");
             if(nameInput.val() !== nameInput.attr("data-original-value")){
-                budgetItem.name = nameInput.val();
+                budgetItemUpdate.name = nameInput.val();
+                nameHasChanged = true;
             }
+            else{
+                budgetItemUpdate.name = nameInput.attr("data-original-value");
+            }
+
             var amountInput = row.find(".amount-input");
             if(amountInput.val() !== amountInput.attr("data-original-value")){
-                budgetItem.amount = amountInput.val();
+                budgetItemUpdate.amount = amountInput.val();
+                amountHasChanged = true;
             }
-            var selectedOption = row.find(".type-input .active input");
-            var typeInput = row.find(".type-input");
-            if(selectedOption.val() !== typeInput.attr("data-original-value")){
-                budgetItem.budgetItemType = selectedOption.val();
+            else{
+                budgetItemUpdate.amount = amountInput.attr("data-original-value");
             }
-            payload.push(budgetItem);
+            if($(row.find(".month-specific-checkbox")).is(":checked")){
+                budgetItemUpdate.monthSpecific = true;
+            }
+            if(amountHasChanged || nameHasChanged){
+                payload.push(budgetItemUpdate);
+            }
         });
 
         $.ajax({
-            url: "/budget-items",
-            type: "PATCH",
+            url: "/budget-item-updates",
+            type: "POST",
             data: JSON.stringify(payload),
             contentType: "application/json"
         })
@@ -73,7 +97,8 @@ $(document).ready(function (){
             $("#edit-budget-button").show();
             $("#create-new-item-button").show();
             $(".edit-input").addClass("hidden");
-            $("#budget-items-table p").show();
+            $("#month-specific-heading").addClass("hidden");
+            $("#budget-items-table p:not(#month-specific-heading)").show();
             //put new values to inputs & p's
             $(".budget-table-data").each(function(){
                 var row = $(this);
@@ -85,10 +110,6 @@ $(document).ready(function (){
                 var amountInput = row.find(".amount-input");
                 amountDisplay.text(amountInput.val());
                 amountInput.attr("data-original-value", amountInput.val());
-                var typeDisplay = row.find(".item-type");
-                var typeInput = row.find(".type-input .active input");
-                typeDisplay.text(typeInput.val());
-                typeInput.attr("data-original-value", typeInput.val());
             });
         })
         .fail(function(){
@@ -109,6 +130,7 @@ $(document).ready(function (){
         $(".new-item-container").removeClass("hidden");
         $(".new-item-input").removeClass("hidden");
         $(".save-buttons").removeClass("hidden");
+        $("html, body").animate({scrollTop: $("#new-item-div").offset().top}, 1000);
     //show create new curlies
     });
 
@@ -179,18 +201,6 @@ $(document).ready(function (){
                 var newItemAmountInput = newRow.find(".amount-input");
                 newItemAmountInput.val(amount);
                 newItemAmountInput.attr("data-original-value", amount);
-                var newItemTypeInput = newRow.find(".type-input");
-                newItemTypeInput.attr("data-original-value", budgetItemType);
-                var typeButtons = newRow.find("input[type=radio]");
-                typeButtons.each(function(){
-                    if($(this).val().includes(budgetItemType)){
-                        $(this).parent().addClass("active");
-                    }
-                    else{
-                        $(this).parent().removeClass("active");
-                    }
-                //each curlies
-                });
                 newRow.insertBefore(".new-item-container");
             })
             .fail(function(){
@@ -270,5 +280,36 @@ $(document).ready(function (){
         }
     //rename budget curlies
     });
+    $(".delete-item-button").click(function(){
+        var deleteIcon = $(this);
+        $(".delete-confirmation").attr("data-budget-item-id", deleteIcon.parent().parent().attr("data-budget-item-id"))
+    //trashcan curlies
+    });
+
+    $(".delete-confirmation").click(function(){
+        if(!$(".delete-confirmation").hasClass("disabled")){
+            $(".delete-confirmation").addClass("disabled");
+            $("#edit-budget-error-message").hide();
+            var budgetItemId = $(".delete-confirmation").attr("data-budget-item-id");
+            $.ajax({
+                url: "/budget-items/" + budgetItemId,
+                type: "DELETE"
+            })
+            .done(function(){
+                $(".grid-container[data-budget-item-id="+budgetItemId+"]").remove();
+                $("#delete-item-modal").modal("toggle");
+            })
+            .fail(function(){
+                $("#edit-budget-error-message").show();
+            })
+            .always(function(){
+                $(".delete-confirmation").removeClass("disabled");
+            });
+        //if curlies
+        }
+    //delete confirmation function curlies
+    });
+
+
 //whole page closing curlies
 });

@@ -44,11 +44,15 @@ public class BudgetController {
     }
 
     @RequestMapping(value = "/{budgetId}", method = RequestMethod.GET)
-    public String viewIndividualBudget(@PathVariable long budgetId, Model model){
+    public String viewIndividualBudget(@PathVariable long budgetId, @RequestParam(required = false) Integer month, @RequestParam(required = false) Integer year, Model model){
         UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
-        Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId);
+        Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId, month, year);
+        Month displayMonth = budgetService.getDisplayMonth(month);
+        int displayYear = budgetService.getDisplayYear(year);
         model.addAttribute("budget", individualBudget);
+        model.addAttribute("displayYear", displayYear);
+        model.addAttribute("displayMonth", displayMonth);
         return "budget";
     }
 
