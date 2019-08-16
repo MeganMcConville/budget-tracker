@@ -12,6 +12,7 @@ $(document).ready(function (){
         var editButton = $(this);
         editButton.hide();
         $("#edit-budget-success-message").hide();
+        $("#create-entry-success-message").hide();
         $("#create-new-item-success-message").hide();
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
@@ -122,6 +123,7 @@ $(document).ready(function (){
 
     $("#create-new-item-button").click(function(){
         $("#create-new-item-button").hide();
+        $("#create-entry-success-message").hide();
         $("#create-new-item-button").addClass("disabled")
         $("#edit-budget-button").hide();
         $("#edit-budget-error-message").hide();
@@ -219,6 +221,7 @@ $(document).ready(function (){
         $("#budget-title").hide();
         $("#edit-budget-success-message").hide();
         $("#create-new-item-success-message").hide();
+        $("#create-entry-success-message").hide();
         $("#rename-budget-input").removeClass("hidden");
         $(".rename-buttons").removeClass("hidden");
     //rename button curlies
@@ -310,6 +313,74 @@ $(document).ready(function (){
     //delete confirmation function curlies
     });
 
+    $(".add-entry-button").click(function(){
+        var addEntryIcon = $(this);
+        $(".create-entry-confirmation").attr("data-budget-item-id", addEntryIcon.parent().parent().attr("data-budget-item-id"));
+        $("#item-name-display").text(addEntryIcon.parent().parent().find(".name").attr("data-budget-item-name"));
+        $(".create-entry-confirmation").attr("data-budget-entry-month", $("#date-display").attr("data-display-month"));
+        $(".create-entry-confirmation").attr("data-budget-entry-year", $("#date-display").attr("data-display-year"));
+        $("#create-entry-success-message").hide();
+    //add entry curlies
+    });
 
+    $(".create-entry-confirmation").click(function(){
+        if(!$(".create-entry-confirmation").hasClass("disabled")){
+            $(".create-entry-confirmation").addClass("disabled");
+            $("#edit-budget-error-message").hide();
+            var entryAmountInput = $("#entry-amount-input");
+            entryAmountInput.attr("required", true);
+            var amount = entryAmountInput.val();
+            var entryNotesInput = $("#entry-notes-input");
+            var notes = entryNotesInput.val();
+            var monthNumber = $(".create-entry-confirmation").attr("data-budget-entry-month");
+            var year = $(".create-entry-confirmation").attr("data-budget-entry-year");
+            var budgetItemId = $(".create-entry-confirmation").attr("data-budget-item-id");
+
+            var payload = {
+                amount: amount,
+                monthNumber: monthNumber,
+                year: year,
+                notes: notes,
+                budgetItem:{
+                    id: budgetItemId
+                }
+            };
+            if(!entryAmountInput.val()){
+                entryAmountInput.addClass("error");
+                $(".create-entry-confirmation").removeClass("disabled");
+                $("#amount-error-message").show();
+            }
+            else{
+                $.ajax({
+                    url:"/budget-entries",
+                    type: "POST",
+                    data: JSON.stringify(payload),
+                    contentType: "application/json"
+                })
+
+            .done(function(){
+                $("#create-entry-success-message").show();
+                $("#create-entry-modal").modal("toggle");
+                $("#entry-amount-input").val("");
+                $("#entry-notes-input").val("");
+            //done curlies
+            })
+            .fail(function(){
+                $("#edit-budget-error-message").show();
+            //fail curlies
+            })
+            .always(function(){
+                $(".create-entry-confirmation").removeClass("disabled");
+            //always curlies
+            });
+            }
+        }
+    //create entry confirmation closing
+    });
+
+    $(".entry-close").click(function(){
+        $("#entry-amount-input").val("");
+        $("#entry-notes-input").val("");
+    });
 //whole page closing curlies
 });

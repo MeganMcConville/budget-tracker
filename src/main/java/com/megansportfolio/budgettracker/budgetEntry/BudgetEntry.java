@@ -1,5 +1,6 @@
 package com.megansportfolio.budgettracker.budgetEntry;
 
+import com.megansportfolio.budgettracker.budget.Month;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
 
 import javax.persistence.*;
@@ -23,13 +24,16 @@ public class BudgetEntry {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "month")
-    private BudgetEntryMonth budgetEntryMonth;
+    private Month budgetEntryMonth;
 
     @Column(name = "year")
     private long year;
 
     @Column(name = "notes")
     private String notes;
+
+    @Transient
+    private int monthNumber;
 
     public long getId() {
         return this.id;
@@ -55,11 +59,11 @@ public class BudgetEntry {
         this.amount = amount;
     }
 
-    public BudgetEntryMonth getBudgetEntryMonth() {
+    public Month getBudgetEntryMonth() {
         return this.budgetEntryMonth;
     }
 
-    public void setBudgetEntryMonth(BudgetEntryMonth budgetEntryMonth) {
+    public void setBudgetEntryMonth(Month budgetEntryMonth) {
         this.budgetEntryMonth = budgetEntryMonth;
     }
 
@@ -77,5 +81,14 @@ public class BudgetEntry {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+
+    public int getMonthNumber() {
+        return this.monthNumber;
+    }
+
+    public void setMonthNumber(int monthNumber) {
+        this.monthNumber = monthNumber;
     }
 }

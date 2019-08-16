@@ -30,7 +30,7 @@ public class BudgetItem {
     @Column(name = "type")
     private BudgetItemType budgetItemType;
 
-    @OneToMany(mappedBy = "budgetItemId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "budgetItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BudgetEntry> budgetEntries;
 
     public long getId(){

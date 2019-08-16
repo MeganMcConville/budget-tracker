@@ -31,6 +31,31 @@
         </div>
     </div>
 
+    <div class="modal" id="create-entry-modal" tabindex="-1" role="alertdialog" aria-hidden="true" aria-labelledby="create-entry-modal-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" id="create-entry-header">
+                    <h5 class="modal-title">Add new entry for </h5>
+                    <h5 class="modal-title" id="item-name-display"></h5>
+                    <button type="button" class="close entry-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body" id="create-entry-body">
+                        <label>Amount:</label>
+                        <input type="number" name="amount" id="entry-amount-input" required="required">
+                        <p id="amount-error-message" class="hidden">*An amount is required here</p>
+                        <label>Notes:</label>
+                        <textarea name="notes" id="entry-notes-input"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary entry-close" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success create-entry-confirmation">Create</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="select-date-modal" tabindex="-1" role="alertdialog" aria-hidden="true" aria-labelledby="select-date-modal-label">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -63,6 +88,7 @@
     <div id="rename-budget-error-message" class="hidden alert alert-danger">Please enter a name</div>
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
     <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
+    <div id="create-entry-success-message" class="hidden alert alert-success">Entry successfully added</div>
 
 
     <div id="budget-heading">
@@ -86,6 +112,7 @@
     </div>
     <div id="budget-items-table">
             <div class="grid-container">
+                <div class="column-heading"></div>
                 <div class="column-heading">Name</div>
                 <div class="column-heading">Amount</div>
                 <div class="column-heading">Type</div>
@@ -100,7 +127,10 @@
             <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
                  th:attr="data-budget-item-id=${budgetItem.getId()}">
                 <div>
-                    <p class="name" th:text="${budgetItem.getName()}"></p>
+                    <i class="far fa-file-alt add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
+                </div>
+                <div>
+                    <p class="name" th:text="${budgetItem.getName()}" th:attr="data-budget-item-name=${budgetItem.getName()}"></p>
                     <input class="hidden edit-input name-input" type="text" th:value="${budgetItem.getName()}"
                            th:attr="data-original-value=${budgetItem.getName()}">
                 </div>
@@ -121,6 +151,7 @@
             </div>
 
             <div class="grid-container row-data new-item-container hidden" id="new-item-div" th:attr="data-budget-id=${budget.getId()}">
+                <div></div>
                 <div>
                     <input class="hidden new-item-input name-input" id="new-item-name-input" type="text">
                 </div>
@@ -133,6 +164,7 @@
                         <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
                     </label>
                 </div>
+                <div></div>
                 <div class="save-buttons hidden">
                     <i class="far fa-times-circle" id="cancel-new-item-x"></i>
                     <i class="fas fa-check" id="save-new-item-check"></i>
