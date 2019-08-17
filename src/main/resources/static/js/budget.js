@@ -327,6 +327,8 @@ $(document).ready(function (){
         if(!$(".create-entry-confirmation").hasClass("disabled")){
             $(".create-entry-confirmation").addClass("disabled");
             $("#edit-budget-error-message").hide();
+            $("#entry-amount-input").removeClass("error");
+            $("#amount-error-message").hide();
             var entryAmountInput = $("#entry-amount-input");
             entryAmountInput.attr("required", true);
             var amount = entryAmountInput.val();
@@ -347,8 +349,8 @@ $(document).ready(function (){
             };
             if(!entryAmountInput.val()){
                 entryAmountInput.addClass("error");
-                $(".create-entry-confirmation").removeClass("disabled");
                 $("#amount-error-message").show();
+                $(".create-entry-confirmation").removeClass("disabled");
             }
             else{
                 $.ajax({
@@ -379,6 +381,8 @@ $(document).ready(function (){
     });
 
     $(".entry-close").click(function(){
+        $("#entry-amount-input").removeClass("error");
+        $("#amount-error-message").hide();
         $("#entry-amount-input").val("");
         $("#entry-notes-input").val("");
     });
