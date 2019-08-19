@@ -29,3 +29,12 @@ name TEXT NOT NULL,
 amount NUMERIC NOT NULL,
 month_specific BOOLEAN NOT NULL
 );
+
+CREATE TABLE budget_entry(
+id BIGSERIAL PRIMARY KEY,
+budget_item_id BIGSERIAL NOT NULL REFERENCES budget_item(id),
+amount NUMERIC NOT NULL,
+month TEXT NOT NULL,
+year NUMERIC NOT NULL,
+notes TEXT
+);

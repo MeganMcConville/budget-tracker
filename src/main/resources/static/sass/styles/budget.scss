@@ -1,6 +1,6 @@
 @import "styles/variables";
 
-#date-modal-header, #delete-item-header{
+#date-modal-header, #delete-item-header, #create-entry-header{
     background-color: $green;
     color: white;
     font-weight: bold;
@@ -19,6 +19,26 @@
     input{
         padding-right: 2px;
         text-align: right;
+    }
+}
+
+#create-entry-modal{
+    .modal-body{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        input{
+            margin-bottom: 5px;
+        }
+        textarea{
+            resize: none;
+            border-radius: 5px;
+            height:5em;
+            width: 15em;
+        }
+        .error{
+            box-shadow: 0 0 3pt 2pt red;
+        }
     }
 }
 
@@ -82,7 +102,7 @@
 
     .grid-container{
         display: grid;
-        grid-template-columns: 40% 15% 20% 20% 5%;
+        grid-template-columns: 5% 35% 15% 20% 20% 5%;
     }
     .column-heading{
         text-align: center;
@@ -127,7 +147,10 @@
                 text-align: center;
             }
         }
-
+        .add-entry-button{
+            color: $secondary;
+            cursor: pointer;
+        }
         .delete-item-button{
             color: $secondary;
             margin-left: 45%;
