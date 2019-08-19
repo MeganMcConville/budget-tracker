@@ -39,51 +39,7 @@ public class TestBudgetEntryService {
     }
 
     @Test
-    public void testCreateBudgetEntryWithNullNotes(){
-
-        BudgetItem budgetItem = new BudgetItem();
-        BudgetEntry budgetEntry = new BudgetEntry();
-        budgetEntry.setBudgetItem(budgetItem);
-        long budgetItemId = 1;
-        budgetItem.setId(budgetItemId);
-        Mockito.when(budgetItemDao.getOne(budgetEntry.getBudgetItem().getId())).thenReturn(budgetItem);
-
-        User user = new User();
-        Budget budget = new Budget();
-        budgetItem.setBudget(budget);
-        budget.setUser(user);
-
-        User loggedInUser = new User();
-        String loggedInUserEmailAddress = "test@test.com";
-        loggedInUser.setUsername(loggedInUserEmailAddress);
-        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress)).thenReturn(loggedInUser);
-
-        long userId = 1;
-        loggedInUser.setId(userId);
-        user.setId(userId);
-
-        BigDecimal amount = BigDecimal.TEN;
-        long year = 2019;
-        String notes = null;
-        int monthNumber = 1;
-        budgetEntry.setAmount(amount);
-        budgetEntry.setMonthNumber(monthNumber);
-        budgetEntry.setYear(year);
-        budgetEntry.setNotes(notes);
-
-        serviceUnderTest.createBudgetEntry(loggedInUserEmailAddress, budgetEntry);
-
-        ArgumentCaptor<BudgetEntry> captor = ArgumentCaptor.forClass(BudgetEntry.class);
-        Mockito.verify(budgetEntryDao).save(captor.capture());
-        BudgetEntry savedBudgetEntry = captor.getValue();
-        Assert.assertEquals(Month.JANUARY, savedBudgetEntry.getMonth());
-        Assert.assertNull(savedBudgetEntry.getNotes());
-        Assert.assertEquals(year, savedBudgetEntry.getYear());
-        Assert.assertEquals(amount, savedBudgetEntry.getAmount());
-    }
-
-    @Test
-    public void testCreateBudgetEntryWithNotes(){
+    public void testCreateBudgetEntry(){
 
         BudgetItem budgetItem = new BudgetItem();
         BudgetEntry budgetEntry = new BudgetEntry();
