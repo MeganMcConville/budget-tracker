@@ -28,7 +28,7 @@ public class BudgetEntryService {
             throw new RuntimeException();
         }
         Month month = Month.valueOfMonthNumber(budgetEntry.getMonthNumber());
-        budgetEntry.setBudgetEntryMonth(month);
+        budgetEntry.setMonth(month);
         budgetEntryDao.save(budgetEntry);
     }
 

@@ -24,7 +24,7 @@ public class BudgetEntry {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "month")
-    private Month budgetEntryMonth;
+    private Month month;
 
     @Column(name = "year")
     private long year;
@@ -59,12 +59,12 @@ public class BudgetEntry {
         this.amount = amount;
     }
 
-    public Month getBudgetEntryMonth() {
-        return this.budgetEntryMonth;
+    public Month getMonth() {
+        return this.month;
     }
 
-    public void setBudgetEntryMonth(Month budgetEntryMonth) {
-        this.budgetEntryMonth = budgetEntryMonth;
+    public void setMonth(Month month) {
+        this.month = month;
     }
 
     public long getYear() {

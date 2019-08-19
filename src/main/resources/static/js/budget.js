@@ -315,8 +315,9 @@ $(document).ready(function (){
 
     $(".add-entry-button").click(function(){
         var addEntryIcon = $(this);
-        $(".create-entry-confirmation").attr("data-budget-item-id", addEntryIcon.parent().parent().attr("data-budget-item-id"));
-        $("#item-name-display").text(addEntryIcon.parent().parent().find(".name").attr("data-budget-item-name"));
+        var entryIconRow = addEntryIcon.parent().parent();
+        $(".create-entry-confirmation").attr("data-budget-item-id", entryIconRow.attr("data-budget-item-id"));
+        $("#item-name-display").text("Add new entry for " + entryIconRow.find(".name").attr("data-budget-item-name"));
         $(".create-entry-confirmation").attr("data-budget-entry-month", $("#date-display").attr("data-display-month"));
         $(".create-entry-confirmation").attr("data-budget-entry-year", $("#date-display").attr("data-display-year"));
         $("#create-entry-success-message").hide();
