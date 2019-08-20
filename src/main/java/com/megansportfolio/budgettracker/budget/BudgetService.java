@@ -1,6 +1,7 @@
 package com.megansportfolio.budgettracker.budget;
 
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
+import com.megansportfolio.budgettracker.budgetItem.BudgetItemService;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
@@ -27,6 +28,9 @@ public class BudgetService {
 
     @Autowired
     private BudgetItemUpdateDao budgetItemUpdateDao;
+
+    @Autowired
+    private BudgetItemService budgetItemService;
 
     public int getDisplayYear(Integer year){
         int displayYear;
@@ -82,6 +86,7 @@ public class BudgetService {
             final int finalMonth = month;
             final int finalYear = year;
             for(BudgetItem budgetItem : budgetItems){
+                budgetItem.setTotalSpent(budgetItemService.getAmountSpent(budgetItem.getId()));
                 List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
                 List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
                         .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))

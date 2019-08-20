@@ -114,6 +114,8 @@
                 <div class="column-heading"></div>
                 <div class="column-heading">Name</div>
                 <div class="column-heading">Amount</div>
+                <div class="column-heading">Total Spent</div>
+                <div class="column-heading">Total Remaining</div>
                 <div class="column-heading">Type</div>
                 <div class="column-heading">
                     <p id="month-specific-heading" class="hidden">Month Specific
@@ -138,6 +140,8 @@
                     <input class="hidden edit-input amount-input" type="number" th:value="${budgetItem.getAmount()}"
                            th:attr="data-original-value=${budgetItem.getAmount()}">
                 </div>
+                <div th:text="${budgetItem.getTotalSpent()}"></div>
+                <div></div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
                 </div>
@@ -157,6 +161,8 @@
                 <div>
                     <input class="hidden new-item-input amount-input" id="new-item-amount-input" type="number">
                 </div>
+                <div></div>
+                <div></div>
                 <div class="btn-group-container hidden btn-group btn-group-toggle new-item-input type-input" id="new-item-type-input" data-toggle="buttons"
                      aria-label="Budget item type">
                     <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">

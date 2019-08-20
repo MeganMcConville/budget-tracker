@@ -2,6 +2,7 @@ package com.megansportfolio.budgettracker.budgetItem;
 
 import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budget.BudgetDao;
+import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
@@ -50,5 +51,21 @@ public class BudgetItemService {
         }
         budgetItemDao.deleteById(itemToDelete.getId());
     }
+
+    public BigDecimal getAmountSpent(long budgetItemId){
+
+        BudgetItem budgetItem = budgetItemDao.getOne(budgetItemId);
+        List<BudgetEntry> budgetEntries = budgetItem.getBudgetEntries();
+        BigDecimal total = BigDecimal.ZERO;
+        for(BudgetEntry budgetEntry : budgetEntries){
+            BigDecimal entryAmount = budgetEntry.getAmount();
+            total = total.add(entryAmount);
+        }
+        return total;
+    }
+
+//    public BigDecimal getAmountRemaining(long budgetItemId){
+//
+//    }
 
 }
