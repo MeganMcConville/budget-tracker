@@ -36,6 +36,9 @@ public class BudgetItem {
     @Transient
     private BigDecimal totalSpent;
 
+    @Transient
+    private BigDecimal totalRemaining;
+
     public long getId(){
         return this.id;
     }
@@ -90,5 +93,13 @@ public class BudgetItem {
 
     public void setTotalSpent(BigDecimal totalSpent) {
         this.totalSpent = totalSpent;
+    }
+
+    public BigDecimal getTotalRemaining() {
+        return this.totalRemaining;
+    }
+
+    public void setTotalRemaining(BigDecimal totalRemaining) {
+        this.totalRemaining = totalRemaining;
     }
 }

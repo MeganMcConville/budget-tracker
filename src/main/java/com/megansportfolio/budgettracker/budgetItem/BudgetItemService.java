@@ -52,20 +52,36 @@ public class BudgetItemService {
         budgetItemDao.deleteById(itemToDelete.getId());
     }
 
-    public BigDecimal getAmountSpent(long budgetItemId){
+    public BigDecimal getAmountSpent(long budgetItemId, int month, int year){
 
         BudgetItem budgetItem = budgetItemDao.getOne(budgetItemId);
         List<BudgetEntry> budgetEntries = budgetItem.getBudgetEntries();
         BigDecimal total = BigDecimal.ZERO;
-        for(BudgetEntry budgetEntry : budgetEntries){
+        List<BudgetEntry> correspondingBudgetEntries;
+        if(budgetItem.getBudgetItemType() == BudgetItemType.ANNUAL){
+            correspondingBudgetEntries = budgetEntries.stream()
+                    .filter(x -> x.getYear() == year)
+                    .collect(Collectors.toList());
+        }
+
+        else{
+            correspondingBudgetEntries = budgetEntries.stream()
+                    .filter(x -> x.getYear() == year && x.getMonth().getMonthNumber() == month)
+                    .collect(Collectors.toList());
+        }
+        for(BudgetEntry budgetEntry : correspondingBudgetEntries){
             BigDecimal entryAmount = budgetEntry.getAmount();
             total = total.add(entryAmount);
         }
         return total;
     }
 
-//    public BigDecimal getAmountRemaining(long budgetItemId){
-//
-//    }
+    public BigDecimal getAmountRemaining(long budgetItemId, int month, int year, BigDecimal itemAmount){
+
+        BigDecimal totalSpent = getAmountSpent(budgetItemId, month, year);
+        BigDecimal amountRemaining = itemAmount.subtract(totalSpent);
+
+        return amountRemaining;
+    }
 
 }

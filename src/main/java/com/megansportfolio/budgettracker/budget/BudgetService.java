@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -86,7 +87,7 @@ public class BudgetService {
             final int finalMonth = month;
             final int finalYear = year;
             for(BudgetItem budgetItem : budgetItems){
-                budgetItem.setTotalSpent(budgetItemService.getAmountSpent(budgetItem.getId()));
+                BigDecimal displayAmount = budgetItem.getAmount();
                 List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
                 List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
                         .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))
@@ -99,7 +100,11 @@ public class BudgetService {
                     BudgetItemUpdate budgetItemUpdate = correspondingUpdate.get();
                     budgetItem.setName(budgetItemUpdate.getName());
                     budgetItem.setAmount(budgetItemUpdate.getAmount());
+                    displayAmount = budgetItemUpdate.getAmount();
                 }
+
+                budgetItem.setTotalSpent(budgetItemService.getAmountSpent(budgetItem.getId(), finalMonth, finalYear));
+                budgetItem.setTotalRemaining(budgetItemService.getAmountRemaining(budgetItem.getId(), finalMonth, finalYear, displayAmount));
             }
 
             return budget;

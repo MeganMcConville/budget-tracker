@@ -141,7 +141,7 @@
                            th:attr="data-original-value=${budgetItem.getAmount()}">
                 </div>
                 <div th:text="${budgetItem.getTotalSpent()}"></div>
-                <div></div>
+                <div th:text="${budgetItem.getTotalRemaining()}"></div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
                 </div>
