@@ -136,12 +136,12 @@
                            th:attr="data-original-value=${budgetItem.getName()}">
                 </div>
                 <div>
-                    <p class="amount" th:text="${'$' + budgetItem.getAmount()}"></p>
-                    <input class="hidden edit-input amount-input" type="number" th:value="${budgetItem.getAmount()}"
+                    <p class="amount" th:text="${'$' + #numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"></p>
+                    <input class="hidden edit-input amount-input" type="number" th:value="${#numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"
                            th:attr="data-original-value=${budgetItem.getAmount()}">
                 </div>
-                <div class="total-display" th:text="${'$' + budgetItem.getTotalSpent()}"></div>
-                <div class="total-display" th:text="${'$' + budgetItem.getTotalRemaining()}"
+                <div class="total-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalSpent(), 1, 'DEFAULT', 2, 'DEFAULT')}"></div>
+                <div class="total-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalRemaining(), 1, 'DEFAULT', 2, 'DEFAULT')}"
                      th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
