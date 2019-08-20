@@ -141,6 +141,15 @@
         .amount-input{
             padding-right: 5px;
         }
+        .total-display{
+            text-align: center;
+        }
+        .negative-amount{
+            background-color: $negative-background;
+        }
+        .positive-amount{
+            background-color: $positive-background;
+        }
         .type-container, .checkbox-container{
             margin: auto;
             .item-type{

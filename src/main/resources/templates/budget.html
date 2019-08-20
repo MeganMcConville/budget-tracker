@@ -140,8 +140,9 @@
                     <input class="hidden edit-input amount-input" type="number" th:value="${budgetItem.getAmount()}"
                            th:attr="data-original-value=${budgetItem.getAmount()}">
                 </div>
-                <div th:text="${budgetItem.getTotalSpent()}"></div>
-                <div th:text="${budgetItem.getTotalRemaining()}"></div>
+                <div class="total-display" th:text="${'$' + budgetItem.getTotalSpent()}"></div>
+                <div class="total-display" th:text="${'$' + budgetItem.getTotalRemaining()}"
+                     th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
                 </div>
