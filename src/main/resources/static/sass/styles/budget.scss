@@ -121,6 +121,9 @@
             cursor: pointer;
         }
     }
+    .hidden-to-clone{
+        display: none !important;
+    }
     .row-data{
 
         text-align: left;

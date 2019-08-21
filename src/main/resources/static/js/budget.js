@@ -177,6 +177,7 @@ $(document).ready(function (){
             //ajax curlies
             })
             .done(function(){
+                var displayAmount = (Math.round(amount*100)/100).toFixed(2);
                 $("#create-new-item-success-message").show();
                 $("#new-item-name-input, #new-item-amount-input").val("");
                 $("#new-item-type-input .active").removeClass("active");
@@ -187,13 +188,14 @@ $(document).ready(function (){
                 $("#create-new-item-button").removeClass("disabled");
                 $("#create-new-item-button").show();
                 //add new item to budget
-                var newRow = $(".budget-table-data").first().clone();
+                var newRow = $(".hidden-to-clone").first().clone();
+                newRow.removeClass("hidden-to-clone");
                 var newItemName = newRow.find(".name");
                 newItemName.text(name);
                 newItemName.attr("data-original-value", name);
                 var newItemAmount = newRow.find(".amount");
-                newItemAmount.text("$" + amount);
-                newItemAmount.attr("data-original-value", amount);
+                newItemAmount.text("$" + displayAmount);
+                newItemAmount.attr("data-original-value", displayAmount);
                 var newItemType = newRow.find(".item-type-text");
                 newItemType.text(budgetItemType);
                 newItemType.attr("data-original-value", budgetItemType);
@@ -201,8 +203,8 @@ $(document).ready(function (){
                 newItemNameInput.val(name);
                 newItemNameInput.attr("data-original-value", name);
                 var newItemAmountInput = newRow.find(".amount-input");
-                newItemAmountInput.val(amount);
-                newItemAmountInput.attr("data-original-value", amount);
+                newItemAmountInput.val(displayAmount);
+                newItemAmountInput.attr("data-original-value", displayAmount);
                 newRow.insertBefore(".new-item-container");
             })
             .fail(function(){
