@@ -109,8 +109,10 @@ $(document).ready(function (){
                 nameInput.attr("data-original-value", nameInput.val());
                 var amountDisplay = row.find(".amount");
                 var amountInput = row.find(".amount-input");
-                amountDisplay.text("$" + amountInput.val());
-                amountInput.attr("data-original-value", amountInput.val());
+                var editedAmount = (Math.round(amountInput.val()*100)/100).toFixed(2);
+                amountDisplay.text("$" + editedAmount);
+                amountInput.attr("data-original-value", editedAmount);
+                amountInput.val(amountInput.attr("data-original-value"));
             });
         })
         .fail(function(){
