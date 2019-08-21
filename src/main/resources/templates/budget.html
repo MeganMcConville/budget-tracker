@@ -72,7 +72,7 @@
                                     th:value="${month.getMonthNumber()}"
                                     th:text="${month.getNameLabel()}"></option>
                         </select>
-                        <input type="number" min="1000" max="9999" placeholder="Year" name="year">
+                        <input id="year-input" type="number" min="1000" max="9999" name="year">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -127,7 +127,7 @@
             </div>
             <div class="budget-table-data row-data grid-container hidden-to-clone">
                 <div>
-                    <i class="far fa-file-alt add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
+                    <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
                 </div>
                 <div>
                     <p class="name"></p>
@@ -135,10 +135,10 @@
                 </div>
                 <div>
                     <p class="amount"></p>
-                    <input class="hidden edit-input amount-input" type="number">
+                    <input class="hidden edit-input amount-input" type="number" step="0.01">
                 </div>
-                <div class="total-display"></div>
-                <div class="total-display"></div>
+                <div class="total-display spent-display"></div>
+                <div class="total-display remaining-display"></div>
                 <div class="type-container">
                     <p class="item-type item-type-text"></p>
                 </div>
@@ -151,8 +151,8 @@
             </div>
             <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
                  th:attr="data-budget-item-id=${budgetItem.getId()}">
-                <div>
-                    <i class="far fa-file-alt add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
+                <div class="icon-div">
+                    <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
                 </div>
                 <div>
                     <p class="name" th:text="${budgetItem.getName()}" th:attr="data-budget-item-name=${budgetItem.getName()}"></p>
@@ -161,11 +161,11 @@
                 </div>
                 <div>
                     <p class="amount" th:text="${'$' + #numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"></p>
-                    <input class="hidden edit-input amount-input" type="number" th:value="${#numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"
-                           th:attr="data-original-value=${budgetItem.getAmount()}">
+                    <input class="hidden edit-input amount-input" type="number" step="0.01" th:value="${#numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"
+                           th:attr="data-original-value=${#numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}">
                 </div>
-                <div class="total-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalSpent(), 1, 'DEFAULT', 2, 'DEFAULT')}"></div>
-                <div class="total-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalRemaining(), 1, 'DEFAULT', 2, 'DEFAULT')}"
+                <div class="total-display spent-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalSpent(), 1, 'DEFAULT', 2, 'DEFAULT')}"></div>
+                <div class="total-display remaining-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalRemaining(), 1, 'DEFAULT', 2, 'DEFAULT')}"
                      th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>

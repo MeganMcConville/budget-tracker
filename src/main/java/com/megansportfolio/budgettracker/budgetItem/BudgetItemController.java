@@ -25,10 +25,10 @@ public class BudgetItemController {
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void createBudgetItem(@RequestBody BudgetItem budgetItem){
+    public long createBudgetItem(@RequestBody BudgetItem budgetItem){
         UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
-        budgetItemService.createBudgetItem(budgetItem, loggedInUserEmailAddress);
+        return budgetItemService.createBudgetItem(budgetItem, loggedInUserEmailAddress);
     }
 
     @RequestMapping(value = "/{budgetItemId}", method = RequestMethod.DELETE)

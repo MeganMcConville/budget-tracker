@@ -33,14 +33,14 @@ public class BudgetItemService {
     @Autowired
     private BudgetItemUpdateDao budgetItemUpdateDao;
 
-    public void createBudgetItem(BudgetItem budgetItem, String loggedInUserEmailAddress){
+    public long createBudgetItem(BudgetItem budgetItem, String loggedInUserEmailAddress){
         Budget budget = budgetDao.findById(budgetItem.getBudget().getId()).get();
         User user = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
         if(user.getId() != budget.getUser().getId()){
             throw new RuntimeException();
         }
         budgetItem.setBudget(budget);
-        budgetItemDao.save(budgetItem);
+        return budgetItemDao.save(budgetItem).getId();
     }
 
     public void deleteBudgetItem(long budgetItemId, String loggedInUserEmailAddress){

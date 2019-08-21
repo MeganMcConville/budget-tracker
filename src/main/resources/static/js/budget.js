@@ -44,7 +44,7 @@ $(document).ready(function (){
         $("#edit-budget-error-message").hide();
 
         var payload = [];
-        $(".budget-table-data").each(function(){
+        $(".budget-table-data:not(.hidden-to-clone)").each(function(){
             var row = $(this);
             var id = row.attr("data-budget-item-id");
             var budgetItem = {
@@ -109,7 +109,7 @@ $(document).ready(function (){
                 nameInput.attr("data-original-value", nameInput.val());
                 var amountDisplay = row.find(".amount");
                 var amountInput = row.find(".amount-input");
-                amountDisplay.text(amountInput.val());
+                amountDisplay.text("$" + amountInput.val());
                 amountInput.attr("data-original-value", amountInput.val());
             });
         })
@@ -176,7 +176,7 @@ $(document).ready(function (){
                 contentType: "application/json"
             //ajax curlies
             })
-            .done(function(){
+            .done(function(budgetItemId){
                 var displayAmount = (Math.round(amount*100)/100).toFixed(2);
                 $("#create-new-item-success-message").show();
                 $("#new-item-name-input, #new-item-amount-input").val("");
@@ -190,8 +190,10 @@ $(document).ready(function (){
                 //add new item to budget
                 var newRow = $(".hidden-to-clone").first().clone();
                 newRow.removeClass("hidden-to-clone");
+                newRow.attr("data-budget-item-id", budgetItemId);
                 var newItemName = newRow.find(".name");
                 newItemName.text(name);
+                newItemName.attr("data-budget-item-name", name);
                 newItemName.attr("data-original-value", name);
                 var newItemAmount = newRow.find(".amount");
                 newItemAmount.text("$" + displayAmount);
@@ -203,8 +205,14 @@ $(document).ready(function (){
                 newItemNameInput.val(name);
                 newItemNameInput.attr("data-original-value", name);
                 var newItemAmountInput = newRow.find(".amount-input");
-                newItemAmountInput.val(displayAmount);
                 newItemAmountInput.attr("data-original-value", displayAmount);
+                newItemAmountInput.val(newItemAmountInput.attr("data-original-value"));
+                var totalSpent = newRow.find(".spent-display");
+                totalSpent.text("$0.00");
+                var totalRemaining = newRow.find(".remaining-display");
+                totalRemaining.text("$" + displayAmount);
+                totalRemaining.addClass("positive-amount");
+
                 newRow.insertBefore(".new-item-container");
             })
             .fail(function(){
@@ -315,7 +323,7 @@ $(document).ready(function (){
     //delete confirmation function curlies
     });
 
-    $(".add-entry-button").click(function(){
+    $(document).on("click", ".add-entry-button", function(){
         var addEntryIcon = $(this);
         var entryIconRow = addEntryIcon.parent().parent();
         $(".create-entry-confirmation").attr("data-budget-item-id", entryIconRow.attr("data-budget-item-id"));
@@ -389,5 +397,10 @@ $(document).ready(function (){
         $("#entry-amount-input").val("");
         $("#entry-notes-input").val("");
     });
+
+    $("#calendar-icon").click(function(){
+        $("#year-input").val($("#date-display").attr("data-display-year"));
+    });
+
 //whole page closing curlies
 });
