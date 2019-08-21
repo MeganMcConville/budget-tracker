@@ -97,12 +97,12 @@
 
 
 #budget-items-table{
-    width: 75%;
+    width: 80%;
     margin-left: 10px;
 
     .grid-container{
         display: grid;
-        grid-template-columns: 5% 35% 15% 20% 20% 5%;
+        grid-template-columns: 5% 25% 15% 8% 10% 12% 20% 5%;
     }
     .column-heading{
         text-align: center;
@@ -140,6 +140,15 @@
         }
         .amount-input{
             padding-right: 5px;
+        }
+        .total-display{
+            text-align: center;
+        }
+        .negative-amount{
+            background-color: $negative-background;
+        }
+        .positive-amount{
+            background-color: $positive-background;
         }
         .type-container, .checkbox-container{
             margin: auto;

@@ -2,6 +2,7 @@ package com.megansportfolio.budgettracker.budgetItem;
 
 import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budget.BudgetDao;
+import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
@@ -49,6 +50,38 @@ public class BudgetItemService {
             throw new RuntimeException();
         }
         budgetItemDao.deleteById(itemToDelete.getId());
+    }
+
+    public BigDecimal getAmountSpent(long budgetItemId, int month, int year){
+
+        BudgetItem budgetItem = budgetItemDao.getOne(budgetItemId);
+        List<BudgetEntry> budgetEntries = budgetItem.getBudgetEntries();
+        BigDecimal total = BigDecimal.ZERO;
+        List<BudgetEntry> correspondingBudgetEntries;
+        if(budgetItem.getBudgetItemType() == BudgetItemType.ANNUAL){
+            correspondingBudgetEntries = budgetEntries.stream()
+                    .filter(x -> x.getYear() == year)
+                    .collect(Collectors.toList());
+        }
+
+        else{
+            correspondingBudgetEntries = budgetEntries.stream()
+                    .filter(x -> x.getYear() == year && x.getMonth().getMonthNumber() == month)
+                    .collect(Collectors.toList());
+        }
+        for(BudgetEntry budgetEntry : correspondingBudgetEntries){
+            BigDecimal entryAmount = budgetEntry.getAmount();
+            total = total.add(entryAmount);
+        }
+        return total;
+    }
+
+    public BigDecimal getAmountRemaining(long budgetItemId, int month, int year, BigDecimal itemAmount){
+
+        BigDecimal totalSpent = getAmountSpent(budgetItemId, month, year);
+        BigDecimal amountRemaining = itemAmount.subtract(totalSpent);
+
+        return amountRemaining;
     }
 
 }

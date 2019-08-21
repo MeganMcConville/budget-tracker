@@ -33,6 +33,12 @@ public class BudgetItem {
     @OneToMany(mappedBy = "budgetItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BudgetEntry> budgetEntries;
 
+    @Transient
+    private BigDecimal totalSpent;
+
+    @Transient
+    private BigDecimal totalRemaining;
+
     public long getId(){
         return this.id;
     }
@@ -71,5 +77,29 @@ public class BudgetItem {
 
     public void setBudgetItemType(BudgetItemType budgetItemType){
         this.budgetItemType = budgetItemType;
+    }
+
+    public List<BudgetEntry> getBudgetEntries() {
+        return this.budgetEntries;
+    }
+
+    public void setBudgetEntries(List<BudgetEntry> budgetEntries) {
+        this.budgetEntries = budgetEntries;
+    }
+
+    public BigDecimal getTotalSpent() {
+        return this.totalSpent;
+    }
+
+    public void setTotalSpent(BigDecimal totalSpent) {
+        this.totalSpent = totalSpent;
+    }
+
+    public BigDecimal getTotalRemaining() {
+        return this.totalRemaining;
+    }
+
+    public void setTotalRemaining(BigDecimal totalRemaining) {
+        this.totalRemaining = totalRemaining;
     }
 }

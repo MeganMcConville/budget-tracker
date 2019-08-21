@@ -63,7 +63,7 @@ public class TestBudgetEntryService {
         user.setId(userId);
 
         BigDecimal amount = BigDecimal.TEN;
-        long year = 2019;
+        int year = 2019;
         String notes = "These are notes.";
         int monthNumber = 1;
         budgetEntry.setAmount(amount);

@@ -27,7 +27,7 @@ public class BudgetEntry {
     private Month month;
 
     @Column(name = "year")
-    private long year;
+    private int year;
 
     @Column(name = "notes")
     private String notes;
@@ -67,11 +67,11 @@ public class BudgetEntry {
         this.month = month;
     }
 
-    public long getYear() {
+    public int getYear() {
         return this.year;
     }
 
-    public void setYear(long year) {
+    public void setYear(int year) {
         this.year = year;
     }
 

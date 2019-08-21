@@ -114,6 +114,8 @@
                 <div class="column-heading"></div>
                 <div class="column-heading">Name</div>
                 <div class="column-heading">Amount</div>
+                <div class="column-heading">Total Spent</div>
+                <div class="column-heading">Total Remaining</div>
                 <div class="column-heading">Type</div>
                 <div class="column-heading">
                     <p id="month-specific-heading" class="hidden">Month Specific
@@ -134,10 +136,13 @@
                            th:attr="data-original-value=${budgetItem.getName()}">
                 </div>
                 <div>
-                    <p class="amount" th:text="${'$' + budgetItem.getAmount()}"></p>
-                    <input class="hidden edit-input amount-input" type="number" th:value="${budgetItem.getAmount()}"
+                    <p class="amount" th:text="${'$' + #numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"></p>
+                    <input class="hidden edit-input amount-input" type="number" th:value="${#numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"
                            th:attr="data-original-value=${budgetItem.getAmount()}">
                 </div>
+                <div class="total-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalSpent(), 1, 'DEFAULT', 2, 'DEFAULT')}"></div>
+                <div class="total-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalRemaining(), 1, 'DEFAULT', 2, 'DEFAULT')}"
+                     th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
                 <div class="type-container">
                     <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
                 </div>
@@ -157,6 +162,8 @@
                 <div>
                     <input class="hidden new-item-input amount-input" id="new-item-amount-input" type="number">
                 </div>
+                <div></div>
+                <div></div>
                 <div class="btn-group-container hidden btn-group btn-group-toggle new-item-input type-input" id="new-item-type-input" data-toggle="buttons"
                      aria-label="Budget item type">
                     <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">

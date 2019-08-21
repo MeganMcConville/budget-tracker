@@ -2,6 +2,8 @@ package com.megansportfolio.budgettracker.budgetItem;
 
 import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budget.BudgetDao;
+import com.megansportfolio.budgettracker.budget.Month;
+import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.junit.Assert;
@@ -140,4 +142,98 @@ public class TestBudgetItemService {
         serviceUnderTest.deleteBudgetItem(budgetItemId, loggedInUserEmailAddress);
     }
 
+    @Test
+    public void testGetAmountSpentWhenItemTypeIsAnnual(){
+
+        long budgetItemId = 1;
+        BudgetItem budgetItem = new BudgetItem();
+        Mockito.when(budgetItemDao.getOne(budgetItemId)).thenReturn(budgetItem);
+
+        BudgetEntry budgetEntry1 = new BudgetEntry();
+        budgetEntry1.setAmount(BigDecimal.TEN);
+        budgetEntry1.setMonth(Month.MAY);
+        budgetEntry1.setYear(2018);
+        BudgetEntry budgetEntry2 = new BudgetEntry();
+        budgetEntry2.setAmount(BigDecimal.TEN);
+        budgetEntry2.setMonth(Month.NOVEMBER);
+        budgetEntry2.setYear(2018);
+        BudgetEntry budgetEntry3 = new BudgetEntry();
+        budgetEntry3.setAmount(BigDecimal.ONE);
+        budgetEntry3.setMonth(Month.NOVEMBER);
+        budgetEntry3.setYear(2000);
+        List<BudgetEntry> budgetEntries = new ArrayList<>();
+        budgetEntries.add(budgetEntry1);
+        budgetEntries.add(budgetEntry2);
+        budgetEntries.add(budgetEntry3);
+        budgetItem.setBudgetEntries(budgetEntries);
+        budgetItem.setBudgetItemType(BudgetItemType.ANNUAL);
+
+        int parameterMonth = 5;
+        int parameterYear = 2018;
+
+        BigDecimal result = serviceUnderTest.getAmountSpent(budgetItemId, parameterMonth, parameterYear);
+        BigDecimal expectedResult = new BigDecimal("20");
+
+        Assert.assertEquals(expectedResult, result);
+    }
+
+    public void testGetAmountSpentWhenItemTypeIsMontly(){
+
+        long budgetItemId = 1;
+        BudgetItem budgetItem = new BudgetItem();
+        Mockito.when(budgetItemDao.getOne(budgetItemId)).thenReturn(budgetItem);
+
+        BudgetEntry budgetEntry1 = new BudgetEntry();
+        budgetEntry1.setAmount(BigDecimal.TEN);
+        budgetEntry1.setMonth(Month.MAY);
+        budgetEntry1.setYear(2018);
+        BudgetEntry budgetEntry2 = new BudgetEntry();
+        budgetEntry2.setAmount(BigDecimal.TEN);
+        budgetEntry2.setMonth(Month.NOVEMBER);
+        budgetEntry2.setYear(2018);
+        BudgetEntry budgetEntry3 = new BudgetEntry();
+        budgetEntry3.setAmount(BigDecimal.ONE);
+        budgetEntry3.setMonth(Month.NOVEMBER);
+        budgetEntry3.setYear(2000);
+        List<BudgetEntry> budgetEntries = new ArrayList<>();
+        budgetEntries.add(budgetEntry1);
+        budgetEntries.add(budgetEntry2);
+        budgetEntries.add(budgetEntry3);
+        budgetItem.setBudgetEntries(budgetEntries);
+        budgetItem.setBudgetItemType(BudgetItemType.MONTHLY);
+
+        int parameterMonth = 5;
+        int parameterYear = 2018;
+
+        BigDecimal result = serviceUnderTest.getAmountSpent(budgetItemId, parameterMonth, parameterYear);
+        BigDecimal expectedResult = BigDecimal.TEN;
+
+        Assert.assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testGetAmountRemaining(){
+
+        long budgetItemId = 1;
+        int month = 5;
+        int year = 2018;
+        BigDecimal itemAmount = BigDecimal.TEN;
+
+        BudgetItem budgetItem = new BudgetItem();
+        budgetItem.setId(budgetItemId);
+        BudgetEntry budgetEntry = new BudgetEntry();
+        budgetEntry.setYear(2018);
+        budgetEntry.setMonth(Month.MAY);
+        budgetEntry.setAmount(BigDecimal.TEN);
+        List<BudgetEntry> budgetEntries = new ArrayList<>();
+        budgetEntries.add(budgetEntry);
+        budgetItem.setBudgetEntries(budgetEntries);
+        Mockito.when(budgetItemDao.getOne(budgetItemId)).thenReturn(budgetItem);
+
+        BigDecimal result = serviceUnderTest.getAmountRemaining(budgetItemId, month, year, itemAmount);
+        BigDecimal expectedResult = BigDecimal.ZERO;
+
+        Assert.assertEquals(expectedResult, result);
+
+    }
 }

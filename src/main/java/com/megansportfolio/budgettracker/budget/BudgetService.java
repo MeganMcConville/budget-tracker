@@ -1,6 +1,7 @@
 package com.megansportfolio.budgettracker.budget;
 
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
+import com.megansportfolio.budgettracker.budgetItem.BudgetItemService;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -27,6 +29,9 @@ public class BudgetService {
 
     @Autowired
     private BudgetItemUpdateDao budgetItemUpdateDao;
+
+    @Autowired
+    private BudgetItemService budgetItemService;
 
     public int getDisplayYear(Integer year){
         int displayYear;
@@ -82,6 +87,7 @@ public class BudgetService {
             final int finalMonth = month;
             final int finalYear = year;
             for(BudgetItem budgetItem : budgetItems){
+                BigDecimal displayAmount = budgetItem.getAmount();
                 List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
                 List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
                         .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))
@@ -94,7 +100,11 @@ public class BudgetService {
                     BudgetItemUpdate budgetItemUpdate = correspondingUpdate.get();
                     budgetItem.setName(budgetItemUpdate.getName());
                     budgetItem.setAmount(budgetItemUpdate.getAmount());
+                    displayAmount = budgetItemUpdate.getAmount();
                 }
+
+                budgetItem.setTotalSpent(budgetItemService.getAmountSpent(budgetItem.getId(), finalMonth, finalYear));
+                budgetItem.setTotalRemaining(budgetItemService.getAmountRemaining(budgetItem.getId(), finalMonth, finalYear, displayAmount));
             }
 
             return budget;
