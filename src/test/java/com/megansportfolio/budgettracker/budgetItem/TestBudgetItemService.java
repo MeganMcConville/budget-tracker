@@ -157,9 +157,14 @@ public class TestBudgetItemService {
         budgetEntry2.setAmount(BigDecimal.TEN);
         budgetEntry2.setMonth(Month.NOVEMBER);
         budgetEntry2.setYear(2018);
+        BudgetEntry budgetEntry3 = new BudgetEntry();
+        budgetEntry3.setAmount(BigDecimal.ONE);
+        budgetEntry3.setMonth(Month.NOVEMBER);
+        budgetEntry3.setYear(2000);
         List<BudgetEntry> budgetEntries = new ArrayList<>();
         budgetEntries.add(budgetEntry1);
         budgetEntries.add(budgetEntry2);
+        budgetEntries.add(budgetEntry3);
         budgetItem.setBudgetEntries(budgetEntries);
         budgetItem.setBudgetItemType(BudgetItemType.ANNUAL);
 
@@ -186,9 +191,14 @@ public class TestBudgetItemService {
         budgetEntry2.setAmount(BigDecimal.TEN);
         budgetEntry2.setMonth(Month.NOVEMBER);
         budgetEntry2.setYear(2018);
+        BudgetEntry budgetEntry3 = new BudgetEntry();
+        budgetEntry3.setAmount(BigDecimal.ONE);
+        budgetEntry3.setMonth(Month.NOVEMBER);
+        budgetEntry3.setYear(2000);
         List<BudgetEntry> budgetEntries = new ArrayList<>();
         budgetEntries.add(budgetEntry1);
         budgetEntries.add(budgetEntry2);
+        budgetEntries.add(budgetEntry3);
         budgetItem.setBudgetEntries(budgetEntries);
         budgetItem.setBudgetItemType(BudgetItemType.MONTHLY);
 
