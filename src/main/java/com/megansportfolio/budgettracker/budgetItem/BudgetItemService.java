@@ -60,7 +60,7 @@ public class BudgetItemService {
         List<BudgetEntry> correspondingBudgetEntries;
         if(budgetItem.getBudgetItemType() == BudgetItemType.ANNUAL){
             correspondingBudgetEntries = budgetEntries.stream()
-                    .filter(x -> x.getYear() == year)
+                    .filter(x -> x.getYear() == year && x.getMonth().getMonthNumber() <= month)
                     .collect(Collectors.toList());
         }
 
