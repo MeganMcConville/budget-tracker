@@ -62,9 +62,15 @@ public class TestBudgetItemService {
         user.setId(userId);
         existingBudget.setUser(user);
 
-        serviceUnderTest.createBudgetItem(budgetItem, loggedInUserEmailAddress);
+        BudgetItem returnedBudgetItem = new BudgetItem();
+        long budgetItemId = 1;
+        returnedBudgetItem.setId(budgetItemId);
+        Mockito.when(budgetItemDao.save(budgetItem)).thenReturn(returnedBudgetItem);
+
+        long result = serviceUnderTest.createBudgetItem(budgetItem, loggedInUserEmailAddress);
 
         Mockito.verify(budgetItemDao).save(budgetItem);
+        Assert.assertEquals(budgetItemId, result);
 
     }
 
@@ -172,7 +178,7 @@ public class TestBudgetItemService {
         int parameterYear = 2018;
 
         BigDecimal result = serviceUnderTest.getAmountSpent(budgetItemId, parameterMonth, parameterYear);
-        BigDecimal expectedResult = new BigDecimal("20");
+        BigDecimal expectedResult = BigDecimal.TEN;
 
         Assert.assertEquals(expectedResult, result);
     }

@@ -2,6 +2,7 @@ package com.megansportfolio.budgettracker.budgetItem;
 
 import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
+import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -32,6 +33,9 @@ public class BudgetItem {
 
     @OneToMany(mappedBy = "budgetItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BudgetEntry> budgetEntries;
+
+    @OneToMany(mappedBy = "budgetItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BudgetItemUpdate> budgetItemUpdates;
 
     @Transient
     private BigDecimal totalSpent;
@@ -101,5 +105,13 @@ public class BudgetItem {
 
     public void setTotalRemaining(BigDecimal totalRemaining) {
         this.totalRemaining = totalRemaining;
+    }
+
+    public List<BudgetItemUpdate> getBudgetItemUpdates() {
+        return this.budgetItemUpdates;
+    }
+
+    public void setBudgetItemUpdates(List<BudgetItemUpdate> budgetItemUpdates) {
+        this.budgetItemUpdates = budgetItemUpdates;
     }
 }

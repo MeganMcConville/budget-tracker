@@ -91,7 +91,7 @@ public class BudgetService {
                 List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
                 List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
                         .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))
-                        .sorted(Comparator.comparing(BudgetItemUpdate::getDate))
+                        .sorted(Comparator.comparing(BudgetItemUpdate::getDate).reversed())
                         .collect(Collectors.toList());
                 Optional<BudgetItemUpdate> correspondingUpdate = budgetItemUpdatesBeforeCutoff.stream()
                         .filter(x -> !x.isMonthSpecific() || (x.getMonth() == finalMonth && x.getYear() == finalYear))
