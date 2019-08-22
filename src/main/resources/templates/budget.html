@@ -126,9 +126,9 @@
                 <div class="column-heading"></div>
             </div>
             <div class="budget-table-data row-data grid-container hidden-to-clone">
-                <div>
+                <div class="icon-div">
                     <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
-                    <i class="fas fa-bars entry-table-opener" title="View budget entries"></i>
+                    <i class="fas fa-bars entry-table-opener" title="View budget entries" data-toggle="collapse"></i>
                 </div>
                 <div>
                     <p class="name"></p>
@@ -149,7 +149,13 @@
                 <div>
                     <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>
                 </div>
-                <div class="entries-display collapse"></div>
+                <div class="entries-display collapse">
+                    <div class="entry-heading-container">
+                        <div class="entry-table-heading month-entry-heading">Month</div>
+                        <div class="entry-table-heading amount-entry-heading">Amount</div>
+                        <div class="entry-table-heading">Notes</div>
+                    </div>
+                </div>
             </div>
             <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
                  th:attr="data-budget-item-id=${budgetItem.getId()}">

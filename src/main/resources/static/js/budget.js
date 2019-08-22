@@ -214,6 +214,10 @@ $(document).ready(function (){
                 var totalRemaining = newRow.find(".remaining-display");
                 totalRemaining.text("$" + displayAmount);
                 totalRemaining.addClass("positive-amount");
+                var entryCollapse = newRow.find(".entries-display");
+                entryCollapse.attr("id", "collapse" + budgetItemId);
+                var entryTableIcon = newRow.find(".entry-table-opener");
+                entryTableIcon.attr("data-target", "#" + entryCollapse.attr("id"));
 
                 newRow.insertBefore(".new-item-container");
             })
