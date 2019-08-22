@@ -17,7 +17,7 @@ $(document).ready(function (){
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
-        $("#budget-items-table p:not(.item-type-text, #month-specific-heading)").hide();
+        $("#budget-items-table p:not(.item-type-text, #month-specific-heading, .entry-data)").hide();
         $(".edit-input").removeClass("hidden");
         $("#month-specific-heading").removeClass("hidden");
     });

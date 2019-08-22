@@ -128,6 +128,7 @@
             <div class="budget-table-data row-data grid-container hidden-to-clone">
                 <div>
                     <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
+                    <i class="fas fa-bars entry-table-opener" title="View budget entries"></i>
                 </div>
                 <div>
                     <p class="name"></p>
@@ -148,11 +149,13 @@
                 <div>
                     <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>
                 </div>
+                <div class="entries-display collapse"></div>
             </div>
             <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
                  th:attr="data-budget-item-id=${budgetItem.getId()}">
                 <div class="icon-div">
                     <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
+                    <i class="fas fa-bars entry-table-opener" title="View budget entries" data-toggle="collapse" th:attr="data-target='#collapse' + ${budgetItem.getId()}"></i>
                 </div>
                 <div>
                     <p class="name" th:text="${budgetItem.getName()}" th:attr="data-budget-item-name=${budgetItem.getName()}"></p>
@@ -175,6 +178,18 @@
                 </div>
                 <div>
                     <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>
+                </div>
+                <div class="entries-display collapse" th:id="'collapse' + ${budgetItem.getId()}">
+                    <div class="entry-heading-container">
+                        <div class="entry-table-heading month-entry-heading">Month</div>
+                        <div class="entry-table-heading amount-entry-heading">Amount</div>
+                        <div class="entry-table-heading">Notes</div>
+                    </div>
+                    <div class="entry-container" th:each="budgetEntry : ${budgetItem.getBudgetEntries()}">
+                        <p class="entry-data month-entry-data" th:text="${budgetEntry.getMonth().getNameLabel()}" th:classappend="${budgetItem.getBudgetItemType() == T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).MONTHLY} ? 'invisible' : ''"></p>
+                        <p class="entry-data amount-entry-data" th:text="${'$' + #numbers.formatDecimal(budgetEntry.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"></p>
+                        <p class="entry-data" th:text="${budgetEntry.getNotes()}"></p>
+                    </div>
                 </div>
             </div>
 
