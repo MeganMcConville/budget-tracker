@@ -44,7 +44,9 @@ public class BudgetController {
     }
 
     @RequestMapping(value = "/{budgetId}", method = RequestMethod.GET)
-    public String viewIndividualBudget(@PathVariable long budgetId, @RequestParam(required = false) Integer month, @RequestParam(required = false) Integer year, Model model){
+    public String viewIndividualBudget(@PathVariable long budgetId, @RequestParam(required = false) Integer month,
+                                       @RequestParam(required = false) Integer year, Model model,
+                                       @RequestParam(required = false, defaultValue = "false") Boolean tableOnly){
         UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
         Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId, month, year);
@@ -53,6 +55,9 @@ public class BudgetController {
         model.addAttribute("budget", individualBudget);
         model.addAttribute("displayYear", displayYear);
         model.addAttribute("displayMonth", displayMonth);
+        if(tableOnly){
+            return "fragments/budget-items-table";
+        }
         return "budget";
     }
 

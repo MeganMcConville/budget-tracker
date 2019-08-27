@@ -344,8 +344,11 @@ $(document).ready(function (){
         if(!$(".create-entry-confirmation").hasClass("disabled")){
             $(".create-entry-confirmation").addClass("disabled");
             $("#edit-budget-error-message").hide();
+            $("#entry-created-error-message").hide();
             $("#entry-amount-input").removeClass("error");
             $("#amount-error-message").hide();
+            $("#loading-gif").show();
+            $("#budget-items-table").addClass("transparent");
             var entryAmountInput = $("#entry-amount-input");
             entryAmountInput.attr("required", true);
             var amount = entryAmountInput.val();
@@ -377,21 +380,42 @@ $(document).ready(function (){
                     contentType: "application/json"
                 })
 
-            .done(function(){
-                $("#create-entry-success-message").show();
-                $("#create-entry-modal").modal("toggle");
-                $("#entry-amount-input").val("");
-                $("#entry-notes-input").val("");
-            //done curlies
-            })
-            .fail(function(){
-                $("#edit-budget-error-message").show();
-            //fail curlies
-            })
-            .always(function(){
-                $(".create-entry-confirmation").removeClass("disabled");
-            //always curlies
-            });
+                .done(function(){
+                    $("#create-entry-modal").modal("toggle");
+                    $("#entry-amount-input").val("");
+                    $("#entry-notes-input").val("");
+                    var budgetId = $("#budget-title").attr("data-budget-id");
+                    $.ajax({
+                        url: "/budgets/" + budgetId,
+                        type: "GET",
+                        data:{
+                            month: monthNumber,
+                            year: year,
+                            tableOnly: "true"
+                        }
+                    })
+                    .done(function(data){
+                        $(".budget-table-data:not(.hidden-to-clone)").remove();
+                        $(data).insertAfter(".hidden-to-clone");
+                        $("#create-entry-success-message").show();
+                    })
+                    .fail(function(){
+                        $("#entry-created-error-message").show();
+                    })
+                    .always(function(){
+                        $("#loading-gif").hide();
+                        $("#budget-items-table").removeClass("transparent");
+                    });
+                //done curlies
+                })
+                .fail(function(){
+                    $("#edit-budget-error-message").show();
+                //fail curlies
+                })
+                .always(function(){
+                    $(".create-entry-confirmation").removeClass("disabled");
+                //always curlies
+                });
             }
         }
     //create entry confirmation closing

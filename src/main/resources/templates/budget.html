@@ -84,6 +84,7 @@
     </div>
 
     <div id="edit-budget-error-message" class="hidden alert alert-danger">Something went wrong. Please refresh the page and try again.</div>
+    <div id="entry-created-error-message" class="hidden alert alert-danger">Your budget entry was created but could not be displayed. Please refresh the page to view it.</div>
     <div id="rename-budget-error-message" class="hidden alert alert-danger">Please enter a name</div>
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
     <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
@@ -109,118 +110,78 @@
         <button id="cancel-edits-button" class="btn btn-secondary hidden mb-2 ml-2">Cancel</button>
         <button id="save-edits-button" class="btn btn-success hidden mb-2" type="submit">Save</button>
     </div>
+    <img src="/images/ajax-loader.gif" class="hidden" id="loading-gif">
     <div id="budget-items-table">
-            <div class="grid-container">
-                <div class="column-heading"></div>
-                <div class="column-heading">Name</div>
-                <div class="column-heading">Amount</div>
-                <div class="column-heading">Total Spent</div>
-                <div class="column-heading">Total Remaining</div>
-                <div class="column-heading">Type</div>
-                <div class="column-heading">
-                    <p id="month-specific-heading" class="hidden">Month Specific
-                        <i class="far fa-question-circle" data-toggle="tooltip" data-placement="top"
-                           title="Check if you want this item's edit to only apply to the selected month and year."></i>
-                    </p>
-                </div>
-                <div class="column-heading"></div>
+        <div class="grid-container">
+            <div class="column-heading"></div>
+            <div class="column-heading">Name</div>
+            <div class="column-heading">Amount</div>
+            <div class="column-heading">Total Spent</div>
+            <div class="column-heading">Total Remaining</div>
+            <div class="column-heading">Type</div>
+            <div class="column-heading">
+                <p id="month-specific-heading" class="hidden">Month Specific
+                    <i class="far fa-question-circle" data-toggle="tooltip" data-placement="top"
+                       title="Check if you want this item's edit to only apply to the selected month and year."></i>
+                </p>
             </div>
-            <div class="budget-table-data row-data grid-container hidden-to-clone">
-                <div class="icon-div">
-                    <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
-                    <i class="fas fa-bars entry-table-opener" title="View budget entries" data-toggle="collapse"></i>
-                </div>
-                <div>
-                    <p class="name"></p>
-                    <input class="hidden edit-input name-input" type="text">
-                </div>
-                <div>
-                    <p class="amount"></p>
-                    <input class="hidden edit-input amount-input" type="number" step="0.01">
-                </div>
-                <div class="total-display spent-display"></div>
-                <div class="total-display remaining-display"></div>
-                <div class="type-container">
-                    <p class="item-type item-type-text"></p>
-                </div>
-                <div class="checkbox-container">
-                    <input class="hidden edit-input month-specific-checkbox" type="checkbox">
-                </div>
-                <div>
-                    <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>
-                </div>
-                <div class="entries-display collapse">
-                    <div class="entry-heading-container">
-                        <div class="entry-table-heading month-entry-heading">Month</div>
-                        <div class="entry-table-heading amount-entry-heading">Amount</div>
-                        <div class="entry-table-heading">Notes</div>
-                    </div>
-                </div>
+            <div class="column-heading"></div>
+        </div>
+        <div class="budget-table-data row-data grid-container hidden-to-clone">
+            <div class="icon-div">
+                <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
+                <i class="fas fa-bars entry-table-opener" title="View budget entries" data-toggle="collapse"></i>
             </div>
-            <div class="budget-table-data row-data grid-container" th:each="budgetItem: ${budget.getBudgetItems()}"
-                 th:attr="data-budget-item-id=${budgetItem.getId()}">
-                <div class="icon-div">
-                    <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
-                    <i class="fas fa-bars entry-table-opener" title="View budget entries" data-toggle="collapse" th:attr="data-target='#collapse' + ${budgetItem.getId()}"></i>
-                </div>
-                <div>
-                    <p class="name" th:text="${budgetItem.getName()}" th:attr="data-budget-item-name=${budgetItem.getName()}"></p>
-                    <input class="hidden edit-input name-input" type="text" th:value="${budgetItem.getName()}"
-                           th:attr="data-original-value=${budgetItem.getName()}">
-                </div>
-                <div>
-                    <p class="amount" th:text="${'$' + #numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"></p>
-                    <input class="hidden edit-input amount-input" type="number" step="0.01" th:value="${#numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"
-                           th:attr="data-original-value=${#numbers.formatDecimal(budgetItem.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}">
-                </div>
-                <div class="total-display spent-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalSpent(), 1, 'DEFAULT', 2, 'DEFAULT')}"></div>
-                <div class="total-display remaining-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalRemaining(), 1, 'DEFAULT', 2, 'DEFAULT')}"
-                     th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
-                <div class="type-container">
-                    <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
-                </div>
-                <div class="checkbox-container">
-                    <input class="hidden edit-input month-specific-checkbox" type="checkbox">
-                </div>
-                <div>
-                    <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>
-                </div>
-                <div class="entries-display collapse" th:id="'collapse' + ${budgetItem.getId()}">
-                    <div class="entry-heading-container">
-                        <div class="entry-table-heading month-entry-heading">Month</div>
-                        <div class="entry-table-heading amount-entry-heading">Amount</div>
-                        <div class="entry-table-heading">Notes</div>
-                    </div>
-                    <div class="entry-container" th:each="budgetEntry : ${budgetItem.getBudgetEntries()}">
-                        <p class="entry-data month-entry-data" th:text="${budgetEntry.getMonth().getNameLabel()}" th:classappend="${budgetItem.getBudgetItemType() == T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).MONTHLY} ? 'invisible' : ''"></p>
-                        <p class="entry-data amount-entry-data" th:text="${'$' + #numbers.formatDecimal(budgetEntry.getAmount(), 1, 'DEFAULT', 2, 'DEFAULT')}"></p>
-                        <p class="entry-data" th:text="${budgetEntry.getNotes()}"></p>
-                    </div>
+            <div>
+                <p class="name"></p>
+                <input class="hidden edit-input name-input" type="text">
+            </div>
+            <div>
+                <p class="amount"></p>
+                <input class="hidden edit-input amount-input" type="number" step="0.01">
+            </div>
+            <div class="total-display spent-display"></div>
+            <div class="total-display remaining-display"></div>
+            <div class="type-container">
+                <p class="item-type item-type-text"></p>
+            </div>
+            <div class="checkbox-container">
+                <input class="hidden edit-input month-specific-checkbox" type="checkbox">
+            </div>
+            <div>
+                <i class="fas fa-trash-alt delete-item-button" title="Delete item" data-toggle="modal" data-target="#delete-item-modal"></i>
+            </div>
+            <div class="entries-display collapse">
+                <div class="entry-heading-container">
+                    <div class="entry-table-heading month-entry-heading">Month</div>
+                    <div class="entry-table-heading amount-entry-heading">Amount</div>
+                    <div class="entry-table-heading">Notes</div>
                 </div>
             </div>
-
-            <div class="grid-container row-data new-item-container hidden" id="new-item-div" th:attr="data-budget-id=${budget.getId()}">
-                <div></div>
-                <div>
-                    <input class="hidden new-item-input name-input" id="new-item-name-input" type="text">
-                </div>
-                <div>
-                    <input class="hidden new-item-input amount-input" id="new-item-amount-input" type="number">
-                </div>
-                <div></div>
-                <div></div>
-                <div class="btn-group-container hidden btn-group btn-group-toggle new-item-input type-input" id="new-item-type-input" data-toggle="buttons"
-                     aria-label="Budget item type">
-                    <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
-                        <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
-                    </label>
-                </div>
-                <div></div>
-                <div class="save-buttons hidden">
-                    <i class="far fa-times-circle" id="cancel-new-item-x"></i>
-                    <i class="fas fa-check" id="save-new-item-check"></i>
-                </div>
+        </div>
+        <div th:replace="fragments/budget-items-table"></div>
+        <div class="grid-container row-data new-item-container hidden" id="new-item-div" th:attr="data-budget-id=${budget.getId()}">
+            <div></div>
+            <div>
+                <input class="hidden new-item-input name-input" id="new-item-name-input" type="text">
             </div>
+            <div>
+                <input class="hidden new-item-input amount-input" id="new-item-amount-input" type="number">
+            </div>
+            <div></div>
+            <div></div>
+            <div class="btn-group-container hidden btn-group btn-group-toggle new-item-input type-input" id="new-item-type-input" data-toggle="buttons"
+                 aria-label="Budget item type">
+                <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
+                    <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
+                </label>
+            </div>
+            <div></div>
+            <div class="save-buttons hidden">
+                <i class="far fa-times-circle" id="cancel-new-item-x"></i>
+                <i class="fas fa-check" id="save-new-item-check"></i>
+            </div>
+        </div>
     </div>
 
 </div>

@@ -95,6 +95,17 @@
     }
 }
 
+.transparent{
+    opacity: 0.3;
+}
+#loading-gif{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    opacity: 1.0 !important;
+    height: 2em;
+    width: 2em;
+}
 
 #budget-items-table{
     width: 80%;
