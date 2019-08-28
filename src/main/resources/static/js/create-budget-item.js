@@ -16,6 +16,7 @@ $(document).ready(function (){
             var amount = amountInput.val();
             var typeInput = $("#budget-item-type .active input");
             var budgetItemType = typeInput.val();
+            var budgetItemTypeText = typeInput.attr("data-type-text-value");
             var budgetIdInput = $("#budget-id");
             var payload = {
                 amount: amount,
@@ -35,10 +36,11 @@ $(document).ready(function (){
                 $("#success-message").show();
                 nameInput.val("");
                 amountInput.val("");
+                var displayAmount = (Math.round(amount*100)/100).toFixed(2);
                 $("#budget-item-type .active").removeClass("active");
                 var nameElement = $("<p></p>").text(name);
-                var amountElement = $("<p></p>").text(amount);
-                var typeElement = $("<p></p>").text(budgetItemType);
+                var amountElement = $("<p></p>").text("$" + displayAmount);
+                var typeElement = $("<p></p>").text(budgetItemTypeText);
                 var row = $("<div></div>");
                 row.append(nameElement, amountElement, typeElement);
                 $("#finished-budget-items").append(row);

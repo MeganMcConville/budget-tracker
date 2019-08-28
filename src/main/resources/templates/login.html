@@ -10,6 +10,7 @@
 <body>
 <div layout:fragment="content">
     <div th:if="${param.error}" class="alert alert-danger">Your username or password is incorrect. Please try again.</div>
+    <div th:if="${param.logout}" class="alert alert-success">You have been successfully logged out.</div>
     <div class="image-div">
         <img th:src="@{/images/fflogo.png}" th:alt-title="${'Finance Friend Logo'}">
     </div>

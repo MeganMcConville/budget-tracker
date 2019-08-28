@@ -17,7 +17,7 @@ $(document).ready(function (){
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
-        $("#budget-items-table p:not(.item-type-text, #month-specific-heading)").hide();
+        $("#budget-items-table p:not(.item-type-text, #month-specific-heading, .entry-data)").hide();
         $(".edit-input").removeClass("hidden");
         $("#month-specific-heading").removeClass("hidden");
     });
@@ -161,6 +161,7 @@ $(document).ready(function (){
             var amount = amountInput.val();
             var typeInput = $("#new-item-type-input .active input");
             var budgetItemType = typeInput.val();
+            var budgetItemTypeText = typeInput.attr("data-item-type-text");
             var budgetId = $("#new-item-name-input").closest(".row-data").attr("data-budget-id");
             var payload = {
                 amount: amount,
@@ -201,7 +202,7 @@ $(document).ready(function (){
                 newItemAmount.text("$" + displayAmount);
                 newItemAmount.attr("data-original-value", displayAmount);
                 var newItemType = newRow.find(".item-type-text");
-                newItemType.text(budgetItemType);
+                newItemType.text(budgetItemTypeText);
                 newItemType.attr("data-original-value", budgetItemType);
                 var newItemNameInput = newRow.find(".name-input");
                 newItemNameInput.val(name);
@@ -214,6 +215,10 @@ $(document).ready(function (){
                 var totalRemaining = newRow.find(".remaining-display");
                 totalRemaining.text("$" + displayAmount);
                 totalRemaining.addClass("positive-amount");
+                var entryCollapse = newRow.find(".entries-display");
+                entryCollapse.attr("id", "collapse" + budgetItemId);
+                var entryTableIcon = newRow.find(".entry-table-opener");
+                entryTableIcon.attr("data-target", "#" + entryCollapse.attr("id"));
 
                 newRow.insertBefore(".new-item-container");
             })
@@ -340,8 +345,11 @@ $(document).ready(function (){
         if(!$(".create-entry-confirmation").hasClass("disabled")){
             $(".create-entry-confirmation").addClass("disabled");
             $("#edit-budget-error-message").hide();
+            $("#entry-created-error-message").hide();
             $("#entry-amount-input").removeClass("error");
             $("#amount-error-message").hide();
+            $("#loading-gif").show();
+            $("#budget-items-table").addClass("transparent");
             var entryAmountInput = $("#entry-amount-input");
             entryAmountInput.attr("required", true);
             var amount = entryAmountInput.val();
@@ -373,21 +381,42 @@ $(document).ready(function (){
                     contentType: "application/json"
                 })
 
-            .done(function(){
-                $("#create-entry-success-message").show();
-                $("#create-entry-modal").modal("toggle");
-                $("#entry-amount-input").val("");
-                $("#entry-notes-input").val("");
-            //done curlies
-            })
-            .fail(function(){
-                $("#edit-budget-error-message").show();
-            //fail curlies
-            })
-            .always(function(){
-                $(".create-entry-confirmation").removeClass("disabled");
-            //always curlies
-            });
+                .done(function(){
+                    $("#create-entry-modal").modal("toggle");
+                    $("#entry-amount-input").val("");
+                    $("#entry-notes-input").val("");
+                    var budgetId = $("#budget-title").attr("data-budget-id");
+                    $.ajax({
+                        url: "/budgets/" + budgetId,
+                        type: "GET",
+                        data:{
+                            month: monthNumber,
+                            year: year,
+                            tableOnly: "true"
+                        }
+                    })
+                    .done(function(data){
+                        $(".budget-table-data:not(.hidden-to-clone)").remove();
+                        $(data).insertAfter(".hidden-to-clone");
+                        $("#create-entry-success-message").show();
+                    })
+                    .fail(function(){
+                        $("#entry-created-error-message").show();
+                    })
+                    .always(function(){
+                        $("#loading-gif").hide();
+                        $("#budget-items-table").removeClass("transparent");
+                    });
+                //done curlies
+                })
+                .fail(function(){
+                    $("#edit-budget-error-message").show();
+                //fail curlies
+                })
+                .always(function(){
+                    $(".create-entry-confirmation").removeClass("disabled");
+                //always curlies
+                });
             }
         }
     //create entry confirmation closing

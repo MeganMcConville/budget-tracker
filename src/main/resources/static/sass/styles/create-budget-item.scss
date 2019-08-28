@@ -17,6 +17,7 @@
 #column-names.displaying{
     width: 40%;
     margin: 2px;
+    margin-left: 5px;
     display: grid;
     grid-template-columns: 40% 40% 20%;
     p{
@@ -56,6 +57,10 @@
 
 #create-budget-item-form{
     margin-left: 5px;
+    #budget-item-amount{
+        text-align: right;
+        padding-right: .5em;
+    }
 }
 
 #return-budget-link{

@@ -1,7 +1,9 @@
 package com.megansportfolio.budgettracker.budget;
 
+import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItemService;
+import com.megansportfolio.budgettracker.budgetItem.BudgetItemType;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
@@ -12,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,6 +104,18 @@ public class BudgetService {
 
                 budgetItem.setTotalSpent(budgetItemService.getAmountSpent(budgetItem.getId(), finalMonth, finalYear));
                 budgetItem.setTotalRemaining(budgetItemService.getAmountRemaining(budgetItem.getId(), finalMonth, finalYear, displayAmount));
+                List<BudgetEntry> correspondingBudgetEntries;
+                if(budgetItem.getBudgetItemType() == BudgetItemType.ANNUAL){
+                    correspondingBudgetEntries = budgetItem.getBudgetEntries().stream()
+                            .filter(x -> x.getYear() == finalYear && x.getMonth().getMonthNumber() <= finalMonth)
+                            .collect(Collectors.toList());
+                }
+                else{
+                    correspondingBudgetEntries = budgetItem.getBudgetEntries().stream()
+                            .filter(x -> x.getYear() == finalYear && x.getMonth().getMonthNumber() == finalMonth)
+                            .collect(Collectors.toList());
+                }
+                budgetItem.setBudgetEntries(correspondingBudgetEntries);
             }
 
             return budget;
