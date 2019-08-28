@@ -161,6 +161,7 @@ $(document).ready(function (){
             var amount = amountInput.val();
             var typeInput = $("#new-item-type-input .active input");
             var budgetItemType = typeInput.val();
+            var budgetItemTypeText = typeInput.attr("data-item-type-text");
             var budgetId = $("#new-item-name-input").closest(".row-data").attr("data-budget-id");
             var payload = {
                 amount: amount,
@@ -201,7 +202,7 @@ $(document).ready(function (){
                 newItemAmount.text("$" + displayAmount);
                 newItemAmount.attr("data-original-value", displayAmount);
                 var newItemType = newRow.find(".item-type-text");
-                newItemType.text(budgetItemType);
+                newItemType.text(budgetItemTypeText);
                 newItemType.attr("data-original-value", budgetItemType);
                 var newItemNameInput = newRow.find(".name-input");
                 newItemNameInput.val(name);

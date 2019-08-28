@@ -18,7 +18,7 @@
     <div class="total-display remaining-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalRemaining(), 1, 'DEFAULT', 2, 'DEFAULT')}"
          th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
     <div class="type-container">
-        <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType()}"></p>
+        <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType().getLowerCaseLabel()}"></p>
     </div>
     <div class="checkbox-container">
         <input class="hidden edit-input month-specific-checkbox" type="checkbox">

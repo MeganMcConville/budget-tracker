@@ -173,7 +173,7 @@
             <div class="btn-group-container hidden btn-group btn-group-toggle new-item-input type-input" id="new-item-type-input" data-toggle="buttons"
                  aria-label="Budget item type">
                 <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
-                    <input type="radio" name="budget-item-type" th:value="${budgetItemType}" autocomplete="off"> [[${budgetItemType}]]
+                    <input type="radio" name="budget-item-type" th:value="${budgetItemType}" th:attr="data-item-type-text=${budgetItemType.getLowerCaseLabel()}" autocomplete="off"> [[${budgetItemType.getLowerCaseLabel()}]]
                 </label>
             </div>
             <div></div>
