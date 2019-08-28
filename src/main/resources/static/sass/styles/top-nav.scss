@@ -1,9 +1,17 @@
 @import "styles/variables";
 
 nav{
-margin-bottom: 5px;
-    a{
+    margin-bottom: 5px;
+    #add-budget-plus{
         color: white;
         cursor: pointer;
+        margin-right: auto;
+        font-size: larger;
+    }
+    #logout{
+        background-color: $green;
+        cursor: pointer;
+        color: white;
+        border: none;
     }
 }
