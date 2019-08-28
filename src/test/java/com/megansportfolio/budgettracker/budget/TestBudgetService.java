@@ -1,8 +1,10 @@
 package com.megansportfolio.budgettracker.budget;
 
+import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItemDao;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItemService;
+import com.megansportfolio.budgettracker.budgetItem.BudgetItemType;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.user.User;
@@ -132,7 +134,9 @@ public class TestBudgetService {
 
         List<BudgetItem> budgetItems = new ArrayList<>();
         BudgetItem budgetItem1 = new BudgetItem();
+        budgetItem1.setBudgetEntries(new ArrayList<>());
         BudgetItem budgetItem2 = new BudgetItem();
+        budgetItem2.setBudgetEntries(new ArrayList<>());
         long budgetItem1Id = 1;
         budgetItem1.setId(budgetItem1Id);
         long budgetItem2Id = 2;
@@ -140,7 +144,9 @@ public class TestBudgetService {
         BudgetItem budgetItem3 = new BudgetItem();
         long budgetItem3Id = 3;
         budgetItem3.setId(budgetItem3Id);
+        budgetItem3.setBudgetItemType(BudgetItemType.ANNUAL);
         BudgetItem budgetItem4 = new BudgetItem();
+        budgetItem4.setBudgetItemType(BudgetItemType.MONTHLY);
         long budgetItem4Id = 4;
         budgetItem4.setId(budgetItem4Id);
         budgetItems.add(budgetItem1);
@@ -148,6 +154,36 @@ public class TestBudgetService {
         budgetItems.add(budgetItem3);
         budgetItems.add(budgetItem4);
         budget.setBudgetItems(budgetItems);
+
+        List<BudgetEntry> budgetEntries1 = new ArrayList<>();
+        BudgetEntry budgetEntry1 = new BudgetEntry();
+        budgetEntry1.setYear(2000);
+        budgetEntry1.setMonth(Month.JANUARY);
+        budgetEntry1.setAmount(BigDecimal.TEN);
+        budgetEntry1.setId(1);
+        BudgetEntry budgetEntry2 = new BudgetEntry();
+        budgetEntry2.setMonth(Month.JULY);
+        budgetEntry2.setYear(2004);
+        budgetEntry2.setAmount(BigDecimal.ONE);
+        budgetEntry2.setId(2);
+        budgetEntries1.add(budgetEntry1);
+        budgetEntries1.add(budgetEntry2);
+        budgetItem3.setBudgetEntries(budgetEntries1);
+
+        List<BudgetEntry> budgetEntries2 = new ArrayList<>();
+        BudgetEntry budgetEntry3 = new BudgetEntry();
+        budgetEntry3.setYear(2000);
+        budgetEntry3.setMonth(Month.JANUARY);
+        budgetEntry3.setAmount(BigDecimal.ONE);
+        budgetEntry3.setId(3);
+        BudgetEntry budgetEntry4 = new BudgetEntry();
+        budgetEntry4.setYear(2000);
+        budgetEntry4.setMonth(Month.JUNE);
+        budgetEntry4.setAmount(BigDecimal.TEN);
+        budgetEntry4.setId(4);
+        budgetEntries2.add(budgetEntry3);
+        budgetEntries2.add(budgetEntry4);
+        budgetItem4.setBudgetEntries(budgetEntries2);
 
         String testName = "Test";
         BigDecimal testAmount = BigDecimal.TEN;
@@ -211,6 +247,10 @@ public class TestBudgetService {
         Assert.assertNull(budgetItem3.getName());
         Assert.assertEquals(testName, budgetItem4.getName());
         Assert.assertEquals(testAmount, budgetItem4.getAmount());
+        Assert.assertEquals(1, resultBudget.getBudgetItems().get(2).getBudgetEntries().size());
+        Assert.assertEquals(1, resultBudget.getBudgetItems().get(2).getBudgetEntries().get(0).getId());
+        Assert.assertEquals(1, resultBudget.getBudgetItems().get(3).getBudgetEntries().size());
+        Assert.assertEquals(3, resultBudget.getBudgetItems().get(3).getBudgetEntries().get(0).getId());
 
     }
 
