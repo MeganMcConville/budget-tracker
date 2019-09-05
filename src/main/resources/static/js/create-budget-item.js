@@ -4,6 +4,14 @@ $(document).ready(function (){
     $(document).ajaxSend(function(e, xhr, options){
         xhr.setRequestHeader(header, token);
     });
+
+    function formatMoney(number){
+            var sign = number < 0 ? "-" : "";
+            var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(2)));
+            var j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + "," : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ",") + ("." + Math.abs(number - i).toFixed(2).slice(2));
+        };
+
     $(".create-budget-item-button").click(function(){
         var button = $(this);
         if(!button.hasClass("disabled")){
@@ -37,7 +45,7 @@ $(document).ready(function (){
                 var finishedTable = $("#finished-budget-items");
                 nameInput.val("");
                 amountInput.val("");
-                var displayAmount = (Math.round(amount*100)/100).toFixed(2);
+                var displayAmount = formatMoney(amount);
                 $("#budget-item-type .active").removeClass("active");
                 var nameElement = $("<p></p>").text(name);
                 nameElement.addClass("name-display");

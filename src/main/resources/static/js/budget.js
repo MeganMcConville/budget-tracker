@@ -5,6 +5,13 @@ $(document).ready(function (){
         xhr.setRequestHeader(header, token);
     });
 
+    function formatMoney(number){
+            var sign = number < 0 ? "-" : "";
+            var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(2)));
+            var j = (j = i.length) > 3 ? j % 3 : 0;
+            return sign + (j ? i.substr(0, j) + "," : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ",") + ("." + Math.abs(number - i).toFixed(2).slice(2));
+        };
+
       $('[data-toggle="tooltip"]').tooltip()
 
     //on click, hide edit button and enter edit mode
@@ -110,7 +117,8 @@ $(document).ready(function (){
                 var amountDisplay = row.find(".amount");
                 var amountInput = row.find(".amount-input");
                 var editedAmount = (Math.round(amountInput.val()*100)/100).toFixed(2);
-                amountDisplay.text("$" + editedAmount);
+                var moneyFormatAmount = formatMoney(editedAmount);
+                amountDisplay.text("$" + moneyFormatAmount);
                 amountInput.attr("data-original-value", editedAmount);
                 amountInput.val(amountInput.attr("data-original-value"));
             });
@@ -181,6 +189,7 @@ $(document).ready(function (){
             })
             .done(function(budgetItemId){
                 var displayAmount = (Math.round(amount*100)/100).toFixed(2);
+                var moneyFormatAmount = formatMoney(amount);
                 $("#create-new-item-success-message").show();
                 $("#new-item-name-input, #new-item-amount-input").val("");
                 $("#new-item-type-input .active").removeClass("active");
@@ -199,8 +208,8 @@ $(document).ready(function (){
                 newItemName.attr("data-budget-item-name", name);
                 newItemName.attr("data-original-value", name);
                 var newItemAmount = newRow.find(".amount");
-                newItemAmount.text("$" + displayAmount);
-                newItemAmount.attr("data-original-value", displayAmount);
+                newItemAmount.text("$" + moneyFormatAmount);
+                newItemAmount.attr("data-original-value", moneyFormatAmount);
                 var newItemType = newRow.find(".item-type-text");
                 newItemType.text(budgetItemTypeText);
                 newItemType.attr("data-original-value", budgetItemType);
@@ -213,7 +222,7 @@ $(document).ready(function (){
                 var totalSpent = newRow.find(".spent-display");
                 totalSpent.text("$0.00");
                 var totalRemaining = newRow.find(".remaining-display");
-                totalRemaining.text("$" + displayAmount);
+                totalRemaining.text("$" + moneyFormatAmount);
                 totalRemaining.addClass("positive-amount");
                 var entryCollapse = newRow.find(".entries-display");
                 entryCollapse.attr("id", "collapse" + budgetItemId);
