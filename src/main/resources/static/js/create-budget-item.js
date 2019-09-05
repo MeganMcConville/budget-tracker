@@ -34,18 +34,23 @@ $(document).ready(function (){
             })
             .done(function(){
                 $("#success-message").show();
+                var finishedTable = $("#finished-budget-items");
                 nameInput.val("");
                 amountInput.val("");
                 var displayAmount = (Math.round(amount*100)/100).toFixed(2);
                 $("#budget-item-type .active").removeClass("active");
                 var nameElement = $("<p></p>").text(name);
+                nameElement.addClass("name-display");
                 var amountElement = $("<p></p>").text("$" + displayAmount);
+                amountElement.addClass("amount-display");
                 var typeElement = $("<p></p>").text(budgetItemTypeText);
+                typeElement.addClass("type-display");
+                var spacingDiv = $("<div></div>");
+                spacingDiv.addClass("spacing-div");
                 var row = $("<div></div>");
-                row.append(nameElement, amountElement, typeElement);
-                $("#finished-budget-items").append(row);
-                $("#column-names").removeClass("hidden");
-                $("#column-names").addClass("displaying");
+                row.append(nameElement, amountElement, typeElement, spacingDiv);
+                row.addClass("new-item-grid-display");
+                finishedTable.append(row);
             })
             .fail(function(){
                 $("#error-message").show();

@@ -14,27 +14,49 @@
     cursor: not-allowed;
 }
 
-#column-names.displaying{
-    width: 40%;
-    margin: 2px;
-    margin-left: 5px;
+.new-item-grid-display{
     display: grid;
-    grid-template-columns: 40% 40% 20%;
-    p{
-        text-decoration: underline;
+    grid-template-columns: 30% 25% 35% 10%;
+    width: 50%;
+}
+
+#column-names{
+    margin-left: 5px;
+    .column-heading{
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid $light-grey;
+        border-collapse: collapse;
+        padding: 10px;
+        border-bottom: 1px solid $light-grey;
+        background-color: $green;
+        color: white;
         font-weight: bold;
+    }
+    p{
+        margin-bottom: 0;
     }
 }
 
 #finished-budget-items{
     height: 100%;
-    width:40%;
     margin-left: 5px;
-
-    div{
-        display: grid;
-        grid-template-columns: 40% 40% 20%;
+    .amount-display{
+        text-align: right;
+        padding-right: 10px;
     }
+    .name-display{
+        padding-left: 5px;
+    }
+    .type-display{
+        text-align: center;
+    }
+    p{
+        margin-bottom: 0px;
+    }
+}
+#finished-budget-items div:nth-child(even):not(.spacing-div){
+    background-color: $light-grey;
 }
 
 .btn-group{
@@ -57,9 +79,17 @@
 
 #create-budget-item-form{
     margin-left: 5px;
+    margin-top: 10px;
+    #budget-item-name{
+        width: 90%;
+    }
     #budget-item-amount{
         text-align: right;
         padding-right: .5em;
+        margin: 0px .5em;
+    }
+    #budget-item-type{
+        margin: 0px auto;
     }
 }
 
