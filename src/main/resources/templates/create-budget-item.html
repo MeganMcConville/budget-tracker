@@ -14,19 +14,17 @@
     <div id="error-message" class="hidden alert alert-danger">Something went wrong. Please refresh the page and try again.</div>
     <div id="success-message" class="hidden alert alert-success">Budget item successfully saved.</div>
     <h2 id="add-budget-item-title">Add Budget Items</h2>
-    <div id="column-names" class="hidden">
-        <p>Name</p>
-        <p>Amount</p>
-        <p>Item Type</p>
+    <div id="column-names" class="new-item-grid-display">
+        <p class="column-heading">Name</p>
+        <p class="column-heading">Amount</p>
+        <p class="column-heading">Item Type</p>
+        <div class="spacing-div column-heading"></div>
     </div>
     <div id="finished-budget-items">
     </div>
-    <div id="create-budget-item-form">
-            <label for="budget-item-name">Name:</label>
+    <div id="create-budget-item-form" class="new-item-grid-display">
             <input id="budget-item-name" type="text">
-            <label for="budget-item-amount">Amount:</label>
             <input id="budget-item-amount" type="number">
-            <label for="budget-item-type">Item Type:</label>
             <div class="btn-group btn-group-toggle" data-toggle="buttons" aria-label="Budget item type" id="budget-item-type">
                 <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
                     <input type="radio" name="budget-item-type" th:value="${budgetItemType}" th:attr="data-type-text-value=${budgetItemType.getLowerCaseLabel()}" autocomplete="off"> [[${budgetItemType.getLowerCaseLabel()}]]
