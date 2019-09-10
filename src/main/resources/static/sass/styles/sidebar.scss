@@ -55,7 +55,7 @@ body{
                      a{
                           text-decoration: none;
                           margin-left: 1rem;
-                          color: $green;
+                          color: $dark-green;
                       }
                 }
 
@@ -71,8 +71,9 @@ body{
     #closer{
         float: right;
         cursor: pointer;
-        margin: 2px 2px 0px 0px;
+        margin: 2px 5px 0px 0px;
         font-size: 1.25em;
+        color: white;
     }
 
     #sidebar.collapsed + #content{
