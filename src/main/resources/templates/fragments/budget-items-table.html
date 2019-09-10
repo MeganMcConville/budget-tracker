@@ -17,7 +17,7 @@
     <div class="total-display spent-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalSpent(), 1, 'DEFAULT', 2, 'DEFAULT')}"></div>
     <div class="total-display remaining-display" th:text="${'$' + #numbers.formatDecimal(budgetItem.getTotalRemaining(), 1, 'DEFAULT', 2, 'DEFAULT')}"
          th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
-    <div class="type-container">
+    <div class="type-container mx-2">
         <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType().getLowerCaseLabel()}"></p>
     </div>
     <div class="checkbox-container">
