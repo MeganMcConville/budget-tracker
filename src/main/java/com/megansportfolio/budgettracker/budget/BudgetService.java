@@ -100,6 +100,7 @@ public class BudgetService {
                     budgetItem.setName(budgetItemUpdate.getName());
                     budgetItem.setAmount(budgetItemUpdate.getAmount());
                     displayAmount = budgetItemUpdate.getAmount();
+                    budgetItem.setRecurring(budgetItemUpdate.isRecurring());
                 }
 
                 budgetItem.setTotalSpent(budgetItemService.getAmountSpent(budgetItem.getId(), finalMonth, finalYear));

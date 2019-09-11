@@ -108,14 +108,14 @@
 }
 
 #budget-items-table{
-    width: 80%;
+    width: 90%;
     margin-left: 10px;
     i{
         cursor: pointer;
     }
     .grid-container{
         display: grid;
-        grid-template-columns: 5% 20% 10% 13% 15% 17% 15% 5%;
+        grid-template-columns: 3% 20% 10% 13% 15% 15% 11% 10% 3%;
     }
     .column-heading{
         text-align: center;
@@ -158,6 +158,8 @@
         }
         .type-container, .checkbox-container{
             margin: auto;
+            display: flex;
+            justify-content: center;
             .item-type{
                 text-align: center;
             }
