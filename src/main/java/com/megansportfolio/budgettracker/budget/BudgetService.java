@@ -6,6 +6,7 @@ import com.megansportfolio.budgettracker.budgetItem.BudgetItemService;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItemType;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
+import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateService;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class BudgetService {
     @Autowired
     private BudgetItemService budgetItemService;
 
-    public int getDisplayYear(Integer year){
+    public static int getDisplayYear(Integer year){
         int displayYear;
         if(year == null){
             Calendar cal = Calendar.getInstance();
@@ -44,7 +45,7 @@ public class BudgetService {
         return displayYear;
     }
 
-    public Month getDisplayMonth(Integer month){
+    public static Month getDisplayMonth(Integer month){
         Month displayMonth;
         if(month == null){
             Calendar cal = Calendar.getInstance();
@@ -80,21 +81,15 @@ public class BudgetService {
                 year = (cal.get(Calendar.YEAR));
             }
 
-            LocalDate cutOff = LocalDate.of(year, month, 1);
-
             List<BudgetItem> budgetItems = budget.getBudgetItems();
             final int finalMonth = month;
             final int finalYear = year;
+
             for(BudgetItem budgetItem : budgetItems){
                 BigDecimal displayAmount = budgetItem.getAmount();
                 List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
-                List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
-                        .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))
-                        .sorted(Comparator.comparing(BudgetItemUpdate::getDate).reversed())
-                        .collect(Collectors.toList());
-                Optional<BudgetItemUpdate> correspondingUpdate = budgetItemUpdatesBeforeCutoff.stream()
-                        .filter(x -> !x.isMonthSpecific() || (x.getMonth() == finalMonth && x.getYear() == finalYear))
-                        .findFirst();
+
+                Optional<BudgetItemUpdate> correspondingUpdate = BudgetItemUpdateService.findCorrespondingBudgetItemUpdate(finalYear, finalMonth, budgetItemUpdates);
                 if(correspondingUpdate.isPresent()){
                     BudgetItemUpdate budgetItemUpdate = correspondingUpdate.get();
                     budgetItem.setName(budgetItemUpdate.getName());
