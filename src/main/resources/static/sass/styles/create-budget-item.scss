@@ -16,12 +16,12 @@
 
 .new-item-grid-display{
     display: grid;
-    grid-template-columns: 30% 25% 35% 10%;
-    width: 50%;
+    grid-template-columns: 27% 20% 30% 15% 8%;
 }
 
 #column-names{
     margin-left: 5px;
+    width: 55%;
     .column-heading{
         text-align: center;
         vertical-align: middle;
@@ -41,6 +41,10 @@
 #finished-budget-items{
     height: 100%;
     margin-left: 5px;
+    width: 55%;
+    .new-row-width{
+        width: 100%;
+    }
     .amount-display{
         text-align: right;
         padding-right: 10px;
@@ -54,8 +58,13 @@
     p{
         margin-bottom: 0px;
     }
+    .recurring-display{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
-#finished-budget-items div:nth-child(even):not(.spacing-div){
+#finished-budget-items div:nth-child(even):not(.spacing-div):not(.recurring-display){
     background-color: $light-grey;
 }
 
@@ -80,7 +89,8 @@
 #create-budget-item-form{
     margin-left: 5px;
     margin-top: 10px;
-    input{
+    width: 55%;
+    input:not(#recurring-checkbox){
         height: 80%;
     }
     #budget-item-name{
@@ -93,6 +103,14 @@
     }
     #budget-item-type{
         margin: 0px auto;
+    }
+    .recurring-form-display{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        #recurring-checkbox{
+            cursor: pointer;
+        }
     }
 }
 
