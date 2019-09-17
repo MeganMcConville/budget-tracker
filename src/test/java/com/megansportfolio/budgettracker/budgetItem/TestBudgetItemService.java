@@ -51,6 +51,8 @@ public class TestBudgetItemService {
         Budget budget = new Budget();
         budget.setId(budgetId);
         budgetItem.setBudget(budget);
+        budgetItem.setBudgetItemType(BudgetItemType.MONTHLY);
+        budgetItem.setRecurring(true);
         Budget existingBudget = new Budget();
         Mockito.when(budgetDao.findById(budgetItem.getBudget().getId())).thenReturn(Optional.of(existingBudget));
 
@@ -69,8 +71,12 @@ public class TestBudgetItemService {
 
         long result = serviceUnderTest.createBudgetItem(budgetItem, loggedInUserEmailAddress);
 
-        Mockito.verify(budgetItemDao).save(budgetItem);
         Assert.assertEquals(budgetItemId, result);
+        ArgumentCaptor<BudgetItem> captor = ArgumentCaptor.forClass(BudgetItem.class);
+        Mockito.verify(budgetItemDao).save(captor.capture());
+        BudgetItem resultItem = captor.getValue();
+        Assert.assertTrue(resultItem.isRecurring());
+        Assert.assertEquals(BudgetItemType.MONTHLY, resultItem.getBudgetItemType());
 
     }
 
