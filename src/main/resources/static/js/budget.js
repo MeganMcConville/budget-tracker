@@ -26,7 +26,8 @@ $(document).ready(function (){
         $("#save-edits-button").removeClass("hidden");
         $("#budget-items-table p:not(.item-type-text, #month-specific-heading, .entry-data)").hide();
         $(".edit-input").removeClass("hidden");
-        $("#month-specific-heading").removeClass("hidden");
+        $(".recurring-check").prop("disabled", false);
+        $("#month-specific-heading").removeClass("invisible");
     });
 
     //on click of cancel button, revert to original, put values back
@@ -37,10 +38,16 @@ $(document).ready(function (){
         $("#edit-budget-button").show();
         $("#create-new-item-button").show();
         $(".edit-input").addClass("hidden");
-        $("#month-specific-heading").addClass("hidden");
+        $("#month-specific-heading").addClass("invisible");
+        $(".recurring-check").prop("disabled", true);
         //change input values back to original
         $(".edit-input").each(function(){
             $(this).val($(this).attr("data-original-value"));
+        });
+        $(".recurring-check").each(function(){
+            var checkedStatus = $(this).attr("data-original-value");
+            var isChecked = (checkedStatus == "true");
+            $(this).prop("checked", isChecked);
         });
         $("#budget-items-table p:not(#month-specific-heading)").show();
     });
@@ -66,6 +73,7 @@ $(document).ready(function (){
             };
             var nameHasChanged = false;
             var amountHasChanged = false;
+            var recurringHasChanged = false;
 
             var nameInput = row.find(".name-input");
             if(nameInput.val() !== nameInput.attr("data-original-value")){
@@ -84,10 +92,15 @@ $(document).ready(function (){
             else{
                 budgetItemUpdate.amount = amountInput.attr("data-original-value");
             }
+            var recurringCheckbox = row.find(".recurring-check");
+            if(recurringCheckbox.is(":checked") !== recurringCheckbox.attr("data-original-value")){
+                budgetItemUpdate.recurring = recurringCheckbox.is(":checked");
+                recurringHasChanged = true;
+            }
             if($(row.find(".month-specific-checkbox")).is(":checked")){
                 budgetItemUpdate.monthSpecific = true;
             }
-            if(amountHasChanged || nameHasChanged){
+            if(amountHasChanged || nameHasChanged || recurringHasChanged){
                 payload.push(budgetItemUpdate);
             }
         });
@@ -105,7 +118,8 @@ $(document).ready(function (){
             $("#edit-budget-button").show();
             $("#create-new-item-button").show();
             $(".edit-input").addClass("hidden");
-            $("#month-specific-heading").addClass("hidden");
+            $("#month-specific-heading").addClass("invisible");
+            $(".recurring-check").prop("disabled", true);
             $("#budget-items-table p:not(#month-specific-heading)").show();
             //put new values to inputs & p's
             $(".budget-table-data").each(function(){
@@ -121,6 +135,8 @@ $(document).ready(function (){
                 amountDisplay.text("$" + moneyFormatAmount);
                 amountInput.attr("data-original-value", editedAmount);
                 amountInput.val(amountInput.attr("data-original-value"));
+                var recurringCheckbox = row.find(".recurring-check");
+                recurringCheckbox.attr("data-original-value", recurringCheckbox.is(":checked"));
             });
         })
         .fail(function(){

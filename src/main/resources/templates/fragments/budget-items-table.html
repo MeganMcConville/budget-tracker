@@ -2,7 +2,8 @@
      th:attr="data-budget-item-id=${budgetItem.getId()}" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="icon-div">
         <i class="fas fa-plus add-entry-button" title="Add new budget entry" data-toggle="modal" data-target="#create-entry-modal"></i>
-        <i class="fas fa-bars entry-table-opener" title="View budget entries" data-toggle="collapse" th:attr="data-target='#collapse' + ${budgetItem.getId()}"></i>
+        <i class="fas fa-bars entry-table-opener" title="View budget entries" data-toggle="collapse"
+           th:attr="data-target='#collapse' + ${budgetItem.getId()}"></i>
     </div>
     <div>
         <p class="name" th:text="${budgetItem.getName()}" th:attr="data-budget-item-name=${budgetItem.getName()}"></p>
@@ -19,6 +20,10 @@
          th:classappend="${budgetItem.getTotalRemaining() < 0} ? negative-amount : positive-amount"></div>
     <div class="type-container mx-2">
         <p class="item-type item-type-text" th:text="${budgetItem.getBudgetItemType().getLowerCaseLabel()}"></p>
+    </div>
+    <div class="checkbox-container">
+        <input class="recurring-check" type="checkbox" disabled th:checked="${budgetItem.isRecurring()}"
+               th:attr="data-original-value=${budgetItem.isRecurring()}">
     </div>
     <div class="checkbox-container">
         <input class="hidden edit-input month-specific-checkbox" type="checkbox">

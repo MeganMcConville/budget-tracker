@@ -12,6 +12,8 @@ $(document).ready(function (){
             return sign + (j ? i.substr(0, j) + "," : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ",") + ("." + Math.abs(number - i).toFixed(2).slice(2));
         };
 
+        $('[data-toggle="tooltip"]').tooltip()
+
     $(".create-budget-item-button").click(function(){
         var button = $(this);
         if(!button.hasClass("disabled")){
@@ -26,10 +28,12 @@ $(document).ready(function (){
             var budgetItemType = typeInput.val();
             var budgetItemTypeText = typeInput.attr("data-type-text-value");
             var budgetIdInput = $("#budget-id");
+            var recurring = $("#recurring-checkbox").is(":checked");
             var payload = {
                 amount: amount,
                 name: name,
                 budgetItemType: budgetItemType,
+                recurring: recurring,
                 budget:{
                     id: budgetIdInput.val()
                 }
@@ -45,6 +49,7 @@ $(document).ready(function (){
                 var finishedTable = $("#finished-budget-items");
                 nameInput.val("");
                 amountInput.val("");
+                $("#recurring-checkbox").prop("checked", false);
                 var displayAmount = formatMoney(amount);
                 $("#budget-item-type .active").removeClass("active");
                 var nameElement = $("<p></p>").text(name);
@@ -53,11 +58,18 @@ $(document).ready(function (){
                 amountElement.addClass("amount-display");
                 var typeElement = $("<p></p>").text(budgetItemTypeText);
                 typeElement.addClass("type-display");
+                var recurringElement = $("<input type='checkbox'>");
+                recurringElement.prop("disabled", true);
+                recurringElement.prop("checked", recurring);
+                var recurringDiv = $("<div></div>");
+                recurringDiv.append(recurringElement);
+                recurringDiv.addClass("recurring-display");
                 var spacingDiv = $("<div></div>");
                 spacingDiv.addClass("spacing-div");
                 var row = $("<div></div>");
-                row.append(nameElement, amountElement, typeElement, spacingDiv);
+                row.append(nameElement, amountElement, typeElement, recurringDiv, spacingDiv);
                 row.addClass("new-item-grid-display");
+                row.addClass("new-row-width");
                 finishedTable.append(row);
             })
             .fail(function(){

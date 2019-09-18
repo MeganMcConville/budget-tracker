@@ -17,7 +17,8 @@ id BIGSERIAL PRIMARY KEY,
 budget_id BIGSERIAL NOT NULL REFERENCES budget(id),
 amount NUMERIC NOT NULL,
 name VARCHAR(200) NOT NULL,
-type VARCHAR(200) NOT NULL
+type VARCHAR(200) NOT NULL,
+recurring BOOLEAN NOT NULL DEFAULT 'f'
 );
 
 CREATE TABLE budget_item_update(
@@ -27,7 +28,8 @@ month SMALLINT NOT NULL,
 year SMALLINT NOT NULL,
 name TEXT NOT NULL,
 amount NUMERIC NOT NULL,
-month_specific BOOLEAN NOT NULL
+month_specific BOOLEAN NOT NULL,
+recurring BOOLEAN NOT NULL DEFAULT 'f'
 );
 
 CREATE TABLE budget_entry(

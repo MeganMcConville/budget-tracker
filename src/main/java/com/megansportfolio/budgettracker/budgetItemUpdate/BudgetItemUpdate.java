@@ -31,6 +31,9 @@ public class BudgetItemUpdate {
     @Column(name = "amount")
     private BigDecimal amount;
 
+    @Column(name = "recurring")
+    private boolean isRecurring;
+
     @Column(name = "month_specific")
     private boolean monthSpecific;
 
@@ -92,5 +95,13 @@ public class BudgetItemUpdate {
 
     public LocalDate getDate(){
         return LocalDate.of(year, month, 1);
+    }
+
+    public boolean isRecurring() {
+        return isRecurring;
+    }
+
+    public void setRecurring(boolean recurring) {
+        isRecurring = recurring;
     }
 }

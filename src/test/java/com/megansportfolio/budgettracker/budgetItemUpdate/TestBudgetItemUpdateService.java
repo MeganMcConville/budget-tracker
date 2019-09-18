@@ -47,7 +47,10 @@ public class TestBudgetItemUpdateService {
         ids.add(id2);
 
         BudgetItemUpdate budgetItemUpdate1 = new BudgetItemUpdate();
+        budgetItemUpdate1.setRecurring(true);
         BudgetItemUpdate budgetItemUpdate2 = new BudgetItemUpdate();
+        budgetItemUpdate2.setRecurring(false);
+        budgetItemUpdate2.setMonthSpecific(true);
         List<BudgetItemUpdate> parameterBudgetItemUpdates = new ArrayList<>();
         parameterBudgetItemUpdates.add(budgetItemUpdate1);
         parameterBudgetItemUpdates.add(budgetItemUpdate2);
@@ -91,7 +94,10 @@ public class TestBudgetItemUpdateService {
         List<BudgetItemUpdate> savedBudgetItemUpdates = captor.getValue();
         Assert.assertEquals(2, savedBudgetItemUpdates.size());
         Assert.assertEquals(budgetItemUpdate1, savedBudgetItemUpdates.get(0));
+        Assert.assertTrue(savedBudgetItemUpdates.get(0).isRecurring());
         Assert.assertEquals(budgetItemUpdate2, savedBudgetItemUpdates.get(1));
+        Assert.assertTrue(savedBudgetItemUpdates.get(1).isMonthSpecific());
+        Assert.assertFalse(savedBudgetItemUpdates.get(1).isRecurring());
     }
 
     @Test

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +47,24 @@ public class BudgetItemUpdateService {
         }
 
         budgetItemUpdateDao.saveAll(updatesToSave);
+    }
+
+    public static Optional <BudgetItemUpdate> findCorrespondingBudgetItemUpdate(Integer year, Integer month,
+                                                                     List<BudgetItemUpdate> budgetItemUpdates){
+        LocalDate cutOff = LocalDate.of(year, month, 1);
+
+        final int finalMonth = month;
+        final int finalYear = year;
+
+        List<BudgetItemUpdate> budgetItemUpdatesBeforeCutoff = budgetItemUpdates.stream()
+                .filter(x ->  x.getDate().equals(cutOff) || x.getDate().isBefore(cutOff))
+                .sorted(Comparator.comparing(BudgetItemUpdate::getDate).reversed())
+                .collect(Collectors.toList());
+        Optional<BudgetItemUpdate> correspondingUpdate = budgetItemUpdatesBeforeCutoff.stream()
+                .filter(x -> !x.isMonthSpecific() || (x.getMonth() == finalMonth && x.getYear() == finalYear))
+                .findFirst();
+
+        return correspondingUpdate;
     }
 
 }

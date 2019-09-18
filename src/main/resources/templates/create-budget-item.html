@@ -18,20 +18,27 @@
         <p class="column-heading">Name</p>
         <p class="column-heading">Amount</p>
         <p class="column-heading">Item Type</p>
-        <div class="spacing-div column-heading"></div>
+        <div class="column-heading">Recurring
+            <i class="far fa-question-circle" data-toggle="tooltip" data-placement="right"
+               title="If checked, this budget item will automatically create an entry at the beginning of every month (or year, for annual items)."></i>
+        </div>
+        <div class="column-heading spacing-div"></div>
     </div>
     <div id="finished-budget-items">
     </div>
     <div id="create-budget-item-form" class="new-item-grid-display">
-            <input id="budget-item-name" type="text">
-            <input id="budget-item-amount" type="number">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons" aria-label="Budget item type" id="budget-item-type">
-                <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
-                    <input type="radio" name="budget-item-type" th:value="${budgetItemType}" th:attr="data-type-text-value=${budgetItemType.getLowerCaseLabel()}" autocomplete="off"> [[${budgetItemType.getLowerCaseLabel()}]]
-                </label>
-            </div>
-            <input type="hidden" th:value="${budgetId}" id="budget-id">
-            <button type="button" class="btn btn-success create-budget-item-button" id="create-item-button">Add</button>
+        <input id="budget-item-name" type="text">
+        <input id="budget-item-amount" type="number">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" aria-label="Budget item type" id="budget-item-type">
+            <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
+                <input type="radio" name="budget-item-type" th:value="${budgetItemType}" th:attr="data-type-text-value=${budgetItemType.getLowerCaseLabel()}" autocomplete="off"> [[${budgetItemType.getLowerCaseLabel()}]]
+            </label>
+        </div>
+        <div class="recurring-form-display">
+            <input type="checkbox" id="recurring-checkbox">
+        </div>
+        <input type="hidden" th:value="${budgetId}" id="budget-id">
+        <button type="button" class="btn btn-success create-budget-item-button" id="create-item-button">Add</button>
     </div>
     <a id="return-budget-link" class="btn btn-secondary" th:href="@{/budgets}"><i class="fas fa-reply"></i>Return to Budgets</a>
 

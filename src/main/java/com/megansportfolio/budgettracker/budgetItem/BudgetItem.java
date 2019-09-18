@@ -37,6 +37,9 @@ public class BudgetItem {
     @OneToMany(mappedBy = "budgetItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BudgetItemUpdate> budgetItemUpdates;
 
+    @Column(name = "recurring")
+    private boolean isRecurring;
+
     @Transient
     private BigDecimal totalSpent;
 
@@ -113,5 +116,13 @@ public class BudgetItem {
 
     public void setBudgetItemUpdates(List<BudgetItemUpdate> budgetItemUpdates) {
         this.budgetItemUpdates = budgetItemUpdates;
+    }
+
+    public boolean isRecurring() {
+        return isRecurring;
+    }
+
+    public void setRecurring(boolean recurring) {
+        isRecurring = recurring;
     }
 }
