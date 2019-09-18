@@ -73,7 +73,7 @@ public class BudgetEntryService {
         budgetEntryDao.saveAll(recurringAnnualEntries);
     }
 
-    public List<BudgetEntry> createRecurringEntries(List<BudgetItem> budgetItemsOfType, int month, int year){
+    private List<BudgetEntry> createRecurringEntries(List<BudgetItem> budgetItemsOfType, int month, int year){
 
         List<BudgetEntry> createdRecurringEntries = new ArrayList<>();
 
