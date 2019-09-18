@@ -1,5 +1,6 @@
 package com.megansportfolio.budgettracker.budgetEntry;
 
+import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budget.BudgetService;
 import com.megansportfolio.budgettracker.budget.Month;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
@@ -48,52 +49,44 @@ public class BudgetEntryService {
     }
 
     @Scheduled(cron = "0 0 1 1 * ?")
-    public void createRecurringMonthlyEntry(){
+    public void createRecurringMonthlyEntries(){
         Calendar cal = Calendar.getInstance();
         int month = (cal.get(Calendar.MONTH)) + 1;
         int year = (cal.get(Calendar.YEAR));
 
-        List<BudgetEntry> createdRecurringEntries = new ArrayList<>();
-
         List<BudgetItem> monthlyBudgetItems = budgetItemDao.findAllByBudgetItemType(BudgetItemType.MONTHLY);
-        for(BudgetItem budgetItem : monthlyBudgetItems){
-            BudgetEntry budgetEntry = new BudgetEntry();
-            budgetEntry.setNotes("Recurring charge");
-            budgetEntry.setMonth(BudgetService.getDisplayMonth(month));
-            budgetEntry.setYear(year);
+        List<BudgetEntry> recurringMonthlyEntries = createRecurringEntries(monthlyBudgetItems, month, year);
 
-            List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
-            Optional<BudgetItemUpdate> correspondingUpdate = BudgetItemUpdateService.findCorrespondingBudgetItemUpdate(year, month, budgetItemUpdates);
-            if(correspondingUpdate.isPresent()){
-                if(correspondingUpdate.get().isRecurring()) {
-                    budgetEntry.setAmount(correspondingUpdate.get().getAmount());
-                    budgetEntry.setBudgetItem(budgetItem);
-                    createdRecurringEntries.add(budgetEntry);
-                }
-            }
-            else if(budgetItem.isRecurring()){
-                budgetEntry.setBudgetItem(budgetItem);
-                budgetEntry.setAmount(budgetItem.getAmount());
-                createdRecurringEntries.add(budgetEntry);
-            }
-        }
-        budgetEntryDao.saveAll(createdRecurringEntries);
+        budgetEntryDao.saveAll(recurringMonthlyEntries);
     }
 
     @Scheduled(cron = "0 0 1 1 1 ?")
-    public void createRecurringAnnualEntry(){
+    public void createRecurringAnnualEntries(){
         Calendar cal = Calendar.getInstance();
         int month = (cal.get(Calendar.MONTH)) + 1;
         int year = (cal.get(Calendar.YEAR));
 
-        List<BudgetEntry> createdRecurringEntries = new ArrayList<>();
 
         List<BudgetItem> annualBudgetItems = budgetItemDao.findAllByBudgetItemType(BudgetItemType.ANNUAL);
-        for(BudgetItem budgetItem : annualBudgetItems){
+        List<BudgetEntry> recurringAnnualEntries = createRecurringEntries(annualBudgetItems, month, year);
+
+        budgetEntryDao.saveAll(recurringAnnualEntries);
+    }
+
+    public List<BudgetEntry> createRecurringEntries(List<BudgetItem> budgetItemsOfType, int month, int year){
+
+        List<BudgetEntry> createdRecurringEntries = new ArrayList<>();
+
+        for(BudgetItem budgetItem : budgetItemsOfType){
             BudgetEntry budgetEntry = new BudgetEntry();
             budgetEntry.setNotes("Recurring charge");
-            budgetEntry.setMonth(Month.JANUARY);
             budgetEntry.setYear(year);
+            if(budgetItem.getBudgetItemType() == BudgetItemType.MONTHLY){
+                budgetEntry.setMonth(BudgetService.getDisplayMonth(month));
+            }
+            else{
+                budgetEntry.setMonth(Month.JANUARY);
+            }
 
             List<BudgetItemUpdate> budgetItemUpdates = budgetItemUpdateDao.findAllByBudgetItemId(budgetItem.getId());
             Optional<BudgetItemUpdate> correspondingUpdate = BudgetItemUpdateService.findCorrespondingBudgetItemUpdate(year, month, budgetItemUpdates);
@@ -110,8 +103,7 @@ public class BudgetEntryService {
                 createdRecurringEntries.add(budgetEntry);
             }
         }
-
-        budgetEntryDao.saveAll(createdRecurringEntries);
+        return createdRecurringEntries;
     }
 
 }

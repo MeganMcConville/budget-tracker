@@ -165,7 +165,7 @@ public class TestBudgetEntryService {
         List<BudgetItemUpdate> budgetItemUpdates2 = new ArrayList<>();
         Mockito.when(budgetItemUpdateDao.findAllByBudgetItemId(budgetItem2.getId())).thenReturn(budgetItemUpdates2);
 
-        serviceUnderTest.createRecurringMonthlyEntry();
+        serviceUnderTest.createRecurringMonthlyEntries();
 
         ArgumentCaptor<List<BudgetEntry>> captor = ArgumentCaptor.forClass(List.class);
         Mockito.verify(budgetEntryDao).saveAll(captor.capture());
@@ -220,7 +220,7 @@ public class TestBudgetEntryService {
         List<BudgetItemUpdate> budgetItemUpdates2 = new ArrayList<>();
         Mockito.when(budgetItemUpdateDao.findAllByBudgetItemId(budgetItem2.getId())).thenReturn(budgetItemUpdates2);
 
-        serviceUnderTest.createRecurringAnnualEntry();
+        serviceUnderTest.createRecurringAnnualEntries();
 
         ArgumentCaptor<List<BudgetEntry>> captor = ArgumentCaptor.forClass(List.class);
         Mockito.verify(budgetEntryDao).saveAll(captor.capture());
