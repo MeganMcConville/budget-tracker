@@ -14,6 +14,10 @@ input{
     visibility: hidden;
 }
 
+.modal-content{
+    border: none !important;
+}
+
 /*Webkit browsers*/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

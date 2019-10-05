@@ -1,6 +1,6 @@
 @import "styles/variables";
 
-#date-modal-header, #delete-item-header, #create-entry-header{
+#date-modal-header, #delete-item-header, #create-entry-header, #share-budget-modal-header{
     background-color: $green;
     color: white;
     font-weight: bold;
@@ -48,7 +48,7 @@
     #budget-title{
         margin-left: 10px;
     }
-    #rename-budget-button, #rename-budget-check{
+    #rename-budget-button, #rename-budget-check, #share-budget-icon{
         color: $green;
         cursor: pointer;
         &.disabled{

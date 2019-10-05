@@ -261,6 +261,7 @@ $(document).ready(function (){
     $("#rename-budget-button").click(function(){
         $("#rename-budget-button").hide();
         $("#budget-title").hide();
+        $("#share-budget-icon").hide();
         $("#edit-budget-success-message").hide();
         $("#create-new-item-success-message").hide();
         $("#create-entry-success-message").hide();
@@ -272,6 +273,7 @@ $(document).ready(function (){
     $("#rename-budget-x").click(function(){
         $("#edit-budget-error-message").hide();
         $("#budget-title").show();
+        $("#share-budget-icon").show();
         $("#rename-budget-error-message").hide();
         $(".rename-buttons").addClass("hidden");
         $("#rename-budget-input").addClass("hidden");
@@ -309,6 +311,7 @@ $(document).ready(function (){
                     $("#rename-budget-input").addClass("hidden");
                     $("#rename-budget-button").show();
                     $("#budget-title").show();
+                    $("#share-budget-icon").show();
                     $("#budget-title").text(updateBudgetName);
                     $("#budget-title").attr("data-original-value", updateBudgetName);
                     $("#rename-budget-input").val(updateBudgetName);
