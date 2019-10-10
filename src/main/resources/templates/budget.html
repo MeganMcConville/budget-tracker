@@ -95,7 +95,7 @@
                 <div class="modal-body" id="share-budget-modal-body">
                     <input type="hidden" id="hidden-id-input" name="budgetId" th:value="${budget.getId()}">
                     <p id="invalid-email-message" class="hidden red-text">*Please enter a valid email</p>
-                    <p id="current-user-email-message" class="hidden red-text">*This is your email</p>
+                    <p id="current-user-email-message" class="hidden red-text">*You cannot share a budget with yourself</p>
                     <label for="search-email">Find user by email address:</label>
                     <input type="text" id="search-email">
                 </div>
@@ -113,7 +113,7 @@
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
     <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
     <div id="create-entry-success-message" class="hidden alert alert-success">Entry successfully added</div>
-    <div id="share-budget-success-message" class="hidden alert alert-success">If a user with this address exists, they now have access to this budget.</div>
+    <div id="share-budget-success-message" class="hidden alert alert-success">This budget has been shared.</div>
 
 
     <div id="budget-heading">

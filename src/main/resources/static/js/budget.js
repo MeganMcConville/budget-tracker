@@ -485,6 +485,7 @@ $(document).ready(function (){
                 data: {searchedEmailAddress: searchedEmailAddress}
             })
             .done(function(){
+                $("#share-budget-success-message").text("This budget has been shared with " + searchedEmailAddress);
                 $("#share-budget-success-message").show();
                 $("#share-budget-modal").modal("toggle");
                 $("#search-email").val("");
