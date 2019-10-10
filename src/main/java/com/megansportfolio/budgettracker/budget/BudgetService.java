@@ -169,9 +169,6 @@ public class BudgetService {
             SharedUser sharedUser = new SharedUser();
             sharedUser.setBudget(budget);
             sharedUser.setEmail(searchedEmailAddress);
-            List<SharedUser> sharedUsers = budget.getSharedUsers();
-            sharedUsers.add(sharedUser);
-            budget.setSharedUsers(sharedUsers);
             sharedUserDao.save(sharedUser);
         }
     }

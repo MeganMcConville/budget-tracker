@@ -480,9 +480,9 @@ $(document).ready(function (){
             var budgetId = $("#hidden-id-input").val();
 
             $.ajax({
-                url: "/budgets/share",
+                url: "/budgets/" + budgetId + "/share",
                 type: "POST",
-                data: {searchedEmailAddress: searchedEmailAddress, budgetId: budgetId}
+                data: {searchedEmailAddress: searchedEmailAddress}
             })
             .done(function(){
                 $("#share-budget-success-message").show();
