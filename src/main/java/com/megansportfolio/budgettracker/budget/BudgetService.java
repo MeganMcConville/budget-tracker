@@ -7,8 +7,14 @@ import com.megansportfolio.budgettracker.budgetItem.BudgetItemType;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateService;
+import com.megansportfolio.budgettracker.sharedUser.EmailIsCurrentUserException;
+import com.megansportfolio.budgettracker.sharedUser.SharedUser;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserDao;
+import com.megansportfolio.budgettracker.user.InvalidEmailException;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
+import com.megansportfolio.budgettracker.user.UserService;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +38,12 @@ public class BudgetService {
 
     @Autowired
     private BudgetItemService budgetItemService;
+
+    @Autowired
+    private SharedUserDao sharedUserDao;
+
+    @Autowired
+    private UserService userService;
 
     public static int getDisplayYear(Integer year){
         int displayYear;
@@ -133,6 +145,32 @@ public class BudgetService {
             existingBudget.setName(updatedName);
         }
         budgetDao.save(existingBudget);
+    }
+
+    public void addSharedUser(String loggedInUserEmailAddress, String searchedEmailAddress, long budgetId) throws InvalidEmailException, EmailIsCurrentUserException {
+        Budget budget = budgetDao.getOne(budgetId);
+        User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
+        if(loggedInUser.getId() != budget.getUser().getId()){
+            throw new RuntimeException();
+        }
+        if(loggedInUserEmailAddress.equals(searchedEmailAddress)){
+            throw new EmailIsCurrentUserException();
+        }
+        if(!userService.isEmailValid(searchedEmailAddress)){
+            throw new InvalidEmailException();
+        }
+        SharedUser searchedUser = sharedUserDao.findOneByEmailAndBudgetId(searchedEmailAddress, budgetId);
+
+        if(searchedUser != null){
+            return;
+        }
+
+        else{
+            SharedUser sharedUser = new SharedUser();
+            sharedUser.setBudget(budget);
+            sharedUser.setEmail(searchedEmailAddress);
+            sharedUserDao.save(sharedUser);
+        }
     }
 
 }

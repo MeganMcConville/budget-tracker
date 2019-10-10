@@ -21,6 +21,7 @@ $(document).ready(function (){
         $("#edit-budget-success-message").hide();
         $("#create-entry-success-message").hide();
         $("#create-new-item-success-message").hide();
+        $("#share-budget-success-message").hide();
         $("#create-new-item-button").hide();
         $("#cancel-edits-button").removeClass("hidden");
         $("#save-edits-button").removeClass("hidden");
@@ -150,6 +151,7 @@ $(document).ready(function (){
     $("#create-new-item-button").click(function(){
         $("#create-new-item-button").hide();
         $("#create-entry-success-message").hide();
+        $("#share-budget-success-message").hide();
         $("#create-new-item-button").addClass("disabled")
         $("#edit-budget-button").hide();
         $("#edit-budget-error-message").hide();
@@ -261,6 +263,8 @@ $(document).ready(function (){
     $("#rename-budget-button").click(function(){
         $("#rename-budget-button").hide();
         $("#budget-title").hide();
+        $("#share-budget-icon").hide();
+        $("#share-budget-success-message").hide();
         $("#edit-budget-success-message").hide();
         $("#create-new-item-success-message").hide();
         $("#create-entry-success-message").hide();
@@ -272,6 +276,7 @@ $(document).ready(function (){
     $("#rename-budget-x").click(function(){
         $("#edit-budget-error-message").hide();
         $("#budget-title").show();
+        $("#share-budget-icon").show();
         $("#rename-budget-error-message").hide();
         $(".rename-buttons").addClass("hidden");
         $("#rename-budget-input").addClass("hidden");
@@ -309,6 +314,7 @@ $(document).ready(function (){
                     $("#rename-budget-input").addClass("hidden");
                     $("#rename-budget-button").show();
                     $("#budget-title").show();
+                    $("#share-budget-icon").show();
                     $("#budget-title").text(updateBudgetName);
                     $("#budget-title").attr("data-original-value", updateBudgetName);
                     $("#rename-budget-input").val(updateBudgetName);
@@ -452,11 +458,63 @@ $(document).ready(function (){
         $("#amount-error-message").hide();
         $("#entry-amount-input").val("");
         $("#entry-notes-input").val("");
+        $("#loading-gif").hide();
+        $("#budget-items-table").removeClass("transparent");
     });
 
     $("#calendar-icon").click(function(){
         $("#year-input").val($("#date-display").attr("data-display-year"));
     });
+
+    $("#share-budget-button").click(function(){
+        $("#share-budget-success-message").hide();
+        $("#edit-budget-success-message").hide();
+        $("#create-entry-success-message").hide();
+        $("#create-new-item-success-message").hide();
+        $("#search-email").removeClass("error");
+        $("#invalid-email-message").hide();
+        $("#current-user-email-message").hide();
+        if(!$("#share-budget-button").hasClass("disabled")){
+            $("#share-budget-button").addClass("disabled");
+            var searchedEmailAddress = $("#search-email").val();
+            var budgetId = $("#hidden-id-input").val();
+
+            $.ajax({
+                url: "/budgets/" + budgetId + "/share",
+                type: "POST",
+                data: {searchedEmailAddress: searchedEmailAddress}
+            })
+            .done(function(){
+                $("#share-budget-success-message").text("This budget has been shared with " + searchedEmailAddress);
+                $("#share-budget-success-message").show();
+                $("#share-budget-modal").modal("toggle");
+                $("#search-email").val("");
+            })
+            .fail(function(data){
+                if(data.responseText == "invalid email"){
+                    $("#invalid-email-message").show();
+                    $("#search-email").addClass("error");
+                }
+                if(data.responseText == "email is current user"){
+                    $("#current-user-email-message").show();
+                    $("#search-email").addClass("error");
+                }
+                else{
+                    $("edit-budget-error-message").show();
+                }
+            })
+            .always(function(){
+                $("#share-budget-button").removeClass("disabled");
+            });
+        }
+    });
+
+    $(".share-close").click(function(){
+            $("#search-email").val("");
+            $("#invalid-email-message").hide();
+            $("#current-user-email-message").hide();
+            $("#search-email").removeClass("error");
+        });
 
 //whole page closing curlies
 });

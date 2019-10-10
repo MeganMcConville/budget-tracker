@@ -1,11 +1,20 @@
 @import "styles/variables";
 
-#date-modal-header, #delete-item-header, #create-entry-header{
+#date-modal-header, #delete-item-header, #create-entry-header, #share-budget-modal-header{
     background-color: $green;
     color: white;
     font-weight: bold;
     span{
         color: white;
+    }
+}
+
+.modal-body{
+    .error{
+        box-shadow: 0 0 3pt 2pt red;
+    }
+    .red-text{
+        color: red;
     }
 }
 
@@ -36,9 +45,6 @@
             height:5em;
             width: 15em;
         }
-        .error{
-            box-shadow: 0 0 3pt 2pt red;
-        }
     }
 }
 
@@ -48,7 +54,7 @@
     #budget-title{
         margin-left: 10px;
     }
-    #rename-budget-button, #rename-budget-check{
+    #rename-budget-button, #rename-budget-check, #share-budget-icon{
         color: $green;
         cursor: pointer;
         &.disabled{

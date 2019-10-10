@@ -1,6 +1,7 @@
 package com.megansportfolio.budgettracker.budget;
 
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
+import com.megansportfolio.budgettracker.sharedUser.SharedUser;
 import com.megansportfolio.budgettracker.user.User;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class Budget {
 
     @OneToMany(mappedBy = "budget")
     private List<BudgetItem> budgetItems;
+
+    @OneToMany(mappedBy = "budget")
+    private List<SharedUser> sharedUsers;
 
     public long getId(){
         return this.id;
@@ -57,4 +61,11 @@ public class Budget {
         this.budgetItems = budgetItems;
     }
 
+    public List<SharedUser> getSharedUsers() {
+        return this.sharedUsers;
+    }
+
+    public void setSharedUsers(List<SharedUser> sharedUsers) {
+        this.sharedUsers = sharedUsers;
+    }
 }

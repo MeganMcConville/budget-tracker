@@ -40,3 +40,10 @@ month TEXT NOT NULL,
 year NUMERIC NOT NULL,
 notes TEXT
 );
+
+CREATE TABLE shared_user(
+id BIGSERIAL PRIMARY KEY,
+email TEXT NOT NULL,
+budget_id BIGSERIAL NOT NULL REFERENCES budget(id),
+UNIQUE(email, budget_id)
+);
