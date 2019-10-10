@@ -1,5 +1,7 @@
 package com.megansportfolio.budgettracker.budget;
 
+import com.megansportfolio.budgettracker.sharedUser.EmailIsCurrentUserException;
+import com.megansportfolio.budgettracker.user.InvalidEmailException;
 import com.megansportfolio.budgettracker.user.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -68,4 +70,13 @@ public class BudgetController {
         String loggedInUserEmailAddress = loggedInUser.getUsername();
         budgetService.renameBudget(budget, loggedInUserEmailAddress);
     }
+
+    @RequestMapping(value = "/share", method = RequestMethod.POST)
+    @ResponseBody
+    public void addSharedUser(@RequestParam("searchedEmailAddress") String searchedEmailAddress, @RequestParam("budgetId") long budgetId) throws InvalidEmailException, EmailIsCurrentUserException {
+        UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        budgetService.addSharedUser(loggedInUserEmailAddress, searchedEmailAddress, budgetId);
+    }
+
 }

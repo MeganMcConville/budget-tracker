@@ -14,6 +14,13 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailValidator validator;
+
+    public boolean isEmailValid(String email){
+        return validator.isValid(email);
+    }
+
     public void createUser(User user) throws EmailExistsException, InvalidEmailException{
 
         User existingUser = userDao.findOneByUsernameIgnoreCase(user.getUsername());
@@ -21,8 +28,7 @@ public class UserService {
             throw new EmailExistsException();
         }
 
-        EmailValidator validator = EmailValidator.getInstance();
-        if (validator.isValid(user.getUsername())){
+        if (isEmailValid(user.getUsername())){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setFirstName(user.getFirstName().trim());
             user.setLastName(user.getLastName().trim());

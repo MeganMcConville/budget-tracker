@@ -14,9 +14,8 @@ public class SharedUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(targetEntity = User.class)
-    private User user;
+    @Column(name = "email")
+    private String email;
 
     @JoinColumn(name = "budget_id")
     @ManyToOne(targetEntity = Budget.class)
@@ -30,19 +29,19 @@ public class SharedUser {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Budget getBudget() {
         return budget;
     }
 
     public void setBudget(Budget budget) {
         this.budget = budget;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

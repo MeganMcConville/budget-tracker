@@ -43,7 +43,7 @@
                     <div class="modal-body" id="create-entry-body">
                         <label>Amount:</label>
                         <input type="number" name="amount" id="entry-amount-input" required="required">
-                        <p id="amount-error-message" class="hidden">Amount is required</p>
+                        <p id="amount-error-message" class="hidden red-text">*Amount is required</p>
                         <label>Notes:</label>
                         <textarea name="notes" id="entry-notes-input"></textarea>
                     </div>
@@ -88,17 +88,19 @@
             <div class="modal-content">
                 <div class="modal-header" id="share-budget-modal-header">
                     <h5 class="modal-title" th:text="'Share ' + ${budget.getName()}"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close share-close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" id="share-budget-modal-body">
-                    <input type="hidden" name="budgetId" th:value="${budget.getId()}">
+                    <input type="hidden" id="hidden-id-input" name="budgetId" th:value="${budget.getId()}">
+                    <p id="invalid-email-message" class="hidden red-text">*Please enter a valid email</p>
+                    <p id="current-user-email-message" class="hidden red-text">*This is your email</p>
                     <label for="search-email">Find user by email address:</label>
                     <input type="text" id="search-email">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary share-close" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success" id="share-budget-button">Share</button>
                 </div>
             </div>
@@ -111,6 +113,7 @@
     <div id="edit-budget-success-message" class="hidden alert alert-success">Budget successfully updated</div>
     <div id="create-new-item-success-message" class="hidden alert alert-success">Item successfully added</div>
     <div id="create-entry-success-message" class="hidden alert alert-success">Entry successfully added</div>
+    <div id="share-budget-success-message" class="hidden alert alert-success">If a user with this address exists, they now have access to this budget.</div>
 
 
     <div id="budget-heading">

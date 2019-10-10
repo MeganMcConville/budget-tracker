@@ -43,6 +43,7 @@ notes TEXT
 
 CREATE TABLE shared_user(
 id BIGSERIAL PRIMARY KEY,
-user_id BIGSERIAL NOT NULL REFERENCES users(id),
-budget_id BIGSERIAL NOT NULL REFERENCES budget(id)
+email TEXT NOT NULL,
+budget_id BIGSERIAL NOT NULL REFERENCES budget(id),
+UNIQUE(email, budget_id)
 );

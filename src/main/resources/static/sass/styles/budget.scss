@@ -9,6 +9,15 @@
     }
 }
 
+.modal-body{
+    .error{
+        box-shadow: 0 0 3pt 2pt red;
+    }
+    .red-text{
+        color: red;
+    }
+}
+
 #date-modal-body{
     display: flex;
     justify-content: space-evenly;
@@ -35,9 +44,6 @@
             border-radius: 5px;
             height:5em;
             width: 15em;
-        }
-        .error{
-            box-shadow: 0 0 3pt 2pt red;
         }
     }
 }
