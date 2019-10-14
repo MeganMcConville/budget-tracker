@@ -82,6 +82,14 @@ public class BudgetService {
         return userBudgets;
     }
 
+    public List<Budget> findSharedBudgets(String emailAddress){
+        List<SharedUser> sharedUsers = sharedUserDao.findAllByEmailIgnoreCase(emailAddress);
+        List<Budget> sharedBudgets = sharedUsers.stream()
+                .map(x -> x.getBudget())
+                .collect(Collectors.toList());
+        return sharedBudgets;
+    }
+
     @Transactional(readOnly = true)
     public Budget getBudget(String loggedInUserEmailAddress, long budgetId, Integer month, Integer year){
         User currentUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
@@ -159,7 +167,7 @@ public class BudgetService {
         if(!userService.isEmailValid(searchedEmailAddress)){
             throw new InvalidEmailException();
         }
-        SharedUser searchedUser = sharedUserDao.findOneByEmailAndBudgetId(searchedEmailAddress, budgetId);
+        SharedUser searchedUser = sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(searchedEmailAddress, budgetId);
 
         if(searchedUser != null){
             return;

@@ -45,6 +45,16 @@ public class BudgetController {
         return "view-budgets";
     }
 
+    @RequestMapping(value = "/shared", method = RequestMethod.GET)
+    public String viewSharedBudgets(Model model){
+        UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        List<Budget> sharedBudgets = budgetService.findSharedBudgets(loggedInUserEmailAddress);
+        model.addAttribute("sharedBudgets", sharedBudgets);
+        return "view-shared-budgets";
+    }
+
+
     @RequestMapping(value = "/{budgetId}", method = RequestMethod.GET)
     public String viewIndividualBudget(@PathVariable long budgetId, @RequestParam(required = false) Integer month,
                                        @RequestParam(required = false) Integer year, Model model,
