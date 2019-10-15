@@ -18,4 +18,9 @@ public class SharedUserService {
 
     }
 
+    public boolean isSharedUser(String email, long budgetId){
+        SharedUser sharedUser = sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(email, budgetId);
+        return sharedUser != null;
+    }
+
 }

@@ -10,6 +10,7 @@ import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateServic
 import com.megansportfolio.budgettracker.sharedUser.EmailIsCurrentUserException;
 import com.megansportfolio.budgettracker.sharedUser.SharedUser;
 import com.megansportfolio.budgettracker.sharedUser.SharedUserDao;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
 import com.megansportfolio.budgettracker.user.InvalidEmailException;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
@@ -44,6 +45,9 @@ public class BudgetService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SharedUserService sharedUserService;
 
     public static int getDisplayYear(Integer year){
         int displayYear;
@@ -94,7 +98,7 @@ public class BudgetService {
     public Budget getBudget(String loggedInUserEmailAddress, long budgetId, Integer month, Integer year){
         User currentUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
         Budget budget = budgetDao.getOne(budgetId);
-        if(currentUser.getId() == budget.getUser().getId()){
+        if(currentUser.getId() == budget.getUser().getId() || sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId)){
             if(month == null || year == null){
                 Calendar cal = Calendar.getInstance();
                 month = (cal.get(Calendar.MONTH)) + 1;
@@ -139,10 +143,10 @@ public class BudgetService {
         throw new RuntimeException();
     }
 
-    public void renameBudget(Budget budget, String loggedInUserEmailaddress){
-        User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailaddress);
+    public void renameBudget(Budget budget, String loggedInUserEmailAddress){
+        User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
         Budget existingBudget = budgetDao.getOne(budget.getId());
-        if(loggedInUser.getId() != existingBudget.getUser().getId()){
+        if(loggedInUser.getId() != existingBudget.getUser().getId() && !sharedUserService.isSharedUser(loggedInUserEmailAddress, existingBudget.getId())){
             throw new RuntimeException();
         }
         if(budget.getName() != null){

@@ -119,7 +119,7 @@
     <div id="budget-heading">
         <h1 id="budget-title" th:text="${budget.getName()}" th:attr="data-budget-id=${budget.getId()}, data-original-value=${budget.getName()}"></h1>
         <i class="fas fa-pencil-alt ml-3" title="Rename budget" id="rename-budget-button"></i>
-        <i class="fas fa-user-plus ml-2" title="Share budget" id="share-budget-icon" data-toggle="modal" data-target="#share-budget-modal"></i>
+        <i th:unless="${isSharedUser}" class="fas fa-user-plus ml-2" title="Share budget" id="share-budget-icon" data-toggle="modal" data-target="#share-budget-modal"></i>
         <input id="rename-budget-input" class="hidden" type="text" th:value="${budget.getName()}">
         <div class="rename-buttons ml-3 hidden">
             <i class="far fa-times-circle" id="rename-budget-x" title="Cancel"></i>
