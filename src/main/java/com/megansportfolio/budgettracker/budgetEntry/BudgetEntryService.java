@@ -9,6 +9,7 @@ import com.megansportfolio.budgettracker.budgetItem.BudgetItemType;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateService;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,22 +26,25 @@ import java.util.stream.Collectors;
 public class BudgetEntryService {
 
     @Autowired
-    BudgetEntryDao budgetEntryDao;
+    private BudgetEntryDao budgetEntryDao;
 
     @Autowired
-    BudgetItemDao budgetItemDao;
+    private BudgetItemDao budgetItemDao;
 
     @Autowired
-    BudgetItemUpdateDao budgetItemUpdateDao;
+    private BudgetItemUpdateDao budgetItemUpdateDao;
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
+
+    @Autowired
+    private SharedUserService sharedUserService;
 
     public void createBudgetEntry(String loggedInUserEmailAddress, BudgetEntry budgetEntry){
         BudgetItem budgetItem = budgetItemDao.getOne(budgetEntry.getBudgetItem().getId());
         User user = budgetItem.getBudget().getUser();
         User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
-        if(user.getId() != loggedInUser.getId()){
+        if(user.getId() != loggedInUser.getId() && !sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetItem.getBudget().getId())){
             throw new RuntimeException();
         }
         Month month = Month.valueOfMonthNumber(budgetEntry.getMonthNumber());

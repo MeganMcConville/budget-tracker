@@ -2,6 +2,7 @@ package com.megansportfolio.budgettracker.budgetItemUpdate;
 
 import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItemDao;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class BudgetItemUpdateService {
     @Autowired
     private BudgetItemDao budgetItemDao;
 
+    @Autowired
+    private SharedUserService sharedUserService;
+
     @Transactional
     public void createBudgetItemUpdates(List<BudgetItemUpdate> budgetItemUpdates, String loggedInUserEmailAddress){
         List<Long> ids = budgetItemUpdates.stream().map(x -> x.getBudgetItem().getId()).collect(Collectors.toList());
@@ -28,7 +32,7 @@ public class BudgetItemUpdateService {
             BudgetItem correspondingBudgetItem = originalBudgetItems.stream()
                     .filter(x -> x.getId() == budgetItemUpdate.getBudgetItem().getId())
                     .findFirst().get();
-            if(!correspondingBudgetItem.getBudget().getUser().getUsername().equals(loggedInUserEmailAddress)){
+            if(!correspondingBudgetItem.getBudget().getUser().getUsername().equals(loggedInUserEmailAddress) && !sharedUserService.isSharedUser(loggedInUserEmailAddress, correspondingBudgetItem.getBudget().getId())){
                 throw new RuntimeException();
             }
 

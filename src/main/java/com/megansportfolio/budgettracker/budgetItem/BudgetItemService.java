@@ -5,6 +5,7 @@ import com.megansportfolio.budgettracker.budget.BudgetDao;
 import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,13 @@ public class BudgetItemService {
     @Autowired
     private BudgetItemUpdateDao budgetItemUpdateDao;
 
+    @Autowired
+    private SharedUserService sharedUserService;
+
     public long createBudgetItem(BudgetItem budgetItem, String loggedInUserEmailAddress){
         Budget budget = budgetDao.findById(budgetItem.getBudget().getId()).get();
         User user = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
-        if(user.getId() != budget.getUser().getId()){
+        if(user.getId() != budget.getUser().getId() && !sharedUserService.isSharedUser(loggedInUserEmailAddress, budget.getId())){
             throw new RuntimeException();
         }
         budgetItem.setBudget(budget);
@@ -46,7 +50,7 @@ public class BudgetItemService {
     public void deleteBudgetItem(long budgetItemId, String loggedInUserEmailAddress){
         User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
         BudgetItem itemToDelete = budgetItemDao.getOne(budgetItemId);
-        if(loggedInUser.getId() != itemToDelete.getBudget().getUser().getId()){
+        if(loggedInUser.getId() != itemToDelete.getBudget().getUser().getId() && !sharedUserService.isSharedUser(loggedInUserEmailAddress, itemToDelete.getBudget().getId())){
             throw new RuntimeException();
         }
         budgetItemDao.deleteById(itemToDelete.getId());
