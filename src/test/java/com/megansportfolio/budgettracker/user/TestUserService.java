@@ -23,6 +23,9 @@ public class TestUserService {
     @Mock
     PasswordEncoder passwordEncoder;
 
+    @Mock
+    EmailValidator validator;
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -39,6 +42,7 @@ public class TestUserService {
         String userEmail = "test@test.com";
         user.setUsername(userEmail);
         Mockito.when(userDao.findOneByUsernameIgnoreCase(user.getUsername())).thenReturn(null);
+        Mockito.when(validator.isValid(userEmail)).thenReturn(true);
 
         String userPassword = "password";
         user.setPassword(userPassword);
@@ -71,6 +75,7 @@ public class TestUserService {
         String userEmail = "test@test.com";
         user.setUsername(userEmail);
         Mockito.when(userDao.findOneByUsernameIgnoreCase(user.getUsername())).thenReturn(null);
+        Mockito.when(validator.isValid(userEmail)).thenReturn(true);
 
         String userPassword = "password";
         user.setPassword(userPassword);
@@ -89,6 +94,7 @@ public class TestUserService {
         String userEmail = "test@test.com";
         user.setUsername(userEmail);
         Mockito.when(userDao.findOneByUsernameIgnoreCase(user.getUsername())).thenReturn(null);
+        Mockito.when(validator.isValid(userEmail)).thenReturn(true);
 
         String userPassword = "password";
         user.setPassword(userPassword);
