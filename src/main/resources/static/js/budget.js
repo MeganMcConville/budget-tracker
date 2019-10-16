@@ -157,6 +157,7 @@ $(document).ready(function (){
         $("#edit-budget-error-message").hide();
         $("#edit-budget-success-message").hide();
         $("#create-new-item-success-message").hide();
+        $("#new-recurring-check").removeClass("hidden");
         $(".new-item-container").removeClass("hidden");
         $(".new-item-input").removeClass("hidden");
         $(".save-buttons").removeClass("hidden");
@@ -168,12 +169,14 @@ $(document).ready(function (){
         $(".new-item-container").addClass("hidden");
         $(".save-buttons").addClass("hidden");
         $(".new-item-input").addClass("hidden");
+        $("#new-recurring-check").addClass("hidden");
         $("#edit-budget-button").show();
         $("#create-new-item-button").removeClass("disabled");
         $("#create-new-item-button").show();
         //clear inputs
         $("#new-item-name-input, #new-item-amount-input").val("");
         $("#new-item-type-input .active").removeClass("active");
+        $("#new-recurring-check").prop("checked", false);
     //cancel item button curlies
     });
 
@@ -189,10 +192,13 @@ $(document).ready(function (){
             var budgetItemType = typeInput.val();
             var budgetItemTypeText = typeInput.attr("data-item-type-text");
             var budgetId = $("#new-item-name-input").closest(".row-data").attr("data-budget-id");
+            var newRecurringCheckbox = $("#new-recurring-check");
+            var recurring = newRecurringCheckbox.is(":checked");
             var payload = {
                 amount: amount,
                 name: name,
                 budgetItemType: budgetItemType,
+                recurring: recurring,
                 budget:{
                     id: budgetId
                 }
@@ -214,6 +220,7 @@ $(document).ready(function (){
                 $(".new-item-container").addClass("hidden");
                 $(".save-buttons").addClass("hidden");
                 $(".new-item-input").addClass("hidden");
+                $("#new-recurring-check").addClass("hidden");
                 $("#edit-budget-button").show();
                 $("#create-new-item-button").removeClass("disabled");
                 $("#create-new-item-button").show();
@@ -247,7 +254,13 @@ $(document).ready(function (){
                 var entryTableIcon = newRow.find(".entry-table-opener");
                 entryTableIcon.attr("data-target", "#" + entryCollapse.attr("id"));
 
+                var recurringCheck = newRow.find(".recurring-check");
+                var recurring = $("#new-recurring-check");
+                recurringCheck.prop("checked", recurring.is(":checked"));
+                recurringCheck.attr("data-original-value", recurring.is(":checked"));
+
                 newRow.insertBefore(".new-item-container");
+                $("#new-recurring-check").prop("checked", false)
             })
             .fail(function(){
                 $("#edit-budget-error-message").show();
