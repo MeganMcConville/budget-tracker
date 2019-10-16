@@ -9,8 +9,8 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h2 id="shared-budgets-title">Shared Budgets</h2>
-    <div id="shared-budgets-container">
+    <h2 id="budgets-shared-title">Budgets Shared with Me</h2>
+    <div id="budgets-shared-container">
         <ul>
             <li th:each="budget: ${sharedBudgets}">
                 <a th:href="@{/budgets/{budgetId} (budgetId=${budget.getId()})}"

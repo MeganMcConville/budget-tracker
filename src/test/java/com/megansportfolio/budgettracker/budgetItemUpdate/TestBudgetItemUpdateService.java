@@ -146,47 +146,72 @@ public class TestBudgetItemUpdateService {
     @Test
     public void testCreateBudgetItemUpdatesWithSharedUser(){
 
-            long id1 = 1;
-            List<Long> ids = new ArrayList<>();
-            ids.add(id1);
+        String loggedInUserEmailAddress = "test@test.com";
+        User sharedUser = new User();
+        sharedUser.setUsername(loggedInUserEmailAddress);
 
-            BudgetItemUpdate budgetItemUpdate1 = new BudgetItemUpdate();
-            List<BudgetItemUpdate> parameterBudgetItemUpdates = new ArrayList<>();
-            parameterBudgetItemUpdates.add(budgetItemUpdate1);
-            BudgetItem inputItem1 = new BudgetItem();
-            budgetItemUpdate1.setBudgetItem(inputItem1);
-            inputItem1.setId(id1);
+        User budgetOwner = new User();
+        String budgetOwnerUsername = "test@test.com";
+        budgetOwner.setUsername(budgetOwnerUsername);
+        Budget budget = new Budget();
+        long budgetId = 5;
+        budget.setId(budgetId);
+        budget.setUser(budgetOwner);
 
-            String loggedInUserEmailAddress = "test@test.com";
-            User sharedUser = new User();
-            sharedUser.setUsername(loggedInUserEmailAddress);
+        Mockito.when(sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId)).thenReturn(true);
 
-            User budgetOwner = new User();
-            String budgetOwnerUsername = "test@test.com";
-            budgetOwner.setUsername(budgetOwnerUsername);
-            Budget budget = new Budget();
-            long budgetId = 5;
-            budget.setId(budgetId);
-            budget.setUser(budgetOwner);
+        long id1 = 1;
+        long id2 = 2;
+        List<Long> ids = new ArrayList<>();
+        ids.add(id1);
+        ids.add(id2);
 
-            BudgetItem budgetItem1 = new BudgetItem();
-            budgetItem1.setId(id1);
-            budgetItem1.setBudget(budget);
-            List<BudgetItem> originalBudgetItems = new ArrayList<>();
-            originalBudgetItems.add(budgetItem1);
+        BudgetItemUpdate budgetItemUpdate1 = new BudgetItemUpdate();
+        budgetItemUpdate1.setRecurring(true);
+        BudgetItemUpdate budgetItemUpdate2 = new BudgetItemUpdate();
+        budgetItemUpdate2.setRecurring(false);
+        budgetItemUpdate2.setMonthSpecific(true);
+        List<BudgetItemUpdate> parameterBudgetItemUpdates = new ArrayList<>();
+        parameterBudgetItemUpdates.add(budgetItemUpdate1);
+        parameterBudgetItemUpdates.add(budgetItemUpdate2);
+        BudgetItem inputItem1 = new BudgetItem();
+        BudgetItem inputItem2 = new BudgetItem();
+        budgetItemUpdate1.setBudgetItem(inputItem1);
+        budgetItemUpdate2.setBudgetItem(inputItem2);
+        inputItem1.setId(id1);
+        inputItem2.setId(id2);
 
-            Mockito.when(sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId)).thenReturn(true);
-            Mockito.when(budgetItemDao.findAllById(ids)).thenReturn(originalBudgetItems);
+        BudgetItem budgetItem1 = new BudgetItem();
+        budgetItem1.setId(id1);
+        budgetItem1.setBudget(budget);
+        BudgetItem budgetItem2 = new BudgetItem();
+        budgetItem2.setId(id2);
+        budgetItem2.setBudget(budget);
+        List<BudgetItem> originalBudgetItems = new ArrayList<>();
+        originalBudgetItems.add(budgetItem1);
+        originalBudgetItems.add(budgetItem2);
 
-            int month = 1;
-            budgetItemUpdate1.setMonth(month);
-            int year = 2018;
-            budgetItemUpdate1.setYear(year);
-            Mockito.when(budgetItemUpdateDao.findOneByBudgetItemIdAndMonthAndYear(id1, month, year)).thenReturn(null);
+        Mockito.when(budgetItemDao.findAllById(ids)).thenReturn(originalBudgetItems);
 
-            serviceUnderTest.createBudgetItemUpdates(parameterBudgetItemUpdates, loggedInUserEmailAddress);
+        BudgetItemUpdate existingBudgetItemUpdate = new BudgetItemUpdate();
+        int month = 1;
+        budgetItemUpdate1.setMonth(month);
+        int year = 2018;
+        budgetItemUpdate1.setYear(year);
+        Mockito.when(budgetItemUpdateDao.findOneByBudgetItemIdAndMonthAndYear(id1, month, year)).thenReturn(existingBudgetItemUpdate);
 
-            Mockito.verify(budgetItemUpdateDao, times(0)).delete(any());
+        serviceUnderTest.createBudgetItemUpdates(parameterBudgetItemUpdates, loggedInUserEmailAddress);
+
+        Mockito.verify(budgetItemUpdateDao).delete(existingBudgetItemUpdate);
+        ArgumentCaptor<List<BudgetItemUpdate>> captor = ArgumentCaptor.forClass(List.class);
+        Mockito.verify(budgetItemUpdateDao).saveAll(captor.capture());
+        List<BudgetItemUpdate> savedBudgetItemUpdates = captor.getValue();
+        Assert.assertEquals(2, savedBudgetItemUpdates.size());
+        Assert.assertEquals(budgetItemUpdate1, savedBudgetItemUpdates.get(0));
+        Assert.assertTrue(savedBudgetItemUpdates.get(0).isRecurring());
+        Assert.assertEquals(budgetItemUpdate2, savedBudgetItemUpdates.get(1));
+        Assert.assertTrue(savedBudgetItemUpdates.get(1).isMonthSpecific());
+        Assert.assertFalse(savedBudgetItemUpdates.get(1).isRecurring());
 
     }
 
