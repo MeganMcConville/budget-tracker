@@ -176,6 +176,9 @@
                 <p class="item-type item-type-text"></p>
             </div>
             <div class="checkbox-container">
+                <input class="recurring-check" type="checkbox" disabled>
+            </div>
+            <div class="checkbox-container">
                 <input class="hidden edit-input month-specific-checkbox" type="checkbox">
             </div>
             <div>
@@ -205,6 +208,9 @@
                 <label class="btn btn-secondary type-button" th:each="budgetItemType : ${T(com.megansportfolio.budgettracker.budgetItem.BudgetItemType).values()}">
                     <input type="radio" name="budget-item-type" th:value="${budgetItemType}" th:attr="data-item-type-text=${budgetItemType.getLowerCaseLabel()}" autocomplete="off"> [[${budgetItemType.getLowerCaseLabel()}]]
                 </label>
+            </div>
+            <div class="checkbox-container">
+                <input class="recurring-check hidden" id="new-recurring-check" type="checkbox">
             </div>
             <div></div>
             <div class="save-buttons hidden">
