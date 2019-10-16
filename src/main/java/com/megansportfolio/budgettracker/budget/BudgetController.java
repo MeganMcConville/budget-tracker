@@ -1,6 +1,7 @@
 package com.megansportfolio.budgettracker.budget;
 
 import com.megansportfolio.budgettracker.sharedUser.EmailIsCurrentUserException;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
 import com.megansportfolio.budgettracker.user.InvalidEmailException;
 import com.megansportfolio.budgettracker.user.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class BudgetController {
 
     @Autowired
     private BudgetService budgetService;
+
+    @Autowired
+    private SharedUserService sharedUserService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/create")
     public String getCreateBudget(Model model){
@@ -45,12 +49,23 @@ public class BudgetController {
         return "view-budgets";
     }
 
+    @RequestMapping(value = "/shared", method = RequestMethod.GET)
+    public String viewSharedBudgets(Model model){
+        UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInUserEmailAddress = loggedInUser.getUsername();
+        List<Budget> sharedBudgets = budgetService.findSharedBudgets(loggedInUserEmailAddress);
+        model.addAttribute("sharedBudgets", sharedBudgets);
+        return "view-shared-budgets";
+    }
+
+
     @RequestMapping(value = "/{budgetId}", method = RequestMethod.GET)
     public String viewIndividualBudget(@PathVariable long budgetId, @RequestParam(required = false) Integer month,
                                        @RequestParam(required = false) Integer year, Model model,
                                        @RequestParam(required = false, defaultValue = "false") Boolean tableOnly){
         UserDetails loggedInUser = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
+        model.addAttribute("isSharedUser", sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId));
         Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId, month, year);
         Month displayMonth = budgetService.getDisplayMonth(month);
         int displayYear = budgetService.getDisplayYear(year);

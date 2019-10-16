@@ -7,17 +7,20 @@ import com.megansportfolio.budgettracker.budgetItem.BudgetItemService;
 import com.megansportfolio.budgettracker.budgetItem.BudgetItemType;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdate;
 import com.megansportfolio.budgettracker.budgetItemUpdate.BudgetItemUpdateDao;
+import com.megansportfolio.budgettracker.sharedUser.EmailIsCurrentUserException;
+import com.megansportfolio.budgettracker.sharedUser.SharedUser;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserDao;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
+import com.megansportfolio.budgettracker.user.InvalidEmailException;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
+import com.megansportfolio.budgettracker.user.UserService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -42,6 +45,15 @@ public class TestBudgetService {
 
     @Mock
     BudgetItemDao budgetItemDao;
+
+    @Mock
+    SharedUserDao sharedUserDao;
+
+    @Mock
+    SharedUserService sharedUserService;
+
+    @Mock
+    UserService userService;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -97,6 +109,22 @@ public class TestBudgetService {
     }
 
     @Test
+    public void testFindSharedBudgets(){
+        String emailAddress = "test@test.com";
+        List<SharedUser> sharedUsers = new ArrayList<>();
+        SharedUser sharedUser = new SharedUser();
+        Budget sharedBudget = new Budget();
+        sharedUser.setBudget(sharedBudget);
+        sharedUsers.add(sharedUser);
+        Mockito.when(sharedUserDao.findAllByEmailIgnoreCase(emailAddress)).thenReturn(sharedUsers);
+
+        List<Budget> result = serviceUnderTest.findSharedBudgets(emailAddress);
+
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(sharedBudget, result.get(0));
+    }
+
+    @Test
     public void testGetBudgetWithWrongUser(){
 
         String loggedInUserEmailAddress = "test@test.com";
@@ -116,6 +144,35 @@ public class TestBudgetService {
         expectedException.expect(RuntimeException.class);
 
         serviceUnderTest.getBudget(loggedInUserEmailAddress, budgetId, null, null);
+    }
+
+    @Test
+    public void testGetBudgetWithSharedUser(){
+
+        String loggedInUserEmailAddress = "test@test.com";
+        Budget budget = new Budget();
+        long budgetId = 1;
+        budget.setId(budgetId);
+        User currentUser = new User();
+        long currentUserId = 2;
+        currentUser.setId(currentUserId);
+        User user = new User();
+        long userId = 5;
+        user.setId(userId);
+        budget.setUser(user);
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress)).thenReturn(currentUser);
+        Mockito.when(budgetDao.getOne(budgetId)).thenReturn(budget);
+        Mockito.when(sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId)).thenReturn(true);
+
+        List<BudgetItem> budgetItems = new ArrayList<>();
+        budget.setBudgetItems(budgetItems);
+        long budgetItemId = 1;
+        Mockito.when(budgetItemUpdateDao.findAllByBudgetItemId(budgetItemId)).thenReturn(null);
+
+        Budget result = serviceUnderTest.getBudget(loggedInUserEmailAddress, budgetId, null, null);
+
+        Assert.assertEquals(budget, result);
+
     }
 
     @Test
@@ -284,6 +341,38 @@ public class TestBudgetService {
     }
 
     @Test
+    public void testRenameBudgetWithSharedUser(){
+
+        String loggedInUserEmailAddress = "test@test.com";
+        User user = new User();
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress)).thenReturn(user);
+
+        Budget parameterBudget = new Budget();
+        Budget budget = new Budget();
+        long budgetId = 1;
+        parameterBudget.setId(budgetId);
+        budget.setId(budgetId);
+        Mockito.when(budgetDao.getOne(parameterBudget.getId())).thenReturn(budget);
+
+        User differentUser = new User();
+        long userId = 1;
+        long differentUserId = 2;
+        user.setId(userId);
+        differentUser.setId(differentUserId);
+        budget.setUser(differentUser);
+        Mockito.when(sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId)).thenReturn(true);
+
+        String updatedName = "New Name";
+        parameterBudget.setName(updatedName);
+
+        serviceUnderTest.renameBudget(parameterBudget, loggedInUserEmailAddress);
+
+        Mockito.verify(budgetDao).save(budget);
+        Assert.assertEquals(updatedName, budget.getName());
+
+    }
+
+    @Test
     public void testRenameBudgetWithWrongUser(){
 
         String loggedInUserEmailAddress = "test@test.com";
@@ -359,5 +448,111 @@ public class TestBudgetService {
         Assert.assertEquals(monthLabel, resultMonth.getNameLabel());
     }
 
+    @Test
+    public void testAddSharedUser()throws EmailIsCurrentUserException, InvalidEmailException {
+
+        String loggedInEmailAddress = "email@email.com";
+        String searchedEmailAddress = "search@search.com";
+        long budgetId = 1;
+
+        Budget budget = new Budget();
+        budget.setId(budgetId);
+        Mockito.when(budgetDao.getOne(budgetId)).thenReturn(budget);
+
+        User loggedInUser = new User();
+        long userId = 1;
+        budget.setUser(loggedInUser);
+        loggedInUser.setId(userId);
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInEmailAddress)).thenReturn(loggedInUser);
+
+        Mockito.when(userService.isEmailValid(searchedEmailAddress)).thenReturn(true);
+        Mockito.when(sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(searchedEmailAddress, budgetId)).thenReturn(null);
+
+        serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
+
+        ArgumentCaptor<SharedUser> captor = ArgumentCaptor.forClass(SharedUser.class);
+        Mockito.verify(sharedUserDao).save(captor.capture());
+        SharedUser result = captor.getValue();
+        Assert.assertEquals(result.getBudget(), budget);
+        Assert.assertEquals(result.getEmail(), searchedEmailAddress);
+
+    }
+
+    @Test
+    public void testAddSharedUserWrongLoggedInUser() throws EmailIsCurrentUserException, InvalidEmailException{
+
+        String loggedInEmailAddress = "email@email.com";
+        String searchedEmailAddress = "search@search.com";
+        long budgetId = 1;
+
+        Budget budget = new Budget();
+        budget.setId(budgetId);
+        Mockito.when(budgetDao.getOne(budgetId)).thenReturn(budget);
+        User wrongUser = new User();
+        long wrongUserId = 5;
+        wrongUser.setId(wrongUserId);
+
+        User loggedInUser = new User();
+        long userId = 1;
+        budget.setUser(wrongUser);
+        loggedInUser.setId(userId);
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInEmailAddress)).thenReturn(loggedInUser);
+
+        expectedException.expect(RuntimeException.class);
+
+        serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
+    }
+
+    @Test
+    public void testAddSharedUserWhereSearchedIsCurrentUser() throws EmailIsCurrentUserException, InvalidEmailException{
+
+        String loggedInEmailAddress = "email@email.com";
+        String searchedEmailAddress = "email@email.com";
+        long budgetId = 1;
+
+        Budget budget = new Budget();
+        budget.setId(budgetId);
+        Mockito.when(budgetDao.getOne(budgetId)).thenReturn(budget);
+
+        User loggedInUser = new User();
+        long userId = 1;
+        budget.setUser(loggedInUser);
+        loggedInUser.setId(userId);
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInEmailAddress)).thenReturn(loggedInUser);
+
+        Mockito.when(userService.isEmailValid(searchedEmailAddress)).thenReturn(true);
+        Mockito.when(sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(searchedEmailAddress, budgetId)).thenReturn(null);
+
+        expectedException.expect(EmailIsCurrentUserException.class);
+
+        serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
+
+    }
+
+    @Test
+    public void testAddsharedUserWithInvalidEmail() throws EmailIsCurrentUserException, InvalidEmailException{
+
+        String loggedInEmailAddress = "email@email.com";
+        String searchedEmailAddress = "invalid";
+        long budgetId = 1;
+
+        Budget budget = new Budget();
+        budget.setId(budgetId);
+        Mockito.when(budgetDao.getOne(budgetId)).thenReturn(budget);
+
+        User loggedInUser = new User();
+        long userId = 1;
+        budget.setUser(loggedInUser);
+        loggedInUser.setId(userId);
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInEmailAddress)).thenReturn(loggedInUser);
+
+        Mockito.when(userService.isEmailValid(searchedEmailAddress)).thenReturn(false);
+        Mockito.when(sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(searchedEmailAddress, budgetId)).thenReturn(null);
+
+        expectedException.expect(InvalidEmailException.class);
+
+        serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
+
+    }
 
 }

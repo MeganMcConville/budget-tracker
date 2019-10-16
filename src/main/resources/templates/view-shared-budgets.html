@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/default'">
+<head>
+    <meta charset="UTF-8">
+    <title>Shared Budgets</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2 id="budgets-shared-title">Budgets Shared with Me</h2>
+    <div id="budgets-shared-container">
+        <ul>
+            <li th:each="budget: ${sharedBudgets}">
+                <a th:href="@{/budgets/{budgetId} (budgetId=${budget.getId()})}"
+                   th:text="${budget.getName() + ' - Shared by ' + budget.getUser().getFirstName() + ' ' + budget.getUser().getLastName()}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

@@ -4,6 +4,7 @@ import com.megansportfolio.budgettracker.budget.Budget;
 import com.megansportfolio.budgettracker.budget.BudgetDao;
 import com.megansportfolio.budgettracker.budget.Month;
 import com.megansportfolio.budgettracker.budgetEntry.BudgetEntry;
+import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
 import com.megansportfolio.budgettracker.user.User;
 import com.megansportfolio.budgettracker.user.UserDao;
 import org.junit.Assert;
@@ -33,6 +34,9 @@ public class TestBudgetItemService {
 
     @Mock
     UserDao userDao;
+
+    @Mock
+    SharedUserService sharedUserService;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -77,6 +81,42 @@ public class TestBudgetItemService {
         BudgetItem resultItem = captor.getValue();
         Assert.assertTrue(resultItem.isRecurring());
         Assert.assertEquals(BudgetItemType.MONTHLY, resultItem.getBudgetItemType());
+
+    }
+
+    @Test
+    public void testCreateBudgetItemWithSharedUser(){
+
+        String loggedInUserEmailAddress = "test@test.com";
+        User user = new User();
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress)).thenReturn(user);
+
+        BudgetItem budgetItem = new BudgetItem();
+        long budgetId = 1;
+        Budget budget = new Budget();
+        budget.setId(budgetId);
+        budgetItem.setBudget(budget);
+        budgetItem.setBudgetItemType(BudgetItemType.MONTHLY);
+        budgetItem.setRecurring(true);
+        Budget existingBudget = new Budget();
+        Mockito.when(budgetDao.findById(budgetItem.getBudget().getId())).thenReturn(Optional.of(existingBudget));
+
+        User differentUser = new User();
+        long userId = 1;
+        long differentUserId = 2;
+        user.setId(userId);
+        differentUser.setId(differentUserId);
+        existingBudget.setUser(differentUser);
+        existingBudget.setId(budgetId);
+        Mockito.when(sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId)).thenReturn(true);
+
+        BudgetItem returnedBudgetItem = new BudgetItem();
+        long budgetItemId = 1;
+        returnedBudgetItem.setId(budgetItemId);
+        Mockito.when(budgetItemDao.save(budgetItem)).thenReturn(returnedBudgetItem);
+
+        long result = serviceUnderTest.createBudgetItem(budgetItem, loggedInUserEmailAddress);
+        Assert.assertEquals(budgetItemId, result);
 
     }
 
@@ -128,6 +168,39 @@ public class TestBudgetItemService {
         serviceUnderTest.deleteBudgetItem(budgetItemId, loggedInUserEmailAddress);
 
         Mockito.verify(budgetItemDao, times(1)).deleteById(budgetItemId);
+    }
+
+    @Test
+    public void testDeleteBudgetItemWithSharedUser(){
+
+        String loggedInUserEmailAddress = "test@test.com";
+        User sharedUser = new User();
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress)).thenReturn(sharedUser);
+
+        long budgetItemId = 1;
+        BudgetItem budgetItem = new BudgetItem();
+        Mockito.when(budgetItemDao.getOne(budgetItemId)).thenReturn(budgetItem);
+
+        long userId = 1;
+        Budget budget = new Budget();
+        sharedUser.setId(userId);
+        long budgetId = 1;
+        budget.setId(budgetId);
+
+        User budgetOwner = new User();
+        budget.setUser(budgetOwner);
+        budgetItem.setBudget(budget);
+        long budgetOwnerId = 5;
+        budgetOwner.setId(budgetOwnerId);
+
+        Mockito.when(sharedUserService.isSharedUser(loggedInUserEmailAddress, budgetId)).thenReturn(true);
+
+        budgetItem.setId(budgetItemId);
+
+        serviceUnderTest.deleteBudgetItem(budgetItemId, loggedInUserEmailAddress);
+
+        Mockito.verify(budgetItemDao, times(1)).deleteById(budgetItemId);
+
     }
 
     @Test
