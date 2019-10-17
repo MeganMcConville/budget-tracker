@@ -1,6 +1,6 @@
 @import "styles/variables";
 
-#date-modal-header, #delete-item-header, #create-entry-header, #share-budget-modal-header{
+#date-modal-header, #delete-item-header, #create-entry-header, #share-budget-modal-header, #shared-users-modal-header{
     background-color: $green;
     color: white;
     font-weight: bold;
@@ -50,6 +50,23 @@
     }
 }
 
+#shared-users-modal{
+    #shared-users-list{
+        width: 80%;
+        list-style-type: none;
+        button{
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            padding: .5em;
+        }
+        button:active, button:hover, button:focus{
+            background-color: $green !important;
+            color: white;
+        }
+    }
+}
+
 #budget-heading{
     display: flex;
     align-items: center;
@@ -84,13 +101,20 @@
 .date-display-container{
     display: flex;
     justify-content: flex-start;
-    margin: 1em 0 1em 10px;
+    margin: 1em 0 .5em 10px;
     #calendar-icon{
         color: $green;
         font-size: 2em;
         cursor: pointer;
         margin-left: 1rem;
     }
+}
+
+#shared-users-icon{
+    cursor: pointer;
+    color: $green;
+    margin: 0 auto .25em 10px;
+    font-size: 1.5em;
 }
 
 #button-container{

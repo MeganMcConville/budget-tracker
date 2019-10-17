@@ -107,6 +107,28 @@
         </div>
     </div>
 
+    <div class="modal" id="shared-users-modal" tabindex="-1" role="alertdialog" aria-hidden="true" aria-labelledby="shared-users-modal-label">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header" id="shared-users-modal-header">
+                    <h5 class="modal-title" th:text="'Users ' + ${budget.getName()} + ' is shared with'"></h5>
+                    <button type="button" class="close share-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="shared-users-modal-body">
+                    <ul id="shared-users-list" class="list-group list-group-flush">
+                        <button type="button" class="list-group-item list-group-item-action" th:each="sharedUser : ${budget.getSharedUsers()}" th:text="${sharedUser.getEmail()}" th:attr="data-shared-user-budget-id=${budget.getId()}"></button>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary share-close" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger delete-shared-user-confirmation">Remove User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="edit-budget-error-message" class="hidden alert alert-danger">Something went wrong. Please refresh the page and try again.</div>
     <div id="entry-created-error-message" class="hidden alert alert-danger">Your budget entry was created but could not be displayed. Please refresh the page to view it.</div>
     <div id="rename-budget-error-message" class="hidden alert alert-danger">Please enter a name</div>
@@ -130,6 +152,7 @@
         <h3 id="date-display" th:text="${displayMonth.getNameLabel()} + ' ' + ${displayYear}" th:attr="data-display-month=${displayMonth.getMonthNumber()}, data-display-year=${displayYear}"></h3>
         <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
     </div>
+    <i th:if="${budget.getSharedUsers() != null && budget.getSharedUsers().size() > 0}" class="fas fa-address-book" title="Users this Budget is shared with" id="shared-users-icon" data-toggle="modal" data-target="#shared-users-modal"></i>
     <div id="button-container">
         <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
         <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
