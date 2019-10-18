@@ -112,18 +112,22 @@
             <div class="modal-content">
                 <div class="modal-header" id="shared-users-modal-header">
                     <h5 class="modal-title" th:text="'Users ' + ${budget.getName()} + ' is shared with'"></h5>
-                    <button type="button" class="close share-close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close share-users-close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" id="shared-users-modal-body">
-                    <ul id="shared-users-list" class="list-group list-group-flush">
-                        <button type="button" class="list-group-item list-group-item-action" th:each="sharedUser : ${budget.getSharedUsers()}" th:text="${sharedUser.getEmail()}" th:attr="data-shared-user-budget-id=${budget.getId()}"></button>
+                    <ul id="shared-users-list">
+                        <div class="shared-user-list-item" th:each="sharedUser : ${budget.getSharedUsers()}">
+                            <label th:inline="text">[[${sharedUser.getEmail()}]]
+                                <input class="shared-user-checkbox" type="checkbox" th:attr="data-shared-user-id=${sharedUser.getId()}">
+                            </label>
+                        </div>
                     </ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary share-close" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger delete-shared-user-confirmation">Remove User</button>
+                    <button type="button" class="btn btn-secondary share-users-close" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="delete-shared-user-confirmation" disabled>Remove Users</button>
                 </div>
             </div>
         </div>

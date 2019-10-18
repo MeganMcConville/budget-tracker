@@ -523,11 +523,64 @@ $(document).ready(function (){
     });
 
     $(".share-close").click(function(){
-            $("#search-email").val("");
-            $("#invalid-email-message").hide();
-            $("#current-user-email-message").hide();
-            $("#search-email").removeClass("error");
-        });
+        $("#search-email").val("");
+        $("#invalid-email-message").hide();
+        $("#current-user-email-message").hide();
+        $("#search-email").removeClass("error");
+    });
 
+    $(".shared-user-checkbox").change(function(){
+        var anyIsChecked = false;
+        $(".shared-user-checkbox").each(function(){
+            if($(this).prop("checked") == true){
+                $("#delete-shared-user-confirmation").prop("disabled", false);
+                $("#delete-shared-user-confirmation").removeClass("disabled");
+                anyIsChecked = true;
+            }
+        })
+        if(anyIsChecked == false){
+            $("#delete-shared-user-confirmation").prop("disabled", true);
+            $("#delete-shared-user-confirmation").addClass("disabled");
+        }
+    });
+
+    $("#delete-shared-user-confirmation").click(function(){
+        if(!$("#delete-shared-user-confirmation").hasClass("disabled")){
+            $("#delete-shared-user-confirmation").addClass("disabled");
+            $("#edit-budget-error-message").hide();
+            var payload = [];
+            $(".shared-user-checkbox").each(function(){
+                if($(this).is(":checked")){
+                    var sharedUserId = $(this).attr("data-shared-user-id");
+                    payload.push(sharedUserId);
+                }
+            })
+            $.ajax({
+                url: "/shared-users",
+                data: JSON.stringify(payload),
+                contentType: "application/json",
+                type: "DELETE"
+            })
+            .done(function(){
+                $(".shared-user-checkbox").each(function(){
+                    if($(this).is(":checked")){
+                        $(this).parent().parent(".shared-user-list-item").remove();
+                    }
+                })
+            })
+            .fail(function(){
+                $("#edit-budget-error-message").show();
+            })
+            .always(function(){
+               $("#delete-shared-user-confirmation").removeClass("disabled");
+            });
+        }
+    });
+
+    $("#shared-users-modal").on("hidden.bs.modal", function (e){
+        $(".shared-user-checkbox").each(function(){
+            $(this).prop("checked", false);
+        })
+    });
 //whole page closing curlies
 });

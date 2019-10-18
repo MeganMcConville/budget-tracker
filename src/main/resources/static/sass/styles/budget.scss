@@ -54,15 +54,17 @@
     #shared-users-list{
         width: 80%;
         list-style-type: none;
-        button{
+        label{
             cursor: pointer;
-            border: none;
+            display: flex;
             width: 100%;
-            padding: .5em;
-        }
-        button:active, button:hover, button:focus{
-            background-color: $green !important;
-            color: white;
+            align-items: center;
+            justify-content: space-between;
+            input{
+                cursor: pointer;
+                margin-left: .5em;
+                vertical-align: middle;
+            }
         }
     }
 }
