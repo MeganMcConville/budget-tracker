@@ -497,11 +497,21 @@ $(document).ready(function (){
                 type: "POST",
                 data: {searchedEmailAddress: searchedEmailAddress}
             })
-            .done(function(){
+            .done(function(sharedUserId){
                 $("#share-budget-success-message").text("This budget has been shared with " + searchedEmailAddress);
                 $("#share-budget-success-message").show();
                 $("#share-budget-modal").modal("toggle");
                 $("#search-email").val("");
+                if(sharedUserId != ""){
+                    var newSharedUser = $(".shared-user-list-item").first().clone();
+                    newSharedUser.children("label").text(searchedEmailAddress);
+                    newSharedUser.addClass("shared-user-list-item");
+                    newSharedUser.children("label").append("<input type='checkbox' >");
+                    newSharedUser.find("input").addClass("shared-user-checkbox");
+                    newSharedUser.children().children(".shared-user-checkbox").prop("checked", false);
+                    newSharedUser.children().children(".shared-user-checkbox").attr("data-shared-user-id", sharedUserId);
+                    $("#shared-users-list").append(newSharedUser);
+                }
             })
             .fail(function(data){
                 if(data.responseText == "invalid email"){
@@ -529,7 +539,7 @@ $(document).ready(function (){
         $("#search-email").removeClass("error");
     });
 
-    $(".shared-user-checkbox").change(function(){
+    $(document).on("change", ".shared-user-checkbox", function(){
         var anyIsChecked = false;
         $(".shared-user-checkbox").each(function(){
             if($(this).prop("checked") == true){
@@ -548,6 +558,7 @@ $(document).ready(function (){
         if(!$("#delete-shared-user-confirmation").hasClass("disabled")){
             $("#delete-shared-user-confirmation").addClass("disabled");
             $("#edit-budget-error-message").hide();
+            $("#share-budget-success-message").hide();
             var payload = [];
             $(".shared-user-checkbox").each(function(){
                 if($(this).is(":checked")){

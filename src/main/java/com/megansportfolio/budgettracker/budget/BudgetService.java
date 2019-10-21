@@ -159,7 +159,7 @@ public class BudgetService {
         budgetDao.save(existingBudget);
     }
 
-    public void addSharedUser(String loggedInUserEmailAddress, String searchedEmailAddress, long budgetId) throws InvalidEmailException, EmailIsCurrentUserException {
+    public Long addSharedUser(String loggedInUserEmailAddress, String searchedEmailAddress, long budgetId) throws InvalidEmailException, EmailIsCurrentUserException {
         Budget budget = budgetDao.getOne(budgetId);
         User loggedInUser = userDao.findOneByUsernameIgnoreCase(loggedInUserEmailAddress);
         if(loggedInUser.getId() != budget.getUser().getId()){
@@ -174,14 +174,14 @@ public class BudgetService {
         SharedUser searchedUser = sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(searchedEmailAddress, budgetId);
 
         if(searchedUser != null){
-            return;
+            return null;
         }
 
         else{
             SharedUser sharedUser = new SharedUser();
             sharedUser.setBudget(budget);
             sharedUser.setEmail(searchedEmailAddress);
-            sharedUserDao.save(sharedUser);
+            return sharedUserDao.save(sharedUser).getId();
         }
     }
 
