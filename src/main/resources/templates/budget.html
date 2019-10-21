@@ -156,7 +156,7 @@
         <h3 id="date-display" th:text="${displayMonth.getNameLabel()} + ' ' + ${displayYear}" th:attr="data-display-month=${displayMonth.getMonthNumber()}, data-display-year=${displayYear}"></h3>
         <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
     </div>
-    <i th:if="${budget.getSharedUsers() != null && budget.getSharedUsers().size() > 0}" class="fas fa-address-book" title="Users this Budget is shared with" id="shared-users-icon" data-toggle="modal" data-target="#shared-users-modal"></i>
+    <i th:if="${budget.getSharedUsers() != null && budget.getSharedUsers().size() > 0 && !isSharedUser}" class="fas fa-address-book" title="Users this Budget is shared with" id="shared-users-icon" data-toggle="modal" data-target="#shared-users-modal"></i>
     <div id="button-container">
         <button id="edit-budget-button" class="btn btn-success mb-2 ml-2">Edit</button>
         <button id="create-new-item-button" class="btn btn-success mb-2 ml-2">Add a New Item</button>
