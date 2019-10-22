@@ -1,5 +1,8 @@
 package com.megansportfolio.budgettracker.sharedUser;
 
+import com.megansportfolio.budgettracker.budget.Budget;
+import com.megansportfolio.budgettracker.user.User;
+import com.megansportfolio.budgettracker.user.UserDao;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +21,9 @@ public class TestSharedUserService {
 
     @Mock
     SharedUserDao sharedUserDao;
+
+    @Mock
+    UserDao userDao;
 
     @Before
     public void setup(){
@@ -49,6 +55,44 @@ public class TestSharedUserService {
         boolean result = serviceUnderTest.isSharedUser(emailAddress, budgetId);
 
         Assert.assertTrue(result);
+    }
+
+    @Test
+    public void testDeleteSharedUsers(){
+
+        String emailAddress = "email@email.com";
+        List<Long> sharedUserIds = new ArrayList<>();
+        long id1 = 4;
+        long id2 = 2;
+        sharedUserIds.add(id1);
+        sharedUserIds.add(id2);
+
+        User loggedInUser = new User();
+        long loggedInId = 5;
+        loggedInUser.setId(loggedInId);
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(emailAddress)).thenReturn(loggedInUser);
+
+        Budget budget = new Budget();
+        long budgetId = 9;
+        budget.setId(budgetId);
+        budget.setUser(loggedInUser);
+
+
+        SharedUser sharedUser1 = new SharedUser();
+        SharedUser sharedUser2 = new SharedUser();
+        sharedUser1.setBudget(budget);
+        sharedUser2.setBudget(budget);
+        Mockito.when(sharedUserDao.getOne(id1)).thenReturn(sharedUser1);
+        Mockito.when(sharedUserDao.getOne(id2)).thenReturn(sharedUser2);
+
+        List<SharedUser> usersToDelete = new ArrayList<>();
+        usersToDelete.add(sharedUser1);
+        usersToDelete.add(sharedUser2);
+
+        serviceUnderTest.deleteSharedUsers(emailAddress, sharedUserIds);
+
+        Mockito.verify(sharedUserDao, Mockito.times(1)).deleteAll(usersToDelete);
+
     }
 
 }

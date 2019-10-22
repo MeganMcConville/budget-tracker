@@ -18,6 +18,10 @@ input{
     border: none !important;
 }
 
+.modal-open{
+    padding-right: 0px !important;
+}
+
 /*Webkit browsers*/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

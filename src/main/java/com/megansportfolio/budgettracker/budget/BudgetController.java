@@ -88,10 +88,10 @@ public class BudgetController {
 
     @RequestMapping(value = "/{budgetId}/share", method = RequestMethod.POST)
     @ResponseBody
-    public void addSharedUser(@RequestParam("searchedEmailAddress") String searchedEmailAddress, @PathVariable long budgetId) throws InvalidEmailException, EmailIsCurrentUserException {
+    public Long addSharedUser(@RequestParam("searchedEmailAddress") String searchedEmailAddress, @PathVariable long budgetId) throws InvalidEmailException, EmailIsCurrentUserException {
         UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
-        budgetService.addSharedUser(loggedInUserEmailAddress, searchedEmailAddress, budgetId);
+        return budgetService.addSharedUser(loggedInUserEmailAddress, searchedEmailAddress, budgetId);
     }
 
 }

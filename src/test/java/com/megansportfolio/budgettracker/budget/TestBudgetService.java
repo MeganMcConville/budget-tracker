@@ -26,6 +26,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+
 public class TestBudgetService {
 
     @InjectMocks
@@ -468,13 +470,20 @@ public class TestBudgetService {
         Mockito.when(userService.isEmailValid(searchedEmailAddress)).thenReturn(true);
         Mockito.when(sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(searchedEmailAddress, budgetId)).thenReturn(null);
 
-        serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
+
+        SharedUser sharedUser2 = new SharedUser();
+        long sharedUserId = 2;
+        sharedUser2.setId(sharedUserId);
+        Mockito.when(sharedUserDao.save(any())).thenReturn(sharedUser2);
+
+        long resultId = serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
 
         ArgumentCaptor<SharedUser> captor = ArgumentCaptor.forClass(SharedUser.class);
         Mockito.verify(sharedUserDao).save(captor.capture());
         SharedUser result = captor.getValue();
         Assert.assertEquals(result.getBudget(), budget);
         Assert.assertEquals(result.getEmail(), searchedEmailAddress);
+        Assert.assertEquals(sharedUser2.getId(), resultId);
 
     }
 
@@ -552,6 +561,34 @@ public class TestBudgetService {
         expectedException.expect(InvalidEmailException.class);
 
         serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
+
+    }
+
+    @Test
+    public void testAddSharedUserWithExistingUser()throws EmailIsCurrentUserException, InvalidEmailException{
+
+        String loggedInEmailAddress = "email@email.com";
+        String searchedEmailAddress = "search@search.com";
+        long budgetId = 1;
+
+        Budget budget = new Budget();
+        budget.setId(budgetId);
+        Mockito.when(budgetDao.getOne(budgetId)).thenReturn(budget);
+
+        User loggedInUser = new User();
+        long userId = 1;
+        budget.setUser(loggedInUser);
+        loggedInUser.setId(userId);
+        Mockito.when(userDao.findOneByUsernameIgnoreCase(loggedInEmailAddress)).thenReturn(loggedInUser);
+
+        SharedUser existingUser = new SharedUser();
+
+        Mockito.when(userService.isEmailValid(searchedEmailAddress)).thenReturn(true);
+        Mockito.when(sharedUserDao.findOneByEmailIgnoreCaseAndBudgetId(searchedEmailAddress, budgetId)).thenReturn(existingUser);
+
+        Long result = serviceUnderTest.addSharedUser(loggedInEmailAddress, searchedEmailAddress, budgetId);
+
+        Assert.assertNull(result);
 
     }
 

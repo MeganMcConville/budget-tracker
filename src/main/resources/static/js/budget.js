@@ -497,11 +497,21 @@ $(document).ready(function (){
                 type: "POST",
                 data: {searchedEmailAddress: searchedEmailAddress}
             })
-            .done(function(){
+            .done(function(sharedUserId){
                 $("#share-budget-success-message").text("This budget has been shared with " + searchedEmailAddress);
                 $("#share-budget-success-message").show();
                 $("#share-budget-modal").modal("toggle");
                 $("#search-email").val("");
+                if(sharedUserId != ""){
+                    var newSharedUser = $(".shared-user-list-item").first().clone();
+                    newSharedUser.children("label").text(searchedEmailAddress);
+                    newSharedUser.addClass("shared-user-list-item");
+                    newSharedUser.children("label").append("<input type='checkbox' >");
+                    newSharedUser.find("input").addClass("shared-user-checkbox");
+                    newSharedUser.children().children(".shared-user-checkbox").prop("checked", false);
+                    newSharedUser.children().children(".shared-user-checkbox").attr("data-shared-user-id", sharedUserId);
+                    $("#shared-users-list").append(newSharedUser);
+                }
             })
             .fail(function(data){
                 if(data.responseText == "invalid email"){
@@ -523,11 +533,65 @@ $(document).ready(function (){
     });
 
     $(".share-close").click(function(){
-            $("#search-email").val("");
-            $("#invalid-email-message").hide();
-            $("#current-user-email-message").hide();
-            $("#search-email").removeClass("error");
-        });
+        $("#search-email").val("");
+        $("#invalid-email-message").hide();
+        $("#current-user-email-message").hide();
+        $("#search-email").removeClass("error");
+    });
 
+    $(document).on("change", ".shared-user-checkbox", function(){
+        var anyIsChecked = false;
+        $(".shared-user-checkbox").each(function(){
+            if($(this).prop("checked") == true){
+                $("#delete-shared-user-confirmation").prop("disabled", false);
+                $("#delete-shared-user-confirmation").removeClass("disabled");
+                anyIsChecked = true;
+            }
+        })
+        if(anyIsChecked == false){
+            $("#delete-shared-user-confirmation").prop("disabled", true);
+            $("#delete-shared-user-confirmation").addClass("disabled");
+        }
+    });
+
+    $("#delete-shared-user-confirmation").click(function(){
+        if(!$("#delete-shared-user-confirmation").hasClass("disabled")){
+            $("#delete-shared-user-confirmation").addClass("disabled");
+            $("#edit-budget-error-message").hide();
+            $("#share-budget-success-message").hide();
+            var payload = [];
+            $(".shared-user-checkbox").each(function(){
+                if($(this).is(":checked")){
+                    var sharedUserId = $(this).attr("data-shared-user-id");
+                    payload.push(sharedUserId);
+                }
+            })
+            $.ajax({
+                url: "/shared-users",
+                data: JSON.stringify(payload),
+                contentType: "application/json",
+                type: "DELETE"
+            })
+            .done(function(){
+                $(".shared-user-checkbox").each(function(){
+                    if($(this).is(":checked")){
+                        $(this).parent().parent(".shared-user-list-item").remove();
+                    }
+                })
+            })
+            .fail(function(){
+                $("#edit-budget-error-message").show();
+            })
+            .always(function(){
+               $("#delete-shared-user-confirmation").removeClass("disabled");
+            });
+        }
+    });
+
+    $("#shared-users-modal").on("hidden.bs.modal", function (e){
+        $(".shared-user-checkbox").each(function(){
+            $(this).prop("checked", false);
+        })
+    });
 //whole page closing curlies
 });
