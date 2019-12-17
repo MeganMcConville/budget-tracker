@@ -46,6 +46,18 @@ public class BudgetItem {
     @Transient
     private BigDecimal totalRemaining;
 
+    @Transient
+    private BigDecimal yearlyBudgetedAmount;
+
+    @Transient
+    private BigDecimal yearlyAmountSpent;
+
+    @Transient
+    private BigDecimal percentDifference;
+
+    @Transient
+    private BigDecimal averageMonthlyDifference;
+
     public long getId(){
         return this.id;
     }
@@ -124,5 +136,37 @@ public class BudgetItem {
 
     public void setRecurring(boolean recurring) {
         isRecurring = recurring;
+    }
+
+    public BigDecimal getYearlyBudgetedAmount() {
+        return this.yearlyBudgetedAmount;
+    }
+
+    public void setYearlyBudgetedAmount(BigDecimal yearlyBudgetedAmount) {
+        this.yearlyBudgetedAmount = yearlyBudgetedAmount;
+    }
+
+    public BigDecimal getYearlyAmountSpent() {
+        return this.yearlyAmountSpent;
+    }
+
+    public void setYearlyAmountSpent(BigDecimal yearlyAmountSpent) {
+        this.yearlyAmountSpent = yearlyAmountSpent;
+    }
+
+    public BigDecimal getPercentDifference() {
+        return this.percentDifference;
+    }
+
+    public void setPercentDifference(BigDecimal percentDifference) {
+        this.percentDifference = percentDifference;
+    }
+
+    public BigDecimal getAverageMonthlyDifference() {
+        return this.averageMonthlyDifference;
+    }
+
+    public void setAverageMonthlyDifference(BigDecimal averageMonthlyDifference) {
+        this.averageMonthlyDifference = averageMonthlyDifference;
     }
 }
