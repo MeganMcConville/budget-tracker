@@ -101,10 +101,15 @@ public class ReportService {
 
     //calculate  percent difference between two, BI
     public void setPercentDifference(BudgetItem budgetItem){
-        BigDecimal difference = budgetItem.getYearlyAmountSpent().subtract(budgetItem.getYearlyBudgetedAmount());
-        BigDecimal percentDifference = difference.divide(budgetItem.getYearlyBudgetedAmount(), 2, RoundingMode.HALF_UP);
-        percentDifference = percentDifference.multiply(BigDecimal.valueOf(100));
-        budgetItem.setPercentDifference(percentDifference);
+        if(budgetItem.getYearlyBudgetedAmount().compareTo(BigDecimal.ZERO) == 0){
+            budgetItem.setPercentDifference(BigDecimal.ZERO);
+        }
+        else {
+            BigDecimal difference = budgetItem.getYearlyAmountSpent().subtract(budgetItem.getYearlyBudgetedAmount());
+            BigDecimal percentDifference = difference.divide(budgetItem.getYearlyBudgetedAmount(), 2, RoundingMode.HALF_UP);
+            percentDifference = percentDifference.multiply(BigDecimal.valueOf(100));
+            budgetItem.setPercentDifference(percentDifference);
+        }
     }
 
     //calculate average over/under per month, BI
@@ -113,12 +118,48 @@ public class ReportService {
         budgetItem.setAverageMonthlyDifference(difference.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP));
     }
 
+    public void setReportValues(Report report, List<BudgetItem> budgetItems){
+        setTotalYearlyBudgetedAmount(report, budgetItems);
+        setTotalYearlyAmountSpent(report, budgetItems);
+        setTotalPercentDifference(report);
+        setTotalMonthlyDifference(report);
+    }
+
     //get total of all yearly budgeted, Report
+    public void setTotalYearlyBudgetedAmount(Report report, List<BudgetItem> budgetItems){
+        BigDecimal totalYearlyBudgetedAmount = BigDecimal.ZERO;
+        for(BudgetItem budgetItem : budgetItems){
+            totalYearlyBudgetedAmount = totalYearlyBudgetedAmount.add(budgetItem.getYearlyBudgetedAmount());
+        }
+        report.setBudgetedAmount(totalYearlyBudgetedAmount);
+    }
 
     //get total of all yearly spent, Report
+    public void setTotalYearlyAmountSpent(Report report, List<BudgetItem> budgetItems){
+        BigDecimal totalYearlyAmountSpent = BigDecimal.ZERO;
+        for(BudgetItem budgetItem : budgetItems){
+            totalYearlyAmountSpent = totalYearlyAmountSpent.add(budgetItem.getYearlyAmountSpent());
+        }
+        report.setAmountSpent(totalYearlyAmountSpent);
+    }
 
     //total percent difference, Report
+    public void setTotalPercentDifference(Report report){
+        if(report.getBudgetedAmount().compareTo(BigDecimal.ZERO) == 0){
+            report.setPercentDifference(BigDecimal.ZERO);
+        }
+        else {
+            BigDecimal totalDifference = report.getAmountSpent().subtract(report.getBudgetedAmount());
+            BigDecimal totalPercentDifference = totalDifference.divide(report.getBudgetedAmount(), 2, RoundingMode.HALF_UP);
+            totalPercentDifference = totalPercentDifference.multiply(BigDecimal.valueOf(100));
+            report.setPercentDifference(totalPercentDifference);
+        }
+    }
 
     //total difference over/under per month, Report
+    public void setTotalMonthlyDifference(Report report){
+        BigDecimal difference = report.getAmountSpent().subtract(report.getBudgetedAmount());
+        report.setAverageDifferencePerMonth(difference.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP));
+    }
 
 }
