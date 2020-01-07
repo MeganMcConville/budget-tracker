@@ -63,14 +63,11 @@ public class ReportController {
         UserDetails loggedInUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedInUserEmailAddress = loggedInUser.getUsername();
         Optional <Budget> budget = budgetDao.findById(budgetId);
-        Report report = new Report();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Map<String, Object> input = new HashMap<>();
-        List<BudgetItem> budgetItems = reportService.getReportBudgetItems(budgetId, year, loggedInUserEmailAddress);
-        reportService.setReportValues(report, budgetItems);
+        Report report = reportService.generateReport(budgetId, loggedInUserEmailAddress, year);
 
-        input.put("budgetItems", budgetItems);
         input.put("report", report);
 
         Template template = config.getTemplate("year-end-report.ftl");

@@ -88,15 +88,10 @@ public class ReportService {
     public void setYearlyAmountSpent(BudgetItem budgetItem, int year){
         BigDecimal yearlyAmountSpent = BigDecimal.ZERO;
         List<BudgetEntry> budgetEntries = budgetEntryDao.findAllByBudgetItemIdAndYear(budgetItem.getId(), year);
-        if(budgetEntries.isEmpty()){
-            budgetItem.setYearlyAmountSpent(yearlyAmountSpent);
+        for(BudgetEntry budgetEntry : budgetEntries){
+            yearlyAmountSpent = yearlyAmountSpent.add(budgetEntry.getAmount());
         }
-        else{
-            for(BudgetEntry budgetEntry : budgetEntries){
-                yearlyAmountSpent = yearlyAmountSpent.add(budgetEntry.getAmount());
-            }
-            budgetItem.setYearlyAmountSpent(yearlyAmountSpent);
-        }
+        budgetItem.setYearlyAmountSpent(yearlyAmountSpent);
     }
 
     //calculate  percent difference between two, BI
@@ -118,11 +113,14 @@ public class ReportService {
         budgetItem.setAverageMonthlyDifference(difference.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP));
     }
 
-    public void setReportValues(Report report, List<BudgetItem> budgetItems){
-        setTotalYearlyBudgetedAmount(report, budgetItems);
-        setTotalYearlyAmountSpent(report, budgetItems);
+    public Report generateReport(long budgetId, String loggedInUserEmailAddress, int year){
+        Report report = new Report();
+        report.setBudgetItems(getReportBudgetItems(budgetId, year, loggedInUserEmailAddress));
+        setTotalYearlyBudgetedAmount(report, report.getBudgetItems());
+        setTotalYearlyAmountSpent(report, report.getBudgetItems());
         setTotalPercentDifference(report);
         setTotalMonthlyDifference(report);
+        return report;
     }
 
     //get total of all yearly budgeted, Report

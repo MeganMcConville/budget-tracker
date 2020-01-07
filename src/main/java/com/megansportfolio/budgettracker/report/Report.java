@@ -1,6 +1,9 @@
 package com.megansportfolio.budgettracker.report;
 
+import com.megansportfolio.budgettracker.budgetItem.BudgetItem;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Report {
 
@@ -11,6 +14,8 @@ public class Report {
     private BigDecimal percentDifference;
 
     private BigDecimal averageDifferencePerMonth;
+
+    private List<BudgetItem> budgetItems;
 
     public BigDecimal getBudgetedAmount() {
         return this.budgetedAmount;
@@ -42,5 +47,13 @@ public class Report {
 
     public void setAverageDifferencePerMonth(BigDecimal averageDifferencePerMonth) {
         this.averageDifferencePerMonth = averageDifferencePerMonth;
+    }
+
+    public List<BudgetItem> getBudgetItems(){
+        return this.budgetItems;
+    }
+
+    public void setBudgetItems(List<BudgetItem> budgetItems){
+        this.budgetItems = budgetItems;
     }
 }

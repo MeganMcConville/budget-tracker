@@ -7,6 +7,7 @@ $(document).ready(function(){
 
     $("#budget-select").change(function(){
         $("#no-valid-years-message").hide();
+        $("#reports-error-message").hide();
         var budgetId = $(this).val();
         $("#year-select").empty();
 
@@ -31,8 +32,7 @@ $(document).ready(function(){
             }
         })
         .fail(function(){
-        })
-        .always(function(){
+            $("#reports-error-message").show();
         });
     });
 
