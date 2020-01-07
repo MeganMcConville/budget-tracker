@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="'layouts/default'">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/reports.js}"></script>
+    <title>Reports</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div id="no-valid-years-message" class="hidden alert alert-danger">That budget has no active years to coalate a report.</div>
+    <div id="reports-error-message" class="hidden alert alert-danger">Something went wrong. Please refresh the page and try again.</div>
+    <div>
+        <h1 id="reports-heading">Reports</h1>
+    </div>
+
+    <div class="reports-container" id="year-end-reports-container">
+        <h2>End of Year Reports</h2>
+        <p>Select a Budget and Year</p>
+        <form id="report-form" th:action="@{/reports/year-end-report}">
+            <select class="reports-select" id="budget-select" name="budgetId">
+                <option></option>
+                <option th:each="budget : ${budgets}"
+                        th:value="${budget.getId()}"
+                        th:text="${budget.getName()}"></option>
+            </select>
+
+            <select class="reports-select" id="year-select" name="year" disabled>
+                <option></option>
+            </select>
+            <button disabled id="download-report-button" class="btn btn-small btn-secondary btn-sm" type="submit">
+                <i class="fas fa-download"></i>Download Report</button>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

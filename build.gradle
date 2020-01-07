@@ -55,6 +55,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile('commons-validator:commons-validator:1.6')
     compile("org.postgresql:postgresql:42.1.4")
+    compile group: 'org.freemarker', name: 'freemarker', version: '2.3.29'
     testCompile("junit:junit")
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.2.3'
 }

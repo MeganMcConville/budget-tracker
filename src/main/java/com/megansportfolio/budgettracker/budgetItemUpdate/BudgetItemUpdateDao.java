@@ -12,4 +12,6 @@ public interface BudgetItemUpdateDao extends JpaRepository<BudgetItemUpdate, Lon
 
     List<BudgetItemUpdate> findAllByBudgetItemId(long budgetItemId);
 
+    List<BudgetItemUpdate> findAllByBudgetItemIdAndYear(long budgetItemId, int year);
+
 }

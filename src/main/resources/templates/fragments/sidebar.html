@@ -16,6 +16,9 @@
             <li>
                 <a th:href="@{/budgets/create}">Create A Budget</a>
             </li>
+            <li th:if="${hasBudgets}">
+                <a th:href="@{/reports}">Reports</a>
+            </li>
         </ul>
     </div>
     <div id="content">

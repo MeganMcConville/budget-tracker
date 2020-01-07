@@ -86,6 +86,30 @@ public class BudgetService {
         return userBudgets;
     }
 
+    public boolean hasBudgets(String emailAddress){
+        User user = userDao.findOneByUsernameIgnoreCase(emailAddress);
+        List<Budget> budgets = budgetDao.findByUser(user);
+        return budgets != null && budgets.size() > 0;
+    }
+
+    public List<Integer> getActiveBudgetYears(long budgetId){
+        Budget budget = budgetDao.getOne(budgetId);
+        List<Long> budgetItemIds = budget.getBudgetItems().stream()
+                .map(BudgetItem::getId)
+                .collect(Collectors.toList());
+        if(!budgetItemIds.isEmpty()){
+            List<BigDecimal> years = budgetDao.findActiveYearsByBudgetItemId(budgetItemIds);
+            List<Integer> activeYears = years.stream()
+                    .map(BigDecimal::intValue)
+                    .collect(Collectors.toList());
+            return activeYears;
+        }
+        else{
+            List<Integer> emptyList = new ArrayList<>();
+            return emptyList;
+        }
+    }
+
     public List<Budget> findSharedBudgets(String emailAddress){
         List<SharedUser> sharedUsers = sharedUserDao.findAllByEmailIgnoreCase(emailAddress);
         List<Budget> sharedBudgets = sharedUsers.stream()
