@@ -153,7 +153,13 @@
         </div>
     </div>
     <div class="date-display-container">
+        <a th:href="@{/budgets/{budgetId}(budgetId = ${budget.getId()}, month = ${surroundingDates.getPreviousMonth()}, year = ${surroundingDates.getPreviousYear()})}">
+            <i class="fas fa-angle-left arrow-icon" id="previous-month-arrow" title="Previous Month"></i>
+        </a>
         <h3 id="date-display" th:text="${displayMonth.getNameLabel()} + ' ' + ${displayYear}" th:attr="data-display-month=${displayMonth.getMonthNumber()}, data-display-year=${displayYear}"></h3>
+        <a th:href="@{/budgets/{budgetId}(budgetId = ${budget.getId()}, month = ${surroundingDates.getNextMonth()}, year = ${surroundingDates.getNextYear()})}">
+            <i class="fas fa-angle-right arrow-icon" id="next-month-arrow" title="Next Month"></i>
+        </a>
         <i class="far fa-calendar-alt" id="calendar-icon" title="Select month and year" data-toggle="modal" data-target="#select-date-modal"></i>
     </div>
     <i th:if="${budget.getSharedUsers() != null && budget.getSharedUsers().size() > 0 && !isSharedUser}" class="fas fa-address-book" title="Users this Budget is shared with" id="shared-users-icon" data-toggle="modal" data-target="#shared-users-modal"></i>
