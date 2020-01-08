@@ -132,10 +132,29 @@ $(document).ready(function (){
                 var amountDisplay = row.find(".amount");
                 var amountInput = row.find(".amount-input");
                 var editedAmount = (Math.round(amountInput.val()*100)/100).toFixed(2);
+                var totalSpentDisplay = row.find(".spent-display");
+                var totalSpentText = totalSpentDisplay.text();
+                var totalSpentAmount = totalSpentText.substring(1, totalSpentText.length);
+                var amountInputNumber = parseFloat(amountInput.val());
+                totalSpentAmount = parseFloat(totalSpentAmount);
+                var updatedRemainingAmount = amountInputNumber - totalSpentAmount;
+
                 var moneyFormatAmount = formatMoney(editedAmount);
                 amountDisplay.text("$" + moneyFormatAmount);
                 amountInput.attr("data-original-value", editedAmount);
                 amountInput.val(amountInput.attr("data-original-value"));
+                var totalRemainingDisplay = row.find(".remaining-display");
+                var updatedRemainingAmountMoneyFormat = formatMoney(updatedRemainingAmount);
+                totalRemainingDisplay.text("$" + updatedRemainingAmountMoneyFormat);
+
+                if(updatedRemainingAmount < 0){
+                    totalRemainingDisplay.removeClass("positive-amount");
+                    totalRemainingDisplay.addClass("negative-amount");
+                }
+                else{
+                    totalRemainingDisplay.removeClass("negative-amount");
+                    totalRemainingDisplay.addClass("positive-amount");
+                }
                 var recurringCheckbox = row.find(".recurring-check");
                 recurringCheckbox.attr("data-original-value", recurringCheckbox.is(":checked"));
             });
