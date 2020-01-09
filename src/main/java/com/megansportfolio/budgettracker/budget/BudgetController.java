@@ -74,7 +74,7 @@ public class BudgetController {
         Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId, month, year);
         Month displayMonth = budgetService.getDisplayMonth(month);
         int displayYear = budgetService.getDisplayYear(year);
-        SurroundingDates surroundingDates = surroundingDatesService.setSurroundingDates(month, year);
+        SurroundingDates surroundingDates = surroundingDatesService.getSurroundingDates(month, year);
         model.addAttribute("budget", individualBudget);
         model.addAttribute("displayYear", displayYear);
         model.addAttribute("displayMonth", displayMonth);

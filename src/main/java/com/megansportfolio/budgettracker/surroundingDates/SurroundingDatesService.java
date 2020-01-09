@@ -7,7 +7,7 @@ import java.util.Calendar;
 @Service
 public class SurroundingDatesService {
 
-    public SurroundingDates setSurroundingDates(Integer currentMonth, Integer currentYear){
+    public SurroundingDates getSurroundingDates(Integer currentMonth, Integer currentYear){
 
         SurroundingDates surroundingDates = new SurroundingDates();
         if(currentMonth == null || currentYear == null){
