@@ -23,13 +23,13 @@ input{
 }
 
 /*Webkit browsers*/
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type=number]:not(.default-number-input)::-webkit-inner-spin-button,
+input[type=number]:not(.default-number-input)::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /*Firefox*/
-input[type='number']{
+input[type='number']:not(.default-number-input){
   -moz-appearance:textfield;
 }

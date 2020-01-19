@@ -110,6 +110,17 @@
         cursor: pointer;
         margin-left: 1rem;
     }
+    .arrow-icon{
+        cursor: pointer;
+        color: $secondary;
+        margin: .5em 2px 1em 2px;
+    }
+    #previous-month-arrow{
+        margin-right: 1em !important;
+    }
+    #next-month-arrow{
+        margin-left: 1em !important;
+    }
 }
 
 #shared-users-icon{

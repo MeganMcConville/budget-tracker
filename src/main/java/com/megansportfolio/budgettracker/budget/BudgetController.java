@@ -2,6 +2,8 @@ package com.megansportfolio.budgettracker.budget;
 
 import com.megansportfolio.budgettracker.sharedUser.EmailIsCurrentUserException;
 import com.megansportfolio.budgettracker.sharedUser.SharedUserService;
+import com.megansportfolio.budgettracker.surroundingDates.SurroundingDates;
+import com.megansportfolio.budgettracker.surroundingDates.SurroundingDatesService;
 import com.megansportfolio.budgettracker.user.InvalidEmailException;
 import com.megansportfolio.budgettracker.user.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class BudgetController {
 
     @Autowired
     private SharedUserService sharedUserService;
+
+    @Autowired
+    private SurroundingDatesService surroundingDatesService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/create")
     public String getCreateBudget(Model model){
@@ -69,9 +74,11 @@ public class BudgetController {
         Budget individualBudget = budgetService.getBudget(loggedInUserEmailAddress, budgetId, month, year);
         Month displayMonth = budgetService.getDisplayMonth(month);
         int displayYear = budgetService.getDisplayYear(year);
+        SurroundingDates surroundingDates = surroundingDatesService.getSurroundingDates(month, year);
         model.addAttribute("budget", individualBudget);
         model.addAttribute("displayYear", displayYear);
         model.addAttribute("displayMonth", displayMonth);
+        model.addAttribute("surroundingDates", surroundingDates);
         if(tableOnly){
             return "fragments/budget-items-table";
         }
